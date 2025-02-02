@@ -1,0 +1,130 @@
+/* Universal Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Global styles for background and text */
+  .ConatactPagebody {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f7f7f7;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  
+  /* Container for the contact page */
+  .contact-container {
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 800px;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    animation: fadeIn 1s ease-in-out;
+  }
+  
+  /* Title styling */
+  .contact-title {
+    font-size: 3rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 20px;
+  }
+  
+  /* Subtitle styling */
+  .contact-subtitle {
+    font-size: 1.2rem;
+    color: #7f8c8d;
+    margin-bottom: 40px;
+  }
+  
+  /* Form styling */
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  /* Input group styling */
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  /* Label styling */
+  .input-group label {
+    font-size: 1rem;
+    color: #2c3e50;
+    margin-bottom: 8px;
+  }
+  
+  /* Input field styling */
+  .input-group input,
+  .input-group textarea {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f7f7f7;
+    color: #333;
+    transition: border 0.3s ease;
+  }
+  
+  /* Focus effect on input fields */
+  .input-group input:focus,
+  .input-group textarea:focus {
+    border-color: #6a11cb;
+    outline: none;
+  }
+  
+  /* Button styling */
+  .submit-button {
+    background-color: #6a11cb;
+    color: white;
+    font-size: 1.2rem;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  /* Hover effect on submit button */
+  .submit-button:hover {
+    background-color: #2575fc;
+    transform: translateY(-3px);
+  }
+  
+  /* Responsive Design: For smaller screens */
+  @media (max-width: 600px) {
+    .contact-container {
+      padding: 20px;
+    }
+    
+    .contact-title {
+      font-size: 2.5rem;
+    }
+  
+    .contact-subtitle {
+      font-size: 1rem;
+    }
+  }
+  
+  /* Fade in animation */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  

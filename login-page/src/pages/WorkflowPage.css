@@ -1,0 +1,104 @@
+/* Universal Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Global styles for background and text */
+.WorkflowBody {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f7f7f7;
+  color: #333;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 20px;
+}
+
+/* Container that holds the content */
+.container {
+  max-width: 1000px;
+  width: 100%;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  margin-top: 20px;
+  animation: fadeIn 1s ease;
+}
+
+/* Main title styling */
+.title {
+  text-align: center;
+  font-size: 3rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 40px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+/* Flexbox layout for steps */
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* Styling for each step */
+.step {
+  background-color: #ecf0f1;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  border-left: 6px solid #6a11cb;
+  transition: all 0.3s ease;
+  animation: slideIn 1s ease;
+}
+
+/* Hover effect for steps */
+.step:hover {
+  background-color: #dfe6e9;
+  transform: translateX(10px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Step title styling */
+.step h2 {
+  font-size: 2.2rem;
+  color: #2575fc;
+  font-weight: 600;
+  margin-bottom: 15px;
+  text-transform: capitalize;
+}
+
+/* Description text styling */
+.step .description {
+  font-size: 1.2rem;
+  color: #7f8c8d;
+  line-height: 1.6;
+  margin-top: 10px;
+}
+
+/* Fade in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Slide in animation */
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}

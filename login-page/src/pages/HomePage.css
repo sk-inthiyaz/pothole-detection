@@ -1,0 +1,104 @@
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.home {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding: 20px;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.hero {
+  background: linear-gradient(45deg, #6a11cb, #2575fc);
+  color: white;
+  padding: 60px 20px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+  animation: slideUp 1s ease-in-out;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.hero h1 {
+  font-size: 3.5rem;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hero p {
+  font-size: 1.3rem;
+  margin-bottom: 25px;
+}
+
+.cta-button {
+  background: #ffd93d;
+  color: #333;
+  padding: 12px 25px;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.cta-button:hover {
+  background: #f4c20d;
+  transform: translateY(-3px);
+}
+
+.features {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.features h2 {
+  font-size: 2.5rem;
+  margin-bottom: 25px;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.feature-cards {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.feature-card {
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 25px;
+  width: 300px;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+}
+
+.feature-card h3 {
+  font-size: 1.6rem;
+  margin-bottom: 12px;
+}
+
+.feature-card p {
+  font-size: 1.1rem;
+  color: #555;
+}

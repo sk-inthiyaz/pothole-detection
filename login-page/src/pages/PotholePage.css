@@ -1,0 +1,145 @@
+.maincontainer{
+  background: url('C:\Users\sinti\OneDrive\Pictures\Documents\Desktop\demo\login-page\src\pages\bacgroundimageroad.jpg') no-repeat center center;
+  height: 150vh;
+  background-size: cover;
+}
+
+
+.upload-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed #007BFF;
+  border-radius: 10px;
+  padding: 20px;
+  max-width: 500px;
+  margin: 0 auto;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.9);
+  background: linear-gradient(135deg, #f8f9fa, #e8f0fe);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+
+
+
+.upload-input {
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.upload-button {
+  background-color: #007BFF;
+  color: #fff;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.upload-button:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+.upload-button:active {
+  background-color: #004494;
+  transform: translateY(0);
+}
+
+.preview-container {
+  margin-top: 20px;
+}
+
+.preview-container img {
+  max-width: 100%;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+}
+
+.prediction-container {
+  margin-top: 20px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ced4da;
+  width: 100%;
+}
+
+.prediction-yes {
+  background-color: #FF0000; /* Red for pothole detected */
+}
+
+.prediction-no {
+  background-color: #00FF00; /* Green for no pothole */
+}
+
+.prediction-error {
+  background-color: #FFFFE0; /* Light yellow for error */
+}
+
+.footer {
+  margin-top: 20px;
+  width: 100%;
+  background-color: #007BFF;
+  color: #fff;
+  padding: 10px 0;
+  border-radius: 5px;
+}
+
+.marquee {
+  color: #fff;
+  font-size: 0.9rem;
+  animation: scroll 10s linear infinite;
+}
+
+.alert {
+  position: fixed;
+  top: 80px;
+  right: 10px;
+  padding: 15px;
+  width: 300px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.5s ease-in-out, fadeOut 0.5s ease-in-out 2.5s; /* added fadeOut */
+  z-index: 1000;
+}
+
+.success {
+  background-color: #4caf50;
+  color: white;
+}
+
+.error {
+  background-color: #f44336;
+  color: white;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+
