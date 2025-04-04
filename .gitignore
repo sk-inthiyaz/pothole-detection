@@ -1,4 +1,8 @@
+# Python & Virtual Environment
 venv/
+__pycache__/
+*.py[cod]
 *.pth
-*.lib
 *.dll
+*.lib
+*.bin
