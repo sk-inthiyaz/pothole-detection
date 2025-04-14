@@ -1,8 +1,17 @@
-# Python & Virtual Environment
+# Ignore virtual environment
 venv/
-__pycache__/
+
+# Ignore node_modules in specific folders
+backend/node_modules/
+login-page/node_modules/
+
+# Ignore __pycache__ only in CNNModel
+CNNModel/__pycache__/
+
+# Optional - ignore compiled Python files
 *.py[cod]
-*.pth
+
+# Optional - ignore other binary or system files
 *.dll
 *.lib
 *.bin
