@@ -104,3 +104,21 @@
     padding: 0.5rem 1rem;
   }
 }
+
+.nav-links .logout {
+  background: #ff4081;
+  padding: 0.7rem 1.5rem;
+  border-radius: 25px;
+  font-weight: bold;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: capitalize;
+  font-family: 'Helvetica Neue', sans-serif;
+}
+
+.nav-links .logout:hover {
+  background: #f50057;
+  color: #fff;
+}
