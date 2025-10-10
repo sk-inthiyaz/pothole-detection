@@ -1,0 +1,12 @@
+/* Footer CSS (You can add this in your global CSS or in a separate file) */
+.footer {
+    background-color: #007BFF;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    font-size: 1rem;
+  }
+  

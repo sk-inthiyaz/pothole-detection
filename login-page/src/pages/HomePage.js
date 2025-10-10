@@ -36,9 +36,7 @@ const Home = () => {
           </div>
         </div>
       </section>
-      <footer className="footer">
-        <p>&copy; 2025 Pothole Detector. All Rights Reserved.</p>
-      </footer>
+      
     </div>
   );
 };

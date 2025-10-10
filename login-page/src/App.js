@@ -1,6 +1,8 @@
+// App.js
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from "./Navbar";
+import Layout from './Layout';  // Import the Layout component
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import WorkflowPage from './pages/WorkflowPage';
@@ -9,6 +11,7 @@ import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import PotholePage from './pages/PotholePage';
 import LifeSaverPage from './pages/LifeSaverPage';
+
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -21,14 +24,17 @@ const App = () => {
     <Router>
       <Navbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
       <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/workflow" element={<WorkflowPage />} />
-        <Route path="/contact" element={<ContactPage />} />
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} />} />
-        <Route path="/pothole" element={<PotholePage />} />
-        <Route path="/lifesaver" element={<LifeSaverPage />} />
+        {/* Wrap routes inside the Layout component */}
+        <Route path="/" element={<Layout />}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/workflow" element={<WorkflowPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} />} />
+          <Route path="/pothole" element={<PotholePage />} />
+          <Route path="/lifesaver" element={<LifeSaverPage />} />
+        </Route>
       </Routes>
     </Router>
   );
