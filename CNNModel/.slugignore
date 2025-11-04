@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+.DS_Store
+test_image.jpg
+tempCodeRunnerFile.py
+ANN.py
+ANNa.py
+CNN.py
+CNNs.py

@@ -45,8 +45,12 @@ router.post('/', upload.single('file'), async (req, res) => {
     const formData = new FormData();
     formData.append('file', file.buffer, file.originalname);
 
+    // Get AI service URL from environment variable (for production deployment)
+    const aiServiceUrl = process.env.AI_SERVICE_URL || 'http://127.0.0.1:7000';
+    const processEndpoint = `${aiServiceUrl}/process`;
+
     // Forward the file to Flask backend
-    const response = await axios.post('http://127.0.0.1:7000/process', formData, {
+    const response = await axios.post(processEndpoint, formData, {
       headers: formData.getHeaders(),
       timeout: 30000, // 30 second timeout
     });

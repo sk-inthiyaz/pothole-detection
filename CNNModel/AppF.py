@@ -35,9 +35,12 @@ class PotholeDetectionCNN(nn.Module):
 # Initialize model
 model = PotholeDetectionCNN()
 try:
-    model.load_state_dict(torch.load("CNNModel/best_pothole_detection_model.pth", map_location=torch.device('cpu')))
+    # Use relative path for deployment (works both locally and on Render)
+    import os
+    model_path = os.path.join(os.path.dirname(__file__), "best_pothole_detection_model.pth")
+    model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
     model.eval()
-    app.logger.debug("Model loaded successfully")
+    app.logger.debug(f"Model loaded successfully from {model_path}")
 except Exception as e:
     app.logger.error(f"Error loading model: {str(e)}")
 

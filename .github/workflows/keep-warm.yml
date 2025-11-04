@@ -1,0 +1,25 @@
+name: Keep Render Services Warm
+
+on:
+  schedule:
+    # Run every 14 minutes (Render free tier spins down after 15 min inactivity)
+    - cron: '*/14 * * * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  keep-warm:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Ping Backend Service
+        run: |
+          echo "Pinging backend service..."
+          curl -f ${{ secrets.BACKEND_URL }} || echo "Backend ping failed"
+          
+      - name: Ping AI Service
+        run: |
+          echo "Pinging AI service..."
+          curl -f ${{ secrets.AI_SERVICE_URL }} || echo "AI service ping failed"
+          
+      - name: Complete
+        run: echo "Services pinged successfully at $(date)"

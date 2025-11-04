@@ -222,7 +222,13 @@ Flask/Inference
 
 ---
 
-## Production Deployment Guide 🚀
+## 🚀 Production Deployment Guide
+
+> **� For detailed step-by-step deployment instructions, see:**
+> - **[DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md)** - Complete deployment walkthrough
+> - **[QUICK_DEPLOY.md](./QUICK_DEPLOY.md)** - Quick commands for Vercel + Render
+> - **[ENV_VARS_GUIDE.md](./ENV_VARS_GUIDE.md)** - All environment variables explained
+> - **[POST_DEPLOYMENT_TESTING.md](./POST_DEPLOYMENT_TESTING.md)** - Testing checklist
 
 ### Pre-Deployment Checklist
 
