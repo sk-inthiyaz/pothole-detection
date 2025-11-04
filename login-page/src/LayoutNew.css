@@ -1,0 +1,73 @@
+/* Modern Responsive Layout with Enhanced Footer */
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.content {
+  flex: 1;
+}
+
+.footer {
+  background: linear-gradient(135deg, #434343 0%, #000000 100%);
+  color: #fff;
+  padding: 2.5rem 2rem 1.5rem;
+  text-align: center;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #f093fb, #f5576c, #667eea);
+}
+
+.footer p {
+  font-size: 1rem;
+  margin: 0;
+  padding: 0.5rem 0;
+  letter-spacing: 0.5px;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin: 1rem 0;
+  flex-wrap: wrap;
+}
+
+.footer-links a {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+}
+
+.footer-links a:hover {
+  color: #f093fb;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 640px) {
+  .footer {
+    padding: 2rem 1rem 1rem;
+  }
+
+  .footer p {
+    font-size: 0.9rem;
+  }
+
+  .footer-links {
+    gap: 1rem;
+    font-size: 0.85rem;
+  }
+}

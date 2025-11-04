@@ -1,7 +1,7 @@
-import "./PotholePage.css";
+import "./PotholePageNew.css";
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from 'react-router-dom'; // ✅ move this import to the top
+import { useNavigate } from 'react-router-dom';
 
 const PotholeImageUpload = () => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -12,6 +12,7 @@ const PotholeImageUpload = () => {
   const [recommendation, setRecommendation] = useState("");
   const [alert, setAlert] = useState({ message: "", type: "" });
   const [predictionClass, setPredictionClass] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false); // complaint submit state
   const navigate = useNavigate();
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -126,25 +127,24 @@ const PotholeImageUpload = () => {
                   e.preventDefault();
                   const location = e.target.location.value;
                   const description = e.target.description.value;
+                  setIsSubmitting(true);
 
                   try {
+                    const token = localStorage.getItem('authToken');
                     const response = await axios.post(
                       "http://localhost:5001/api/complaints",
-                      {
-                        location,
-                        description,
-                      }
+                      { location, description },
+                      token ? { headers: { Authorization: `Bearer ${token}` } } : undefined
                     );
-                    setAlert({
-                      message: response.data.message,
-                      type: "success",
-                    });
-                    navigate("/lifesaver"); // using React Router
+                    setAlert({ message: response.data.message, type: "success" });
+                    navigate("/lifesaver");
                   } catch (error) {
                     setAlert({
                       message: "Error submitting complaint. Please try again.",
                       type: "error",
                     });
+                  } finally {
+                    setIsSubmitting(false);
                   }
                 }}
               >
@@ -154,15 +154,21 @@ const PotholeImageUpload = () => {
                   placeholder="Enter location"
                   className="complaint-input"
                   required
+                  disabled={isSubmitting}
                 />
                 <textarea
                   name="description"
                   placeholder="Enter description"
                   className="complaint-input"
                   required
+                  disabled={isSubmitting}
                 ></textarea>
-                <button className="complaint-submit" type="submit">
-                  Submit Complaint
+                <button className={`complaint-submit ${isSubmitting ? 'btn-loading' : ''}`} type="submit" disabled={isSubmitting} aria-busy={isSubmitting}>
+                  {isSubmitting ? (
+                    <span className="loading-inline"><span className="mini-spinner" aria-hidden="true"></span> Submitting...</span>
+                  ) : (
+                    'Submit Complaint'
+                  )}
                 </button>
               </form>
             </div>

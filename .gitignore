@@ -1,9 +1,12 @@
 # Ignore virtual environment
 venv/
 
-# Ignore node_modules in specific folders
+# Ignore node_modules EVERYWHERE
+node_modules/
+**/node_modules/
 backend/node_modules/
 login-page/node_modules/
+frontend/node_modules/
 
 # Ignore __pycache__ only in CNNModel
 CNNModel/__pycache__/
@@ -15,3 +18,16 @@ CNNModel/__pycache__/
 *.dll
 *.lib
 *.bin
+
+# CRITICAL: Ignore environment files with sensitive credentials
+.env
+backend/.env
+frontend/.env
+*/.env
+*.env
+
+# Ignore environment backups
+.env.backup
+.env.local
+.env.production
+.env.development

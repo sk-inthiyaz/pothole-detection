@@ -6,7 +6,7 @@ This README gives you a complete overview of the project structure, technologies
 
 ## Architecture at a Glance
 
-- Frontend: React app in `login-page/`
+- Frontend: React app in `frontend/`
 - Backend API: Node.js + Express + MongoDB in `backend/`
 - ML Inference Service: Python + Flask + PyTorch in `CNNModel/AppF.py`
 - Model Weights: `.pth` checkpoints in both repo root and `CNNModel/`
@@ -23,7 +23,7 @@ Top-level
 - `assets/` – static assets (e.g., `banner.png.png`).
 - `backend/` – Express API server, Mongo connection, routes and models.
 - `CNNModel/` – PyTorch training scripts and Flask inference app; model weights.
-- `login-page/` – React UI (Create React App).
+- `frontend/` – React UI (Create React App).
 - `best_pothole_detection_model.pth`, `final_pothole_detection_model.pth` – model checkpoints (duplicated from `CNNModel/`).
 - `README.md` – this file.
 
@@ -48,7 +48,7 @@ Dependencies (see `backend/package.json`)
 - bcryptjs, jsonwebtoken
 - multer (uploads), axios + form-data (forwarding to Flask)
 
-### Frontend (`login-page/`)
+### Frontend (`frontend/`)
 
 - Routing defined in `src/App.js` with React Router:
 	- `/` Home, `/about`, `/workflow`, `/contact`
@@ -67,7 +67,7 @@ Dependencies (see `backend/package.json`)
 	- `pages/PotholePage.js` – image upload to Express `POST /upload`; displays prediction/confidence/time; if pothole detected, shows a modal to submit complaint `POST /api/complaints`.
 	- `pages/LifeSaverPage.js` – “You Saved a Life” success page.
 
-Dependencies (see `login-page/package.json`)
+Dependencies (see `frontend/package.json`)
 - react, react-dom, react-router-dom, react-scripts
 - axios, dotenv
 
@@ -144,7 +144,7 @@ Express Backend – `backend/`
 - `upload/upload.js`
 	- `POST /upload` – multer memory storage; forward to Flask using axios + form-data.
 
-React Frontend – `login-page/src/pages/`
+React Frontend – `frontend/src/pages/`
 - `LoginPage.js → handleSubmit()` – auth login, store JWT, navigate to `/pothole`.
 - `SignupPage.js → handleSubmit()` – user registration flow.
 - `PotholePage.js`
@@ -188,7 +188,7 @@ npm start
 
 4) Start the React Frontend
 ```powershell
-cd ../login-page
+cd ../frontend
 npm install
 npm start
 ```
@@ -214,7 +214,334 @@ Flask/Inference
 
 ## Notes and Tips
 
-- Ports used: React 3000, Express 5000, Flask 7000.
+- **Ports used**: React 3000, Express 5001 (changed from 5000), Flask 7000.
+- **CORS**: Express has `cors()` enabled; if you change ports or origins, configure accordingly.
+- **Model weights** are present in both root and `CNNModel/`. The Flask app uses the `CNNModel` copy.
+- If you retrain, ensure the new `best_pothole_detection_model.pth` is placed under `CNNModel/` for inference to pick it up.
+- **Responsive Design**: The entire UI is now mobile-first responsive with modern animations, glass-morphism effects, and works beautifully on all screen sizes (mobile, tablet, desktop).
+
+---
+
+## Production Deployment Guide 🚀
+
+### Pre-Deployment Checklist
+
+✅ **Test Locally First**
+```powershell
+# 1. Start MongoDB
+mongod --dbpath C:\data\db
+
+# 2. Start Flask ML Service
+cd CNNModel
+py -3.10 AppF.py
+
+# 3. Start Express Backend
+cd ../backend
+npm start
+
+# 4. Build React Frontend
+cd ../frontend
+npm run build
+```
+
+✅ **Environment Configuration**
+
+Create production `.env` files:
+
+**Backend `.env` (Production)**
+```env
+NODE_ENV=production
+PORT=5001
+MONGO_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/potholeDB
+JWT_SECRET=<strong-random-secret-256-bit>
+FLASK_URL=http://your-flask-service.com:7000
+```
+
+**React `.env.production`** (in `frontend/`)
+```env
+REACT_APP_API_URL=https://your-backend-domain.com
+REACT_APP_FLASK_URL=https://your-flask-service.com
+```
+
+### Deployment Options
+
+#### Option 1: Deploy to Vercel (Frontend) + Render/Railway (Backend)
+
+**Frontend (React) on Vercel:**
+```powershell
+# Install Vercel CLI
+npm i -g vercel
+
+# Navigate to frontend
+cd frontend
+
+# Deploy
+vercel
+
+# Follow prompts, set environment variables in Vercel dashboard
+```
+
+**Backend (Express) on Render:**
+1. Push code to GitHub
+2. Go to [Render.com](https://render.com) → New Web Service
+3. Connect your GitHub repo
+4. Build Command: `npm install`
+5. Start Command: `npm start`
+6. Add environment variables (MONGO_URI, JWT_SECRET, PORT)
+7. Deploy
+
+**ML Service (Flask) on Python Anywhere or Render:**
+- For Render: Create Python web service
+- Upload `CNNModel/` folder
+- Install dependencies: `pip install -r requirements.txt`
+- Start command: `python AppF.py`
+
+#### Option 2: Docker Deployment (All Services)
+
+Create `Dockerfile` in backend:
+```dockerfile
+FROM node:18-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+EXPOSE 5001
+CMD ["npm", "start"]
+```
+
+Create `Dockerfile` in CNNModel:
+```dockerfile
+FROM python:3.10-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+COPY . .
+EXPOSE 7000
+CMD ["python", "AppF.py"]
+```
+
+Create `docker-compose.yml` in root:
+```yaml
+version: '3.8'
+services:
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  flask-ml:
+    build: ./CNNModel
+    ports:
+      - "7000:7000"
+    volumes:
+      - ./CNNModel:/app
+
+  backend:
+    build: ./backend
+    ports:
+      - "5001:5001"
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/potholeDB
+      - JWT_SECRET=${JWT_SECRET}
+      - FLASK_URL=http://flask-ml:7000
+    depends_on:
+      - mongodb
+      - flask-ml
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+volumes:
+  mongo-data:
+```
+
+Deploy with:
+```powershell
+docker-compose up -d
+```
+
+#### Option 3: Deploy to AWS (Full Stack)
+
+**Frontend**: AWS S3 + CloudFront
+```powershell
+# Build React app
+cd frontend
+npm run build
+
+# Upload to S3 bucket
+aws s3 sync build/ s3://your-bucket-name --delete
+
+# Configure CloudFront distribution
+```
+
+**Backend**: AWS EC2 or Elastic Beanstalk
+- Launch EC2 instance with Node.js
+- Install dependencies, PM2 for process management
+- Configure security groups (ports 5001, 7000)
+- Set up nginx as reverse proxy
+
+**Database**: MongoDB Atlas (free tier available)
+- Create cluster at [mongodb.com/atlas](https://www.mongodb.com/atlas)
+- Get connection string
+- Update backend MONGO_URI
+
+**ML Service**: AWS Lambda + API Gateway (serverless)
+- Package Flask app with dependencies
+- Create Lambda function (Python 3.10)
+- Add API Gateway trigger
+- Increase timeout to 30s, memory to 1024MB
+
+### Production Optimizations
+
+**React Build Optimization:**
+```powershell
+# Analyze bundle size
+npm run build
+npx source-map-explorer 'build/static/js/*.js'
+
+# Enable compression in backend
+npm install compression
+```
+
+Add to `backend/server.js`:
+```javascript
+const compression = require('compression');
+app.use(compression());
+```
+
+**Caching Strategy:**
+- Add cache headers for static assets
+- Use Redis for session storage
+- Implement CDN for images
+
+**Security Hardening:**
+```powershell
+# Install security packages
+npm install helmet express-rate-limit
+```
+
+Add to `backend/server.js`:
+```javascript
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+
+app.use(helmet());
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100 // limit each IP to 100 requests per windowMs
+});
+
+app.use('/api/', limiter);
+```
+
+**Performance Monitoring:**
+- Use PM2 for Node.js process management
+- Set up logging (Winston, Morgan)
+- Monitor with New Relic or DataDog
+
+### Post-Deployment Testing
+
+Test these endpoints after deployment:
+```bash
+# Health check
+curl https://your-backend.com/health
+
+# Signup
+curl -X POST https://your-backend.com/signup \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Test","email":"test@test.com","password":"test123"}'
+
+# Login
+curl -X POST https://your-backend.com/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"test@test.com","password":"test123"}'
+
+# ML Service
+curl -X POST https://your-flask-service.com/process \
+  -F "file=@test-image.jpg"
+```
+
+### Continuous Deployment (CI/CD)
+
+Create `.github/workflows/deploy.yml`:
+```yaml
+name: Deploy
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - run: cd frontend && npm install && npm run build
+      - uses: vercel/actions@v1
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          
+  deploy-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Deploy to Render
+        run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
+```
+
+---
+
+## Notes and Tips (Updated)
+
+- **Ports used**: React 3000 (dev) / 80 or 443 (production), Express 5001, Flask 7000.
+- **CORS**: Configure production origins in backend CORS settings before deployment.
+- **Model weights** are present in both root and `CNNModel/`. The Flask app uses the `CNNModel` copy.
+- If you retrain, ensure the new `best_pothole_detection_model.pth` is placed under `CNNModel/` for inference.
+- **Responsive Design**: The entire UI is now mobile-first responsive with modern animations, glass-morphism effects, and works on all screen sizes.
+- **Browser Support**: Modern browsers (Chrome 90+, Firefox 88+, Safari 14+, Edge 90+) for backdrop-filter support.
+
+### Troubleshooting Production Issues
+
+**CORS Errors:**
+```javascript
+// backend/server.js - Update CORS config
+app.use(cors({
+  origin: ['https://your-frontend-domain.com'],
+  credentials: true
+}));
+```
+
+**Large Model File Issues:**
+- Use Git LFS for `.pth` files
+- Consider model compression/quantization
+- Use CDN for model hosting
+
+**MongoDB Connection Issues:**
+- Whitelist IP addresses in MongoDB Atlas
+- Check connection string format
+- Verify network access rules
+
+**Performance Issues:**
+- Enable gzip compression
+- Implement Redis caching
+- Use PM2 cluster mode for backend
+- Optimize images before upload (client-side compression)
+
+---
+
+## Notes and Tips
+
+- **Ports used**: React 3000, Express 5001, Flask 7000.
 - CORS: Express has `cors()` enabled; if you change ports or origins, configure accordingly.
 - Model weights are present in both root and `CNNModel/`. The Flask app uses the `CNNModel` copy.
 - If you retrain, ensure the new `best_pothole_detection_model.pth` is placed under `CNNModel/` for inference to pick it up.

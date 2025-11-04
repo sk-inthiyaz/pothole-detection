@@ -1,0 +1,268 @@
+/* Modern Responsive LifeSaver Page with Celebration */
+
+@keyframes confetti {
+  0% {
+    transform: translateY(0) rotateZ(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotateZ(720deg);
+    opacity: 0;
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.lifesaver-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.lifesaver-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+  animation: float 6s ease-in-out infinite;
+}
+
+.lifesaver-heading {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  animation: fadeInScale 0.8s ease-out, pulse 2s ease-in-out 1s infinite;
+  position: relative;
+  z-index: 1;
+}
+
+.lifesaver-text {
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+  color: rgba(255, 255, 255, 0.95);
+  line-height: 1.8;
+  max-width: 700px;
+  margin: 0 auto 3rem;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(15px);
+  padding: 2rem;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  animation: fadeInScale 1s ease-out 0.3s both;
+  position: relative;
+  z-index: 1;
+}
+
+.newspaper-section {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(15px);
+  border-radius: 20px;
+  padding: 2.5rem;
+  max-width: 800px;
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+  animation: fadeInScale 1.2s ease-out 0.6s both;
+  position: relative;
+  z-index: 1;
+}
+
+.newspaper-section h3 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.newspaper-section p {
+  font-size: clamp(1rem, 1.8vw, 1.2rem);
+  color: rgba(255, 255, 255, 0.9);
+  margin: 1rem 0;
+  line-height: 1.6;
+  font-style: italic;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-left: 4px solid rgba(240, 147, 251, 0.8);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.newspaper-section p:hover {
+  transform: translateX(10px);
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Floating report button */
+.floating-report-btn {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 14px 20px;
+  font-weight: 700;
+  box-shadow: 0 12px 30px rgba(22, 163, 74, 0.45);
+  cursor: pointer;
+  z-index: 1200;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.floating-report-btn:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 16px 36px rgba(22, 163, 74, 0.55);
+}
+
+.floating-report-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+@media (max-width: 480px) {
+  .floating-report-btn {
+    right: 16px;
+    bottom: 16px;
+    padding: 12px 16px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Confetti Effect - Optional, can be enhanced with JS library */
+.confetti {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #f093fb;
+  animation: confetti 3s linear infinite;
+}
+
+.confetti:nth-child(2n) {
+  background: #f5576c;
+  animation-delay: 0.5s;
+}
+
+.confetti:nth-child(3n) {
+  background: #667eea;
+  animation-delay: 1s;
+}
+
+/* Responsive Design */
+@media (max-width: 968px) {
+  .lifesaver-container {
+    padding: 1.5rem;
+  }
+
+  .lifesaver-heading {
+    margin-bottom: 1.2rem;
+  }
+
+  .lifesaver-text {
+    padding: 1.8rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .newspaper-section {
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .lifesaver-container {
+    padding: 1rem;
+  }
+
+  .lifesaver-heading {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .lifesaver-text {
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    font-size: 1rem;
+  }
+
+  .newspaper-section {
+    padding: 1.5rem;
+  }
+
+  .newspaper-section h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .newspaper-section p {
+    font-size: 0.95rem;
+    padding: 0.8rem;
+    margin: 0.8rem 0;
+  }
+
+  .newspaper-section p:hover {
+    transform: translateX(5px);
+  }
+}
+
+@media (max-width: 480px) {
+  .lifesaver-heading {
+    font-size: 1.8rem;
+  }
+
+  .lifesaver-text {
+    padding: 1.2rem;
+    font-size: 0.95rem;
+  }
+
+  .newspaper-section {
+    padding: 1.2rem;
+  }
+
+  .newspaper-section h3 {
+    font-size: 1.3rem;
+  }
+
+  .newspaper-section p {
+    font-size: 0.9rem;
+    padding: 0.7rem;
+  }
+}
