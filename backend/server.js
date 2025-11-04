@@ -3,10 +3,18 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const session = require('express-session');
+const passport = require('./config/passport');
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
+const oauthRoutes = require('./routes/oauthRoutes');
 const uploadRoutes = require('./upload/upload');  // Import the upload routes
 const complaintRoutes = require('./routes/complaintRoutes'); // Import the complaint routes
+
+// Security packages
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+const mongoSanitize = require('express-mongo-sanitize');
 
 
 // Load environment variables
@@ -17,18 +25,152 @@ connectDB();
 
 const app = express();
 
-// Middleware
-app.use(cors());
+// ============================================
+// SECURITY MIDDLEWARE (Apply before routes)
+// ============================================
+
+// Helmet: Set security HTTP headers
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            styleSrc: ["'self'", "'unsafe-inline'"],
+            scriptSrc: ["'self'"],
+            imgSrc: ["'self'", "data:", "https:"],
+        },
+    },
+    crossOriginEmbedderPolicy: false, // Needed for some OAuth flows
+}));
+
+// NoSQL Injection Protection: Remove $ and . from user inputs
+app.use(mongoSanitize({
+    replaceWith: '_', // Replace prohibited characters with underscore
+}));
+
+// Rate Limiting for Authentication Routes
+const authLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 5, // Limit each IP to 5 requests per window
+    message: 'Too many authentication attempts, please try again after 15 minutes',
+    standardHeaders: true, // Return rate limit info in `RateLimit-*` headers
+    legacyHeaders: false, // Disable `X-RateLimit-*` headers
+});
+
+// General API Rate Limiter (more permissive)
+const apiLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // Limit each IP to 100 requests per window
+    message: 'Too many requests from this IP, please try again after 15 minutes',
+    standardHeaders: true,
+    legacyHeaders: false,
+});
+
+// CORS configuration - must be before other middleware
+// Allow both port 3000 and 7001 for development
+const allowedOrigins = [
+    'http://localhost:3000',
+    'http://localhost:7001',
+    process.env.FRONTEND_URL
+].filter(Boolean);
+
+app.use(cors({
+    origin: function(origin, callback) {
+        // In production, enforce strict origin checking
+        if (process.env.NODE_ENV === 'production') {
+            if (!origin || allowedOrigins.indexOf(origin) === -1) {
+                return callback(new Error('Not allowed by CORS'));
+            }
+            callback(null, true);
+        } else {
+            // In development, allow requests with no origin (mobile apps, Postman, etc.)
+            if (!origin) return callback(null, true);
+            
+            if (allowedOrigins.indexOf(origin) !== -1) {
+                callback(null, true);
+            } else {
+                callback(new Error('Not allowed by CORS'));
+            }
+        }
+    },
+    credentials: true // Allow cookies and authentication headers
+}));
+
+// Body parser middleware
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// Session middleware (required for Passport OAuth)
+app.use(session({
+    secret: process.env.SESSION_SECRET || process.env.JWT_SECRET || 'pothole-detection-secret-key',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        secure: process.env.NODE_ENV === 'production', // true in production with HTTPS
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    }
+}));
+
+// Initialize Passport
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Apply rate limiters to specific routes
+// Authentication routes (strict limiting)
+app.use('/signup', authLimiter);
+app.use('/login', authLimiter);
+app.use('/verify-otp', authLimiter);
+app.use('/resend-otp', authLimiter);
+
+// General API routes (more permissive)
+app.use('/api/', apiLimiter);
+app.use('/upload', apiLimiter);
 
 // Routes
 app.use('/', authRoutes);
+app.use('/', oauthRoutes); // OAuth routes (Google, Microsoft)
 app.use('/upload', uploadRoutes);  // Use the upload routes
 app.use('/api/complaints', complaintRoutes);
 
 
 const PORT = process.env.PORT || 5001;
 
+// HTTPS redirect for production
+if (process.env.NODE_ENV === 'production') {
+    app.use((req, res, next) => {
+        if (req.header('x-forwarded-proto') !== 'https') {
+            return res.redirect(`https://${req.header('host')}${req.url}`);
+        }
+        next();
+    });
+}
+
+// Global error handler to return JSON instead of crashing
+app.use((err, req, res, next) => {
+    const isProd = process.env.NODE_ENV === 'production';
+    
+    // Don't expose error details in production
+    if (isProd) {
+        console.error('Production error:', err.message);
+        res.status(err.status || 500).json({ 
+            error: 'Internal server error',
+            message: err.message || 'Something went wrong'
+        });
+    } else {
+        console.error('Development error:', err);
+        res.status(err.status || 500).json({ 
+            error: 'Internal server error', 
+            message: err.message,
+            stack: err.stack
+        });
+    }
+});
+
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server running on http://0.0.0.0:${PORT}`);
+});
+
+// Lightweight health check endpoint
+app.get('/health', (req, res) => {
+    res.json({ status: 'ok', service: 'backend', port: PORT });
 });
