@@ -40,7 +40,7 @@ const PotholeImageUpload = () => {
     try {
       const startTime = Date.now();
       const response = await axios.post(
-        "http://localhost:5000/upload",
+        "http://localhost:5001/upload",
         formData
       );
       const { pothole_detected, confidence_level, recommendation } =
@@ -129,7 +129,7 @@ const PotholeImageUpload = () => {
 
                   try {
                     const response = await axios.post(
-                      "http://localhost:5000/api/complaints",
+                      "http://localhost:5001/api/complaints",
                       {
                         location,
                         description,

@@ -21,7 +21,7 @@ const SignUpPage = () => {
     console.log('Form submitted with:', { name, email, password, confirmPassword });
 
     try {
-      const response = await fetch('http://localhost:5000/signup', {
+      const response = await fetch('http://localhost:5001/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, password })
