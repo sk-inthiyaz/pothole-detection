@@ -12,6 +12,7 @@ import gc
 # Initialize Flask app
 app = Flask(__name__)
 logging.basicConfig(level=logging.DEBUG)
+# Force redeploy - added health check and memory optimizations
 
 # Force CPU and optimize memory
 torch.set_num_threads(1)  # Reduce CPU usage
