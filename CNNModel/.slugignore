@@ -12,7 +12,6 @@ temp*
 *.png
 *.gif
 *.csv
-*.txt
 venv/
 .env
 .DS_Store
@@ -26,7 +25,7 @@ ANN.py
 ANNa.py
 CNN.py
 CNNs.py
-# Only keep: AppF.py, requirements.txt, Procfile, runtime.txt, best_pothole_detection_model.pth, final_pothole_detection_model.pth
+# Keep: AppF.py, requirements.txt, Procfile, runtime.txt, *.pth models
 __pycache__/
 *.pyc
 .DS_Store
