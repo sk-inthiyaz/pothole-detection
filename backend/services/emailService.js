@@ -1,32 +1,77 @@
 const nodemailer = require('nodemailer');
 require('dotenv').config();
 
-// Create transporter with Gmail using explicit port 587 (TLS)
+// Optional: SendGrid HTTP API as primary (avoids SMTP port issues like ETIMEDOUT)
+const useSendgrid = !!process.env.SENDGRID_API_KEY;
+let sgMail = null;
+if (useSendgrid) {
+    try {
+        sgMail = require('@sendgrid/mail');
+        sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+        if (process.env.NODE_ENV !== 'production') {
+            console.log('✓ SendGrid mailer initialized');
+        }
+    } catch (err) {
+        console.error('✗ Failed to initialize SendGrid:', err?.message || err);
+    }
+}
+
+// Create SMTP transporter (fallback when SENDGRID_API_KEY is not provided)
 const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false, // Use TLS (not SSL)
-    auth: {
+    host: process.env.SMTP_HOST || 'smtp.gmail.com',
+    port: Number(process.env.SMTP_PORT || 587),
+    secure: String(process.env.SMTP_SECURE || 'false') === 'true', // TLS (false) vs SSL (true)
+    auth: (process.env.EMAIL_USER && process.env.EMAIL_PASS) ? {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
-    },
+    } : undefined,
     tls: {
         rejectUnauthorized: false // Allow self-signed certificates
-    }
+    },
+    // Timeouts to avoid long hangs on unreachable SMTP
+    connectionTimeout: 10_000,
+    greetingTimeout: 10_000,
+    socketTimeout: 20_000
 });
 
 // Test transporter configuration
-transporter.verify((error, success) => {
-    const isProd = process.env.NODE_ENV === 'production';
-    
-    if (error) {
-        console.error('Email service configuration error:', error);
-    } else {
-        if (!isProd) {
-            console.log('✓ Email service is ready');
+// Only verify SMTP transporter when not using SendGrid
+if (!useSendgrid) {
+    transporter.verify((error, success) => {
+        const isProd = process.env.NODE_ENV === 'production';
+        if (error) {
+            console.error('Email service configuration error:', error);
+        } else if (!isProd) {
+            console.log('✓ Email SMTP service is ready');
         }
+    });
+}
+
+// Helper: deliver mail via SendGrid (preferred) or SMTP fallback
+async function deliver(mailOptions) {
+    if (String(process.env.EMAIL_DISABLE || 'false') === 'true') {
+        console.warn('⚠️ Email sending is disabled via EMAIL_DISABLE=true');
+        return { success: true, messageId: 'disabled' };
     }
-});
+
+    const fromAddress = process.env.EMAIL_FROM || process.env.EMAIL_USER || mailOptions.from;
+
+    if (useSendgrid && sgMail) {
+        const msg = {
+            to: mailOptions.to,
+            from: fromAddress,
+            subject: mailOptions.subject,
+            html: mailOptions.html,
+            text: mailOptions.text,
+        };
+        await sgMail.send(msg);
+        return { success: true, messageId: 'sendgrid' };
+    }
+
+    // Fallback to SMTP
+    const info = await transporter.sendMail({ ...mailOptions, from: fromAddress });
+    return { success: true, messageId: info.messageId };
+}
 
 /**
  * Generate 6-digit OTP
@@ -162,7 +207,7 @@ const sendOTPEmail = async (email, otp, name) => {
     };
 
     try {
-        const info = await transporter.sendMail(mailOptions);
+        const info = await deliver(mailOptions);
         const isProd = process.env.NODE_ENV === 'production';
         
         if (!isProd) {
@@ -289,7 +334,7 @@ const sendWelcomeEmail = async (email, name) => {
     };
 
     try {
-        const info = await transporter.sendMail(mailOptions);
+        const info = await deliver(mailOptions);
         const isProd = process.env.NODE_ENV === 'production';
         
         if (!isProd) {
@@ -538,7 +583,7 @@ const sendPotholeComplaintEmail = async (email, name, location, description) => 
     };
 
     try {
-        const info = await transporter.sendMail(mailOptions);
+        const info = await deliver(mailOptions);
         const isProd = process.env.NODE_ENV === 'production';
         
         if (!isProd) {

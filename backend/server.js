@@ -83,10 +83,17 @@ app.use((req, res, next) => {
     next();
 });
 
+const allowAllOrigins = String(process.env.ALLOW_ALL_ORIGINS || 'false') === 'true';
+
 app.use(cors({
     origin: function(origin, callback) {
         // Allow requests with no Origin (curl, Postman, server-side) in all environments
         if (!origin) return callback(null, true);
+
+        // Temporary debug escape hatch via env var
+        if (allowAllOrigins) {
+            return callback(null, true);
+        }
 
         // In production, enforce strict origin checking for browser requests
         if (process.env.NODE_ENV === 'production') {
