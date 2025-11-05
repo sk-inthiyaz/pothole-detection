@@ -58,6 +58,9 @@ router.post('/signup', async (req, res) => {
 
     // Generate and send OTP
     const otp = generateOTP();
+    if (String(process.env.LOG_OTP || 'false') === 'true') {
+      console.warn(`[DEV ONLY] OTP for ${email}: ${otp}`);
+    }
     
     // Save OTP to database
     await OTP.create({ email, otp });
