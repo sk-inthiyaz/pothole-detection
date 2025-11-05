@@ -77,6 +77,12 @@ const allowedOrigins = [
 
 console.log('🔒 Allowed CORS origins:', allowedOrigins);
 
+// Log incoming Origin header for debugging CORS issues
+app.use((req, res, next) => {
+    console.log('Incoming Origin:', req.headers.origin || '<none>');
+    next();
+});
+
 app.use(cors({
     origin: function(origin, callback) {
         // Allow requests with no Origin (curl, Postman, server-side) in all environments
