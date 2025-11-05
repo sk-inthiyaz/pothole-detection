@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import torch
 import torch.nn as nn
 from torchvision import transforms
@@ -11,6 +12,7 @@ import gc
 
 # Initialize Flask app
 app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
 logging.basicConfig(level=logging.DEBUG)
 # Force redeploy - added health check and memory optimizations
 
