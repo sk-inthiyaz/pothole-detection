@@ -79,21 +79,22 @@ console.log('🔒 Allowed CORS origins:', allowedOrigins);
 
 app.use(cors({
     origin: function(origin, callback) {
-        // In production, enforce strict origin checking
+        // Allow requests with no Origin (curl, Postman, server-side) in all environments
+        if (!origin) return callback(null, true);
+
+        // In production, enforce strict origin checking for browser requests
         if (process.env.NODE_ENV === 'production') {
-            if (!origin || allowedOrigins.indexOf(origin) === -1) {
+            if (allowedOrigins.indexOf(origin) === -1) {
                 return callback(new Error('Not allowed by CORS'));
             }
+            return callback(null, true);
+        }
+
+        // In development, allow listed origins
+        if (allowedOrigins.indexOf(origin) !== -1) {
             callback(null, true);
         } else {
-            // In development, allow requests with no origin (mobile apps, Postman, etc.)
-            if (!origin) return callback(null, true);
-            
-            if (allowedOrigins.indexOf(origin) !== -1) {
-                callback(null, true);
-            } else {
-                callback(new Error('Not allowed by CORS'));
-            }
+            callback(new Error('Not allowed by CORS'));
         }
     },
     credentials: true // Allow cookies and authentication headers
