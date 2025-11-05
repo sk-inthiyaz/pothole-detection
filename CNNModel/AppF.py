@@ -91,6 +91,63 @@ def home():
         'model_loaded': os.path.exists(model_path) if 'model_path' in globals() else False
     })
 
+# Define the /predict route (for frontend compatibility)
+@app.route('/predict', methods=['POST'])
+def predict_image():
+    if 'file' not in request.files:
+        app.logger.error("No file provided")
+        return jsonify({"error": "No file provided"}), 400
+
+    file = request.files['file']
+    if file.filename == '':
+        app.logger.error("No selected file")
+        return jsonify({"error": "No selected file"}), 400
+
+    try:
+        # Read and process the image
+        app.logger.info("Processing image request")
+        img_bytes = file.read()
+        image = Image.open(io.BytesIO(img_bytes))
+        image = image.convert('RGB')
+        
+        # Clear image bytes from memory
+        del img_bytes
+        
+        # Transform image
+        image_tensor = transform(image).unsqueeze(0)
+        del image  # Free memory
+        
+        app.logger.info("Image preprocessed, running inference")
+
+        # Predict using the model with memory cleanup
+        start_time = time.time()
+        
+        with torch.no_grad():
+            output = model(image_tensor)
+            confidence = output.item()
+            prediction = (output > 0.5).float().item()
+        
+        # Clean up tensors
+        del image_tensor, output
+        gc.collect()
+        
+        prediction_time = time.time() - start_time
+
+        is_pothole = bool(prediction == 1)
+        
+        app.logger.info(f"Prediction complete: {is_pothole}, {confidence:.4f}, {prediction_time:.2f}s")
+
+        return jsonify({
+            "is_pothole": is_pothole,
+            "confidence": float(confidence),
+            "prediction_time": f"{prediction_time:.2f}s"
+        })
+
+    except Exception as e:
+        app.logger.error(f"Error processing image: {str(e)}")
+        gc.collect()  # Clean up on error
+        return jsonify({"error": "Failed to process image", "details": str(e)}), 500
+
 # Define the /process route with memory optimization
 @app.route('/process', methods=['POST'])
 def process_image():
