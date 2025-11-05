@@ -23,12 +23,19 @@ const PotholeImageUpload = () => {
     formData.append('file', selectedFile);
 
     try {
-      await axios.post('http://192.168.196.2:5000/upload', formData);
-      setAlertMessage('File uploaded successfully!');
-      setAlertType('success');
+      const response = await axios.post('https://pothole-detection-ai-4562ae5b30dc.herokuapp.com/predict', formData);
+      
+      if (response.data.is_pothole) {
+        setAlertMessage(`Pothole Detected! Confidence: ${(response.data.confidence * 100).toFixed(2)}%`);
+        setAlertType('success');
+      } else {
+        setAlertMessage(`No Pothole Detected. Confidence: ${(response.data.confidence * 100).toFixed(2)}%`);
+        setAlertType('info');
+      }
     } catch (error) {
       setAlertMessage('Error uploading the file.');
       setAlertType('error');
+      console.error('Upload error:', error);
     }
   };
 
