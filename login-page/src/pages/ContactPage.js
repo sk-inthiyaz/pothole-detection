@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './ContactPageNew.css';
 
 const ContactPage = () => {
@@ -9,6 +9,16 @@ const ContactPage = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
+
+  // Auto-hide toast after 5 seconds
+  useEffect(() => {
+    if (submitStatus) {
+      const timer = setTimeout(() => {
+        setSubmitStatus(null);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [submitStatus]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -47,21 +57,35 @@ const ContactPage = () => {
 
   return (
     <div className='ConatactPagebody'>
+        {/* Toast Notification - Fixed position top-right */}
+        {submitStatus && (
+          <div className={`toast-notification ${submitStatus === 'success' ? 'toast-success' : 'toast-error'}`}>
+            <div className="toast-content">
+              <span className="toast-icon">
+                {submitStatus === 'success' ? '✅' : '❌'}
+              </span>
+              <div className="toast-text">
+                <strong>{submitStatus === 'success' ? 'Success!' : 'Error!'}</strong>
+                <p>
+                  {submitStatus === 'success' 
+                    ? 'Message sent successfully! We\'ll get back to you soon.' 
+                    : 'Oops! Something went wrong. Please try again.'}
+                </p>
+              </div>
+              <button 
+                className="toast-close" 
+                onClick={() => setSubmitStatus(null)}
+                aria-label="Close notification"
+              >
+                ×
+              </button>
+            </div>
+          </div>
+        )}
+        
         <div className="contact-container">
         <h1 className="contact-title">Contact Us 📧</h1>
         <p className="contact-subtitle">We'd love to hear from you! Drop us a message below.</p>
-        
-        {submitStatus === 'success' && (
-          <div className="alert alert-success">
-            ✅ Message sent successfully! We'll get back to you soon.
-          </div>
-        )}
-        
-        {submitStatus === 'error' && (
-          <div className="alert alert-error">
-            ❌ Oops! Something went wrong. Please try again.
-          </div>
-        )}
         
         <form className="contact-form" onSubmit={handleSubmit}>
             <div className="input-group">
