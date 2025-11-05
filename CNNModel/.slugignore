@@ -1,3 +1,32 @@
+# Exclude everything except model, app, and config for Heroku
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.ipynb
+*.md
+test_*
+temp*
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.csv
+*.txt
+venv/
+.env
+.DS_Store
+*.log
+*.zip
+*.tar
+*.tar.gz
+*.egg-info/
+tempCodeRunnerFile.py
+ANN.py
+ANNa.py
+CNN.py
+CNNs.py
+# Only keep: AppF.py, requirements.txt, Procfile, runtime.txt, best_pothole_detection_model.pth, final_pothole_detection_model.pth
 __pycache__/
 *.pyc
 .DS_Store
