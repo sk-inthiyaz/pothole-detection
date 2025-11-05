@@ -556,5 +556,7 @@ module.exports = {
     generateOTP,
     sendOTPEmail,
     sendWelcomeEmail,
-    sendPotholeComplaintEmail
+    sendPotholeComplaintEmail,
+    // Export transporter for reuse (e.g., contact form)
+    transporter
 };

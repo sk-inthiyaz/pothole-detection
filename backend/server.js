@@ -10,6 +10,7 @@ const authRoutes = require('./routes/authRoutes');
 const oauthRoutes = require('./routes/oauthRoutes');
 const uploadRoutes = require('./upload/upload');  // Import the upload routes
 const complaintRoutes = require('./routes/complaintRoutes'); // Import the complaint routes
+const contactRoutes = require('./routes/contactRoutes'); // Contact Us route
 
 // Security packages
 const helmet = require('helmet');
@@ -131,6 +132,7 @@ app.use('/', authRoutes);
 app.use('/', oauthRoutes); // OAuth routes (Google, Microsoft)
 app.use('/upload', uploadRoutes);  // Use the upload routes
 app.use('/api/complaints', complaintRoutes);
+app.use('/api/contact', contactRoutes);
 
 
 const PORT = process.env.PORT || 5001;
