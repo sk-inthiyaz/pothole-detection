@@ -85,30 +85,31 @@ app.use((req, res, next) => {
 
 const allowAllOrigins = String(process.env.ALLOW_ALL_ORIGINS || 'false') === 'true';
 
+// Helper: check if origin is allowed (supports *.vercel.app by default)
+function isAllowedOrigin(origin) {
+    // Allow no-origin requests
+    if (!origin) return true;
+
+    // Debug override
+    if (allowAllOrigins) return true;
+
+    // Exact allow-list
+    if (allowedOrigins.includes(origin)) return true;
+
+    // Suffix allow for Vercel preview/prod domains
+    try {
+        const { hostname } = new URL(origin);
+        if (hostname.endsWith('.vercel.app')) return true;
+    } catch (e) {
+        // ignore URL parse errors
+    }
+    return false;
+}
+
 app.use(cors({
     origin: function(origin, callback) {
-        // Allow requests with no Origin (curl, Postman, server-side) in all environments
-        if (!origin) return callback(null, true);
-
-        // Temporary debug escape hatch via env var
-        if (allowAllOrigins) {
-            return callback(null, true);
-        }
-
-        // In production, enforce strict origin checking for browser requests
-        if (process.env.NODE_ENV === 'production') {
-            if (allowedOrigins.indexOf(origin) === -1) {
-                return callback(new Error('Not allowed by CORS'));
-            }
-            return callback(null, true);
-        }
-
-        // In development, allow listed origins
-        if (allowedOrigins.indexOf(origin) !== -1) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
+        if (isAllowedOrigin(origin)) return callback(null, true);
+        return callback(new Error('Not allowed by CORS'));
     },
     credentials: true // Allow cookies and authentication headers
 }));
