@@ -66,51 +66,55 @@ async (accessToken, refreshToken, profile, done) => {
     }
 }));
 
-// Microsoft OAuth Strategy
-passport.use(new MicrosoftStrategy({
-    clientID: process.env.MICROSOFT_CLIENT_ID,
-    clientSecret: process.env.MICROSOFT_CLIENT_SECRET,
-    callbackURL: process.env.MICROSOFT_CALLBACK_URL || 'http://localhost:5001/auth/microsoft/callback',
-    scope: ['user.read']
-},
-async (accessToken, refreshToken, profile, done) => {
-    try {
-        // Check if user already exists with Microsoft ID
-        let user = await User.findOne({ microsoftId: profile.id });
+// Microsoft OAuth Strategy (Optional - only if credentials are provided)
+if (process.env.MICROSOFT_CLIENT_ID && process.env.MICROSOFT_CLIENT_SECRET) {
+    passport.use(new MicrosoftStrategy({
+        clientID: process.env.MICROSOFT_CLIENT_ID,
+        clientSecret: process.env.MICROSOFT_CLIENT_SECRET,
+        callbackURL: process.env.MICROSOFT_CALLBACK_URL || 'http://localhost:5001/auth/microsoft/callback',
+        scope: ['user.read']
+    },
+    async (accessToken, refreshToken, profile, done) => {
+        try {
+            // Check if user already exists with Microsoft ID
+            let user = await User.findOne({ microsoftId: profile.id });
 
-        if (user) {
-            // User exists, return user
-            return done(null, user);
-        }
+            if (user) {
+                // User exists, return user
+                return done(null, user);
+            }
 
-        // Check if user exists with same email (from local auth)
-        const email = profile.emails?.[0]?.value || profile._json?.userPrincipalName;
-        user = await User.findOne({ email });
+            // Check if user exists with same email (from local auth)
+            const email = profile.emails?.[0]?.value || profile._json?.userPrincipalName;
+            user = await User.findOne({ email });
 
-        if (user) {
-            // Link Microsoft account to existing user
-            user.microsoftId = profile.id;
-            user.authProvider = 'microsoft';
-            user.verified = true; // Microsoft accounts are pre-verified
+            if (user) {
+                // Link Microsoft account to existing user
+                user.microsoftId = profile.id;
+                user.authProvider = 'microsoft';
+                user.verified = true; // Microsoft accounts are pre-verified
+                await user.save();
+                return done(null, user);
+            }
+
+            // Create new user
+            user = new User({
+                microsoftId: profile.id,
+                name: profile.displayName,
+                email: email,
+                authProvider: 'microsoft',
+                verified: true // Microsoft accounts are pre-verified
+            });
+
             await user.save();
-            return done(null, user);
+            done(null, user);
+        } catch (error) {
+            console.error('Error in Microsoft OAuth:', error);
+            done(error, null);
         }
-
-        // Create new user
-        user = new User({
-            microsoftId: profile.id,
-            name: profile.displayName,
-            email: email,
-            authProvider: 'microsoft',
-            verified: true // Microsoft accounts are pre-verified
-        });
-
-        await user.save();
-        done(null, user);
-    } catch (error) {
-        console.error('Error in Microsoft OAuth:', error);
-        done(error, null);
-    }
-}));
+    }));
+} else {
+    console.log('⚠️ Microsoft OAuth not configured - skipping');
+}
 
 module.exports = passport;
