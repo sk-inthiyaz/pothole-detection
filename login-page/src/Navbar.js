@@ -38,7 +38,7 @@ const Navbar = ({ isLoggedIn, handleLogout }) => {
     <nav className="navbar">
       <div className="navbar-container">
         <Link to="/" className="logo" onClick={closeMenu}>
-          <span className="logo-icon">🕳️</span>
+          <span className="logo-icon"></span>
           <span className="logo-text">Pothole Detector</span>
         </Link>
         
