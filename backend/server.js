@@ -71,8 +71,11 @@ const apiLimiter = rateLimit({
 const allowedOrigins = [
     'http://localhost:3000',
     'http://localhost:7001',
+    'https://pothole-detection-frontend.vercel.app',
     process.env.FRONTEND_URL
 ].filter(Boolean);
+
+console.log('🔒 Allowed CORS origins:', allowedOrigins);
 
 app.use(cors({
     origin: function(origin, callback) {
