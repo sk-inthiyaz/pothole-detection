@@ -11,6 +11,7 @@ require('dotenv').config();
 router.post('/signup', async (req, res) => {
   try {
     const { name, email, password } = req.body || {};
+    console.log('[SIGNUP] Incoming:', { name, email: email && String(email).toLowerCase(), hasPassword: !!password });
 
     // Basic validation
     if (!name || !email || !password) {
@@ -29,7 +30,8 @@ router.post('/signup', async (req, res) => {
     }
 
     // Check for existing user
-    const existing = await User.findOne({ email });
+  const existing = await User.findOne({ email });
+  console.log('[SIGNUP] Existing user?', !!existing, existing?.verified ? 'verified' : 'not-verified');
     if (existing) {
       if (existing.verified) {
         return res.status(409).json({ error: 'Email already registered and verified.' });
@@ -54,7 +56,8 @@ router.post('/signup', async (req, res) => {
       authProvider: 'local',
       verified: false 
     });
-    await newUser.save();
+  await newUser.save();
+  console.log('[SIGNUP] User saved:', newUser._id);
 
     // Generate and send OTP
     const otp = generateOTP();
@@ -63,27 +66,31 @@ router.post('/signup', async (req, res) => {
     }
     
     // Save OTP to database
-    await OTP.create({ email, otp });
+  await OTP.create({ email, otp });
+  console.log('[SIGNUP] OTP stored');
 
     // Send OTP email
     try {
+      console.log('[SIGNUP] Sending OTP email via provider...');
       await sendOTPEmail(email, otp, name);
+      console.log('[SIGNUP] OTP email sent');
       return res.status(201).json({ 
         message: 'User registered successfully! Please check your email for OTP verification.',
         email: email,
         requiresVerification: true
       });
     } catch (emailError) {
-      console.error('Error sending OTP email:', emailError);
+      console.error('[SIGNUP] Error sending OTP email:', emailError?.message || emailError);
       // Delete the user if email fails
       await User.deleteOne({ email });
+      console.log('[SIGNUP] Rolled back user due to email failure:', email);
       return res.status(500).json({ 
         error: 'Failed to send verification email. Please try again.' 
       });
     }
 
   } catch (error) {
-    console.error('Error registering user:', error);
+    console.error('[SIGNUP] Error registering user:', error?.message || error);
     if (error && error.code === 11000) {
       return res.status(409).json({ error: 'Email already registered.' });
     }
