@@ -32,10 +32,16 @@ router.get('/auth/google', (req, res, next) => {
     };
 
     passport.authenticate('google', {
+        // Required and explicit
         scope: ['profile', 'email'],
+        response_type: 'code',
+        // Nice-to-have UX and offline refresh tokens
         prompt: 'select_account',
         includeGrantedScopes: true,
-        accessType: 'offline'
+        accessType: 'offline',
+        // Also pass underscore variants to ensure Google sees them even if lib doesn’t map camelCase
+        include_granted_scopes: 'true',
+        access_type: 'offline'
     })(req, res, next);
 });
 
