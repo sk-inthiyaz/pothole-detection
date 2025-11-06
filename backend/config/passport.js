@@ -19,11 +19,14 @@ passport.deserializeUser(async (id, done) => {
     }
 });
 
+// Compute a base backend URL for callbacks if explicit callback envs are not provided
+const BASE_BACKEND_URL = process.env.BACKEND_URL || `http://localhost:${process.env.PORT || 5001}`;
+
 // Google OAuth Strategy
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: process.env.GOOGLE_CALLBACK_URL || 'http://localhost:5001/auth/google/callback'
+    callbackURL: process.env.GOOGLE_CALLBACK_URL || `${BASE_BACKEND_URL}/auth/google/callback`
 },
 async (accessToken, refreshToken, profile, done) => {
     try {
@@ -71,7 +74,7 @@ if (process.env.MICROSOFT_CLIENT_ID && process.env.MICROSOFT_CLIENT_SECRET) {
     passport.use(new MicrosoftStrategy({
         clientID: process.env.MICROSOFT_CLIENT_ID,
         clientSecret: process.env.MICROSOFT_CLIENT_SECRET,
-        callbackURL: process.env.MICROSOFT_CALLBACK_URL || 'http://localhost:5001/auth/microsoft/callback',
+        callbackURL: process.env.MICROSOFT_CALLBACK_URL || `${BASE_BACKEND_URL}/auth/microsoft/callback`,
         scope: ['user.read']
     },
     async (accessToken, refreshToken, profile, done) => {
