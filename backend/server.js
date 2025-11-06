@@ -30,6 +30,10 @@ const app = express();
 // SECURITY MIDDLEWARE (Apply before routes)
 // ============================================
 
+// Trust Render/Proxy headers so req.ip and protocol are correct (needed for rate limit, secure cookies)
+app.set('trust proxy', 1);
+console.log('✅ Express trust proxy enabled');
+
 // Helmet: Set security HTTP headers
 app.use(helmet({
     contentSecurityPolicy: {
@@ -55,6 +59,7 @@ const authLimiter = rateLimit({
     message: 'Too many authentication attempts, please try again after 15 minutes',
     standardHeaders: true, // Return rate limit info in `RateLimit-*` headers
     legacyHeaders: false, // Disable `X-RateLimit-*` headers
+    skipFailedRequests: true, // don't penalize network errors
 });
 
 // General API Rate Limiter (more permissive)
@@ -64,6 +69,7 @@ const apiLimiter = rateLimit({
     message: 'Too many requests from this IP, please try again after 15 minutes',
     standardHeaders: true,
     legacyHeaders: false,
+    skipFailedRequests: true,
 });
 
 // CORS configuration - must be before other middleware
