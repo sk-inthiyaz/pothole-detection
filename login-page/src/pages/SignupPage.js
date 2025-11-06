@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './AuthPageNew.module.css';
+import { getBackendUrl } from '../utils/api';
 
 const SignUpPage = () => {
   const [name, setName] = useState('');
@@ -34,8 +35,10 @@ const SignUpPage = () => {
 
     console.log('Form submitted with:', { name, email, password });
 
+    const backendUrl = getBackendUrl();
+    console.log('[Signup] Using backend:', backendUrl);
     try {
-      const response = await fetch('http://localhost:5001/signup', {
+      const response = await fetch(`${backendUrl}/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, password })
@@ -80,7 +83,9 @@ const SignUpPage = () => {
 
   const handleOAuthSignup = (provider) => {
     // Redirect to backend OAuth route
-    window.location.href = `http://localhost:5001/auth/${provider}`;
+    const backendUrl = getBackendUrl();
+    console.log('[Signup OAuth] Using backend:', backendUrl);
+    window.location.href = `${backendUrl}/auth/${provider}`;
   };
 
   return (

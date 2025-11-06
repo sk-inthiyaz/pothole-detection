@@ -1,6 +1,7 @@
 import "./PotholePageNew.css";
 import React, { useState } from "react";
 import axios from "axios";
+import { getBackendUrl, getAiServiceUrl } from '../utils/api';
 import { useNavigate } from 'react-router-dom';
 
 const PotholeImageUpload = () => {
@@ -35,36 +36,36 @@ const PotholeImageUpload = () => {
       return;
     }
 
-    const formData = new FormData();
+  const formData = new FormData();
     formData.append("file", selectedFile);
-
+  const aiServiceUrl = getAiServiceUrl();
+  console.log('[Pothole Detect] Using AI service:', aiServiceUrl);
     try {
       const startTime = Date.now();
       const response = await axios.post(
-        "http://localhost:5001/upload",
+        `${aiServiceUrl}/predict`,
         formData
       );
-      const { pothole_detected, confidence_level, recommendation } =
-        response.data;
+      
+      // Handle response from Flask AI API
+      const { is_pothole, confidence, prediction_time } = response.data;
       const endTime = Date.now();
-      const predictionTime = ((endTime - startTime) / 1000).toFixed(2);
+      const predictionTime = prediction_time || ((endTime - startTime) / 1000).toFixed(2);
+      const confidencePercent = (confidence * 100).toFixed(2);
 
-      if (pothole_detected === "Yes") {
+      if (is_pothole) {
         setPrediction("Pothole Detected");
-        setConfidence(`Confidence: ${confidence_level}`);
+        setConfidence(`Confidence: ${confidencePercent}%`);
         setPredictionClass("prediction-yes");
-      } else if (pothole_detected === "No") {
-        setPrediction("No Pothole Detected");
-        setConfidence(`Confidence: ${confidence_level}`);
-        setPredictionClass("prediction-no");
+        setRecommendation("Immediate Repair Needed");
       } else {
-        setPrediction("Prediction unavailable");
-        setConfidence("");
-        setPredictionClass("");
+        setPrediction("No Pothole Detected");
+        setConfidence(`Confidence: ${confidencePercent}%`);
+        setPredictionClass("prediction-no");
+        setRecommendation("No Immediate Action Needed");
       }
 
-      setTime(`Detection Completed in ${predictionTime} seconds`);
-      setRecommendation(recommendation);
+      setTime(`Detection Completed in ${predictionTime}s`);
       setAlert({ message: "File uploaded successfully!", type: "success" });
     } catch (error) {
       console.error("Error uploading the file:", error);
@@ -131,8 +132,10 @@ const PotholeImageUpload = () => {
 
                   try {
                     const token = localStorage.getItem('authToken');
+                    const backendUrl = getBackendUrl();
+                    console.log('[Complaint] Using backend:', backendUrl);
                     const response = await axios.post(
-                      "http://localhost:5001/api/complaints",
+                      `${backendUrl}/api/complaints`,
                       { location, description },
                       token ? { headers: { Authorization: `Bearer ${token}` } } : undefined
                     );

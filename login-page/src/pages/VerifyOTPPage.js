@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import styles from './AuthPageNew.module.css';
+import { getBackendUrl } from '../utils/api';
 
 const VerifyOTPPage = ({ setIsLoggedIn }) => {
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
@@ -103,7 +104,9 @@ const VerifyOTPPage = ({ setIsLoggedIn }) => {
     }
 
     try {
-      const response = await fetch('http://localhost:5001/verify-otp', {
+      const backendUrl = getBackendUrl();
+      console.log('[Verify OTP] Using backend:', backendUrl);
+      const response = await fetch(`${backendUrl}/verify-otp`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, otp: otpCode })
@@ -140,7 +143,9 @@ const VerifyOTPPage = ({ setIsLoggedIn }) => {
     setAlertMessage('');
 
     try {
-      const response = await fetch('http://localhost:5001/resend-otp', {
+      const backendUrl = getBackendUrl();
+      console.log('[Resend OTP] Using backend:', backendUrl);
+      const response = await fetch(`${backendUrl}/resend-otp`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email })

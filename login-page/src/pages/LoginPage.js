@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import styles from './AuthPageNew.module.css';
+import { getBackendUrl } from '../utils/api';
 
 const LoginPage = ({ setIsLoggedIn }) => {
   const [email, setEmail] = useState('');
@@ -30,8 +31,10 @@ const LoginPage = ({ setIsLoggedIn }) => {
     setAlertMessage('');
     console.log('Form submitted with:', { email, password });
 
+    const backendUrl = getBackendUrl();
+    console.log('[Login] Using backend:', backendUrl);
     try {
-      const response = await fetch('http://localhost:5001/login', {
+      const response = await fetch(`${backendUrl}/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -71,7 +74,9 @@ const LoginPage = ({ setIsLoggedIn }) => {
 
   const handleOAuthLogin = (provider) => {
     // Redirect to backend OAuth route
-    window.location.href = `http://localhost:5001/auth/${provider}`;
+    const backendUrl = getBackendUrl();
+    console.log('[Login OAuth] Using backend:', backendUrl);
+    window.location.href = `${backendUrl}/auth/${provider}`;
   };
 
   const handleVerifyEmail = () => {

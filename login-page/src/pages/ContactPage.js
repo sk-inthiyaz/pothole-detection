@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './ContactPageNew.css';
+import { getBackendUrl } from '../utils/api';
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({
@@ -33,7 +34,8 @@ const ContactPage = () => {
     setIsSubmitting(true);
     setSubmitStatus(null);
 
-    const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5001';
+    const backendUrl = getBackendUrl();
+    console.log('[Contact] Using backend:', backendUrl);
     try {
       const res = await fetch(`${backendUrl}/api/contact`, {
         method: 'POST',
