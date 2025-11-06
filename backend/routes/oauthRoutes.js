@@ -13,9 +13,29 @@ router.get('/auth/google', (req, res, next) => {
             details: 'Credentials are missing or using placeholder values'
         });
     }
-    
-    passport.authenticate('google', { 
-        scope: ['profile', 'email'] 
+    // Instrument redirect to inspect the generated Google authorization URL (for debugging scopes/callback)
+    const originalRedirect = res.redirect.bind(res);
+    res.redirect = (url) => {
+        console.log('[OAuth][Google] Redirecting to:', url);
+        try {
+            const u = new URL(url);
+            console.log('[OAuth][Google] Query params:', {
+                scope: u.searchParams.get('scope'),
+                redirect_uri: u.searchParams.get('redirect_uri'),
+                client_id: u.searchParams.get('client_id'),
+                response_type: u.searchParams.get('response_type'),
+            });
+        } catch (e) {
+            console.log('[OAuth][Google] Non-URL redirect or parse error');
+        }
+        return originalRedirect(url);
+    };
+
+    passport.authenticate('google', {
+        scope: ['profile', 'email'],
+        prompt: 'select_account',
+        includeGrantedScopes: true,
+        accessType: 'offline'
     })(req, res, next);
 });
 
