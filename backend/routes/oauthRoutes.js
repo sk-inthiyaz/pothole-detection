@@ -112,7 +112,11 @@ router.get('/auth/current-user', (req, res) => {
 
 // Diagnostic endpoint to check OAuth configuration
 router.get('/auth/config-status', (req, res) => {
-    const baseBackend = process.env.BACKEND_URL || `http://localhost:${process.env.PORT || 5001}`;
+    const inferredBase = `${req.protocol}://${req.get('host')}`;
+    const baseBackend = process.env.BACKEND_URL 
+        || process.env.RENDER_EXTERNAL_URL 
+        || inferredBase 
+        || `http://localhost:${process.env.PORT || 5001}`;
     const googleCb = (process.env.NODE_ENV !== 'production' && process.env.GOOGLE_CALLBACK_URL)
         ? process.env.GOOGLE_CALLBACK_URL
         : `${baseBackend}/auth/google/callback`;
