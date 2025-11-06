@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import "./Navbar.css";
 
+import { isAuthenticated } from './utils/auth';
+
 const Navbar = ({ isLoggedIn, handleLogout }) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -57,13 +59,13 @@ const Navbar = ({ isLoggedIn, handleLogout }) => {
           <li><Link to="/about" onClick={closeMenu}>About</Link></li>
           <li><Link to="/workflow" onClick={closeMenu}>Workflow</Link></li>
           <li><Link to="/contact" onClick={closeMenu}>Contact</Link></li>
-          {isLoggedIn && userName && (
+          {(isLoggedIn || isAuthenticated()) && userName && (
             <li className="user-greeting" aria-label={`Logged in as ${userName}`}>
               <span className="greet-badge">Hi, {userName} 👋</span>
             </li>
           )}
           {/* Conditional rendering based on authentication state */}
-          {isLoggedIn ? (
+          {(isLoggedIn || isAuthenticated()) ? (
             <li><button onClick={logout} className="logout-btn">Logout</button></li>
           ) : (
             <li><Link to="/login" className="login-btn" onClick={closeMenu}>Login</Link></li>

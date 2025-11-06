@@ -1,12 +1,17 @@
 import React from "react";
 import { useNavigate } from 'react-router-dom';
+import { isAuthenticated } from '../utils/auth';
 import "./HomePageNew.css";
 
 const Home = () => {
   const navigate = useNavigate();
 
   const handleGetStarted = () => {
-    navigate('/login');
+    if (isAuthenticated()) {
+      navigate('/pothole');
+    } else {
+      navigate('/login');
+    }
   };
 
   return (

@@ -1,5 +1,5 @@
 // App.js
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from "./Navbar";
 import Layout from './Layout';  // Import the Layout component
@@ -13,9 +13,22 @@ import VerifyOTPPage from './pages/VerifyOTPPage';
 import OAuthCallbackPage from './pages/OAuthCallbackPage';
 import PotholePage from './pages/PotholePage';
 import LifeSaverPage from './pages/LifeSaverPage';
+import { isAuthenticated } from './utils/auth';
+import { Navigate } from 'react-router-dom';
 
 const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(() => isAuthenticated());
+
+  // Keep state in sync with localStorage updates (e.g., across tabs)
+  useEffect(() => {
+    const onStorage = (e) => {
+      if (e.key === 'authToken') {
+        setIsLoggedIn(isAuthenticated());
+      }
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, []);
 
   const handleLogout = () => {
     setIsLoggedIn(false); // Reset the login state
@@ -28,8 +41,9 @@ const App = () => {
       <Navbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
       <Routes>
         {/* Auth pages without Layout */}
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} />} />
+        {/* If already authenticated, redirect away from login/signup/verify pages */}
+        <Route path="/signup" element={isLoggedIn ? <Navigate to="/pothole" replace /> : <SignupPage />} />
+        <Route path="/login" element={isLoggedIn ? <Navigate to="/pothole" replace /> : <LoginPage setIsLoggedIn={setIsLoggedIn} />} />
         <Route path="/verify-otp" element={<VerifyOTPPage setIsLoggedIn={setIsLoggedIn} />} />
         <Route path="/auth/callback" element={<OAuthCallbackPage setIsLoggedIn={setIsLoggedIn} />} />
         
