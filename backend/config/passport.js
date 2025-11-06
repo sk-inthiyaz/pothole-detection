@@ -2,7 +2,7 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const MicrosoftStrategy = require('passport-microsoft').Strategy;
 const User = require('../models/User');
-require('dotenv').config();
+require('../config/loadEnv');
 
 // Serialize user for session
 passport.serializeUser((user, done) => {
@@ -26,7 +26,10 @@ const BASE_BACKEND_URL = process.env.BACKEND_URL || `http://localhost:${process.
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: process.env.GOOGLE_CALLBACK_URL || `${BASE_BACKEND_URL}/auth/google/callback`
+        // Prefer BACKEND_URL-derived callback in hosted envs; only honor GOOGLE_CALLBACK_URL in local dev
+        callbackURL: (process.env.NODE_ENV !== 'production' && process.env.GOOGLE_CALLBACK_URL) 
+            ? process.env.GOOGLE_CALLBACK_URL 
+            : `${BASE_BACKEND_URL}/auth/google/callback`
 },
 async (accessToken, refreshToken, profile, done) => {
     try {
@@ -74,7 +77,9 @@ if (process.env.MICROSOFT_CLIENT_ID && process.env.MICROSOFT_CLIENT_SECRET) {
     passport.use(new MicrosoftStrategy({
         clientID: process.env.MICROSOFT_CLIENT_ID,
         clientSecret: process.env.MICROSOFT_CLIENT_SECRET,
-        callbackURL: process.env.MICROSOFT_CALLBACK_URL || `${BASE_BACKEND_URL}/auth/microsoft/callback`,
+                callbackURL: (process.env.NODE_ENV !== 'production' && process.env.MICROSOFT_CALLBACK_URL)
+                    ? process.env.MICROSOFT_CALLBACK_URL
+                    : `${BASE_BACKEND_URL}/auth/microsoft/callback`,
         scope: ['user.read']
     },
     async (accessToken, refreshToken, profile, done) => {

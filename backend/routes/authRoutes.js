@@ -5,7 +5,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { generateOTP, sendOTPEmail, sendWelcomeEmail } = require('../services/emailService');
-require('dotenv').config();
+require('../config/loadEnv');
 
 // Sign up route with OTP verification
 router.post('/signup', async (req, res) => {

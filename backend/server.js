@@ -1,4 +1,4 @@
-require('dotenv').config(); // at the top of server.js
+require('./config/loadEnv'); // centralize and conditionally load .env for local only
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -19,7 +19,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 
 
 // Load environment variables
-dotenv.config();
+// Already handled by loadEnv; keep dotenv available if needed elsewhere
 
 // Connect to MongoDB
 connectDB();

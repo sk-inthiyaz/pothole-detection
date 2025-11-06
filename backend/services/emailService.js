@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer');
-require('dotenv').config();
+require('../config/loadEnv');
 
 // Optional: SendGrid HTTP API as primary (avoids SMTP port issues like ETIMEDOUT)
 const useSendgrid = !!process.env.SENDGRID_API_KEY;

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const passport = require('../config/passport');
 const jwt = require('jsonwebtoken');
-require('dotenv').config();
+require('../config/loadEnv');
 
 // Google OAuth routes
 router.get('/auth/google', (req, res, next) => {
@@ -113,8 +113,12 @@ router.get('/auth/current-user', (req, res) => {
 // Diagnostic endpoint to check OAuth configuration
 router.get('/auth/config-status', (req, res) => {
     const baseBackend = process.env.BACKEND_URL || `http://localhost:${process.env.PORT || 5001}`;
-    const googleCb = process.env.GOOGLE_CALLBACK_URL || `${baseBackend}/auth/google/callback`;
-    const msCb = process.env.MICROSOFT_CALLBACK_URL || `${baseBackend}/auth/microsoft/callback`;
+    const googleCb = (process.env.NODE_ENV !== 'production' && process.env.GOOGLE_CALLBACK_URL)
+        ? process.env.GOOGLE_CALLBACK_URL
+        : `${baseBackend}/auth/google/callback`;
+    const msCb = (process.env.NODE_ENV !== 'production' && process.env.MICROSOFT_CALLBACK_URL)
+        ? process.env.MICROSOFT_CALLBACK_URL
+        : `${baseBackend}/auth/microsoft/callback`;
     res.json({
         google: {
             configured: !!(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_ID !== 'your_google_client_id_here'),
