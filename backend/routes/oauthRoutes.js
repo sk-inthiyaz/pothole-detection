@@ -112,18 +112,21 @@ router.get('/auth/current-user', (req, res) => {
 
 // Diagnostic endpoint to check OAuth configuration
 router.get('/auth/config-status', (req, res) => {
+    const baseBackend = process.env.BACKEND_URL || `http://localhost:${process.env.PORT || 5001}`;
+    const googleCb = process.env.GOOGLE_CALLBACK_URL || `${baseBackend}/auth/google/callback`;
+    const msCb = process.env.MICROSOFT_CALLBACK_URL || `${baseBackend}/auth/microsoft/callback`;
     res.json({
         google: {
             configured: !!(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_ID !== 'your_google_client_id_here'),
             clientId: process.env.GOOGLE_CLIENT_ID ? '✓ Set' : '✗ Missing',
             clientSecret: process.env.GOOGLE_CLIENT_SECRET ? '✓ Set' : '✗ Missing',
-            callbackUrl: process.env.GOOGLE_CALLBACK_URL || 'http://localhost:5001/auth/google/callback'
+            callbackUrl: googleCb
         },
         microsoft: {
             configured: !!(process.env.MICROSOFT_CLIENT_ID && process.env.MICROSOFT_CLIENT_ID !== 'your_microsoft_client_id_here'),
             clientId: process.env.MICROSOFT_CLIENT_ID ? '✓ Set' : '✗ Missing',
             clientSecret: process.env.MICROSOFT_CLIENT_SECRET ? '✓ Set' : '✗ Missing',
-            callbackUrl: process.env.MICROSOFT_CALLBACK_URL || 'http://localhost:5001/auth/microsoft/callback'
+            callbackUrl: msCb
         },
         frontend: {
             url: process.env.FRONTEND_URL || 'http://localhost:3000'
