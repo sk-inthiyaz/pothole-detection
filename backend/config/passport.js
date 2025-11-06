@@ -20,9 +20,17 @@ passport.deserializeUser(async (id, done) => {
 });
 
 // Compute a base backend URL for callbacks if explicit callback envs are not provided
-const BASE_BACKEND_URL = process.env.BACKEND_URL 
+const sanitizeBase = (u) => {
+    if (!u || typeof u !== 'string') return u;
+    const trimmed = u.trim();
+    // Remove any trailing slashes and stray whitespace/newlines
+    return trimmed.replace(/[\s\n\r]+/g, '').replace(/\/$/, '');
+};
+
+const rawBase = process.env.BACKEND_URL 
     || process.env.RENDER_EXTERNAL_URL 
     || `http://localhost:${process.env.PORT || 5001}`;
+const BASE_BACKEND_URL = sanitizeBase(rawBase);
 
 // Google OAuth Strategy
 passport.use(new GoogleStrategy({

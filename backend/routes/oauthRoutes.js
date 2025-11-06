@@ -138,11 +138,18 @@ router.get('/auth/current-user', (req, res) => {
 
 // Diagnostic endpoint to check OAuth configuration
 router.get('/auth/config-status', (req, res) => {
+    const sanitizeBase = (u) => {
+        if (!u || typeof u !== 'string') return u;
+        const trimmed = u.trim();
+        return trimmed.replace(/[\s\n\r]+/g, '').replace(/\/$/, '');
+    };
     const inferredBase = `${req.protocol}://${req.get('host')}`;
-    const baseBackend = process.env.BACKEND_URL 
+    const baseBackend = sanitizeBase(
+        process.env.BACKEND_URL 
         || process.env.RENDER_EXTERNAL_URL 
         || inferredBase 
-        || `http://localhost:${process.env.PORT || 5001}`;
+        || `http://localhost:${process.env.PORT || 5001}`
+    );
     const googleCb = (process.env.NODE_ENV !== 'production' && process.env.GOOGLE_CALLBACK_URL)
         ? process.env.GOOGLE_CALLBACK_URL
         : `${baseBackend}/auth/google/callback`;
