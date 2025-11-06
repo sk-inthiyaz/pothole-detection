@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { transporter } = require('../services/emailService');
+const { sendGenericEmail } = require('../services/emailService');
 
 // POST /api/contact
 // Body: { name, email, message }
@@ -41,7 +41,7 @@ router.post('/', async (req, res) => {
 			`
 		};
 
-		await transporter.sendMail(mailOptions);
+	await sendGenericEmail(mailOptions);
 		return res.status(200).json({ message: 'Message sent successfully!' });
 	} catch (err) {
 		console.error('Contact form error:', err);

@@ -603,5 +603,9 @@ module.exports = {
     sendWelcomeEmail,
     sendPotholeComplaintEmail,
     // Export transporter for reuse (e.g., contact form)
-    transporter
+    transporter,
+    // Generic sendMail that respects SendGrid fallback logic
+    sendGenericEmail: async (mailOptions) => {
+        return deliver(mailOptions);
+    }
 };
