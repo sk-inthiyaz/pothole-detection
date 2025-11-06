@@ -161,7 +161,9 @@ router.get('/auth/config-status', (req, res) => {
             configured: !!(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_ID !== 'your_google_client_id_here'),
             clientId: process.env.GOOGLE_CLIENT_ID ? '✓ Set' : '✗ Missing',
             clientSecret: process.env.GOOGLE_CLIENT_SECRET ? '✓ Set' : '✗ Missing',
-            callbackUrl: googleCb
+            callbackUrl: googleCb,
+            baseBackend,
+            baseBackendEncoded: encodeURI(baseBackend)
         },
         microsoft: {
             configured: !!(process.env.MICROSOFT_CLIENT_ID && process.env.MICROSOFT_CLIENT_ID !== 'your_microsoft_client_id_here'),
