@@ -28,7 +28,10 @@
 
 .maincontainer {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background:
+    radial-gradient(circle at 15% 25%, rgba(58,123,213,0.15), transparent 55%),
+    radial-gradient(circle at 85% 80%, rgba(65,90,119,0.18), transparent 60%),
+    var(--color-bg);
   padding: 100px 0 80px;
 }
 
@@ -40,19 +43,20 @@
 }
 
 .upload-container form {
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(15px);
-  border-radius: 25px;
-  padding: 3rem;
-  border: 2px dashed rgba(255, 255, 255, 0.3);
+  background: var(--color-surface);
+  backdrop-filter: blur(12px);
+  border-radius: 18px;
+  padding: 2.4rem;
+  border: 1px dashed var(--color-border);
   text-align: center;
   transition: all 0.3s ease;
   margin-bottom: 2rem;
+  box-shadow: var(--shadow-md);
 }
 
 .upload-container form:hover {
-  border-color: rgba(240, 147, 251, 0.6);
-  background: rgba(255, 255, 255, 0.2);
+  border-color: var(--color-accent);
+  background: var(--color-surface-alt);
 }
 
 .upload-input {
@@ -62,18 +66,18 @@
   margin-bottom: 1.5rem;
   font-size: 1rem;
   font-family: inherit;
-  background: rgba(255, 255, 255, 0.2);
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 12px;
-  color: #fff;
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  color: var(--color-text);
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .upload-input::file-selector-button {
   padding: 0.8rem 1.5rem;
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  color: #fff;
+  background: var(--color-accent-gradient);
+  color: var(--color-text);
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -84,7 +88,8 @@
 
 .upload-input::file-selector-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(245, 87, 108, 0.4);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+  filter: brightness(1.08);
 }
 
 .upload-button {
@@ -92,12 +97,12 @@
   padding: 1.2rem 2.5rem;
   font-size: 1.1rem;
   font-weight: 700;
-  color: #fff;
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: var(--color-text);
+  background: var(--color-accent-gradient);
   border: none;
   border-radius: 50px;
   cursor: pointer;
-  box-shadow: 0 10px 30px rgba(245, 87, 108, 0.4);
+  box-shadow: 0 10px 28px rgba(0,0,0,0.55);
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -105,7 +110,8 @@
 
 .upload-button:hover {
   transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 15px 40px rgba(245, 87, 108, 0.6);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.6);
+  filter: brightness(1.08);
 }
 
 .upload-button:active {
@@ -144,18 +150,19 @@
 
 /* Preview Container */
 .preview-container {
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(15px);
-  border-radius: 20px;
+  background: var(--color-surface);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
   padding: 2rem;
   margin-bottom: 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--color-border);
   animation: fadeInUp 0.6s ease-out;
+  box-shadow: var(--shadow-sm);
 }
 
 .preview-container h3 {
   font-size: 1.5rem;
-  color: #fff;
+  color: var(--color-text);
   margin-bottom: 1rem;
   text-align: center;
 }
@@ -175,52 +182,53 @@
 
 /* Prediction Container */
 .prediction-container {
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(15px);
-  border-radius: 20px;
-  padding: 2.5rem;
+  background: var(--color-surface);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 2.2rem;
   margin-bottom: 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--color-border);
   text-align: center;
   animation: fadeInUp 0.8s ease-out, pulse 2s ease-in-out 1s;
+  box-shadow: var(--shadow-sm);
 }
 
 .prediction-container h3 {
   font-size: 1.8rem;
-  color: #fff;
+  color: var(--color-text);
   margin-bottom: 1rem;
 }
 
 .prediction-container p {
-  font-size: 1.2rem;
-  color: rgba(255, 255, 255, 0.95);
+  font-size: 1.15rem;
+  color: var(--color-text-muted);
   margin: 0.8rem 0;
   line-height: 1.6;
 }
 
 .prediction-yes {
-  border-color: rgba(244, 67, 54, 0.6);
-  background: rgba(244, 67, 54, 0.15);
+  border-color: rgba(58, 123, 213, 0.55);
+  background: rgba(58, 123, 213, 0.12);
 }
 
 .prediction-yes h3 {
-  color: #ff5252;
-  text-shadow: 0 2px 10px rgba(244, 67, 54, 0.5);
+  color: var(--color-accent);
+  text-shadow: 0 2px 10px rgba(58, 123, 213, 0.3);
 }
 
 .prediction-no {
-  border-color: rgba(76, 175, 80, 0.6);
-  background: rgba(76, 175, 80, 0.15);
+  border-color: rgba(65, 90, 119, 0.55);
+  background: rgba(65, 90, 119, 0.12);
 }
 
 .prediction-no h3 {
-  color: #66bb6a;
-  text-shadow: 0 2px 10px rgba(76, 175, 80, 0.5);
+  color: #93a4b8;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.3);
 }
 
 .prediction-error {
-  border-color: rgba(255, 152, 0, 0.6);
-  background: rgba(255, 152, 0, 0.15);
+  border-color: rgba(255, 77, 93, 0.6);
+  background: rgba(255, 77, 93, 0.12);
 }
 
 /* Alert Messages */
@@ -238,13 +246,13 @@
 }
 
 .alert.success {
-  background: rgba(76, 175, 80, 0.9);
-  color: #fff;
+  background: rgba(46, 204, 113, 0.92);
+  color: #0b1626;
 }
 
 .alert.error {
-  background: rgba(244, 67, 54, 0.9);
-  color: #fff;
+  background: rgba(255, 77, 93, 0.95);
+  color: #0b1626;
 }
 
 /* Modal for Complaint Form */
@@ -265,14 +273,15 @@
 }
 
 .modal {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(15px);
-  border-radius: 20px;
-  padding: 2.5rem;
-  max-width: 500px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  border-radius: 16px;
+  padding: 2.2rem;
+  max-width: 520px;
   width: 100%;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  box-shadow: var(--shadow-lg);
   position: relative;
+  border: 1px solid var(--color-border);
 }
 
 .modal.animated-pop {
@@ -280,8 +289,8 @@
 }
 
 .modal h3 {
-  font-size: 1.8rem;
-  color: #333;
+  font-size: 1.7rem;
+  color: var(--color-text);
   margin-bottom: 1.5rem;
   text-align: center;
 }
@@ -292,15 +301,17 @@
   margin-bottom: 1rem;
   font-size: 1rem;
   font-family: inherit;
-  border: 2px solid rgba(102, 126, 234, 0.3);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-alt);
+  color: var(--color-text);
   border-radius: 10px;
   transition: all 0.3s ease;
 }
 
 .complaint-input:focus {
   outline: none;
-  border-color: rgba(102, 126, 234, 0.6);
-  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 4px rgba(58,123,213,0.15);
 }
 
 .complaint-input::placeholder {
@@ -317,12 +328,12 @@ textarea.complaint-input {
   padding: 1rem 2rem;
   font-size: 1.1rem;
   font-weight: 700;
-  color: #fff;
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: var(--color-text);
+  background: var(--color-accent-gradient);
   border: none;
   border-radius: 50px;
   cursor: pointer;
-  box-shadow: 0 10px 30px rgba(245, 87, 108, 0.4);
+  box-shadow: 0 10px 28px rgba(0,0,0,0.55);
   transition: all 0.3s ease;
   text-transform: uppercase;
   margin-top: 0.5rem;
@@ -330,7 +341,8 @@ textarea.complaint-input {
 
 .complaint-submit:hover {
   transform: translateY(-3px);
-  box-shadow: 0 15px 40px rgba(245, 87, 108, 0.6);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.6);
+  filter: brightness(1.08);
 }
 
 .complaint-submit:disabled {

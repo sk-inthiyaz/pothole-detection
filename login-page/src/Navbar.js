@@ -37,6 +37,7 @@ const Navbar = ({ isLoggedIn, handleLogout }) => {
   };
 
   return (
+    <>
     <nav className="navbar">
       <div className="navbar-container">
         <Link to="/" className="logo" onClick={closeMenu}>
@@ -48,13 +49,15 @@ const Navbar = ({ isLoggedIn, handleLogout }) => {
           className={`menu-toggle ${menuOpen ? 'active' : ''}`}
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label="Toggle menu"
+          aria-expanded={menuOpen}
+          aria-controls="primary-navigation"
         >
           <span></span>
           <span></span>
           <span></span>
         </button>
 
-        <ul className={`nav-links ${menuOpen ? 'active' : ''}`}>
+        <ul id="primary-navigation" className={`nav-links ${menuOpen ? 'active' : ''}`} role="menubar">
           <li><Link to="/" onClick={closeMenu}>Home</Link></li>
           <li><Link to="/about" onClick={closeMenu}>About</Link></li>
           <li><Link to="/workflow" onClick={closeMenu}>Workflow</Link></li>
@@ -74,6 +77,9 @@ const Navbar = ({ isLoggedIn, handleLogout }) => {
         </ul>
       </div>
     </nav>
+    {/* Backdrop for mobile nav */}
+    {menuOpen && <div className={`nav-backdrop ${menuOpen ? 'active' : ''}`} onClick={closeMenu} aria-hidden="true"></div>}
+    </>
   );
 };
 
