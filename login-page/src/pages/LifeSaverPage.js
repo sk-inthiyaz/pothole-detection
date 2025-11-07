@@ -41,7 +41,16 @@ const LifeSaverPage = () => {
           }}
         >
           <div className="video-modal animated-pop">
-            <button className="video-close" onClick={() => setShowVideo(false)} aria-label="Close video">✕</button>
+            <button
+              className="video-close"
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowVideo(false);
+              }}
+              aria-label="Close video"
+            >
+              ✕
+            </button>
             <video className="video-player" src={potholeVideo} controls autoPlay playsInline />
           </div>
         </div>

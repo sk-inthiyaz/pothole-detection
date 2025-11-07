@@ -135,7 +135,9 @@
 
 /* Video CTA button */
 .video-trigger-btn {
-  margin-top: 1.5rem;
+  position: fixed;
+  right: 24px;
+  bottom: 84px; /* sit above the green report button */
   background: linear-gradient(135deg, #60a5fa 0%, #7c3aed 100%);
   color: #fff;
   border: none;
@@ -145,8 +147,7 @@
   box-shadow: 0 12px 28px rgba(96, 165, 250, 0.35);
   cursor: pointer;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
-  position: relative;
-  z-index: 1;
+  z-index: 1300; /* above the green button */
 }
 
 .video-trigger-btn:hover {
@@ -162,7 +163,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1500;
+  z-index: 2000;
   animation: fadeIn 0.2s ease;
 }
 
@@ -203,6 +204,7 @@
   font-weight: 900;
   cursor: pointer;
   transition: background 0.2s ease, transform 0.2s ease;
+  z-index: 2100;
 }
 
 .video-close:hover { background: rgba(255,255,255,0.2); transform: scale(1.05); }
