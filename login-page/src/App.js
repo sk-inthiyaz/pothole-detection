@@ -15,6 +15,7 @@ import PotholePage from './pages/PotholePage';
 import LifeSaverPage from './pages/LifeSaverPage';
 import { isAuthenticated } from './utils/auth';
 import { Navigate } from 'react-router-dom';
+import NewsPage from './pages/NewsPage';
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(() => isAuthenticated());
@@ -52,6 +53,7 @@ const App = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/workflow" element={<WorkflowPage />} />
+          <Route path="/news" element={<NewsPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/pothole" element={<PotholePage />} />
           <Route path="/lifesaver" element={<LifeSaverPage />} />

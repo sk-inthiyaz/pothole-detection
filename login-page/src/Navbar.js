@@ -58,6 +58,7 @@ const Navbar = ({ isLoggedIn, handleLogout }) => {
           <li><Link to="/" onClick={closeMenu}>Home</Link></li>
           <li><Link to="/about" onClick={closeMenu}>About</Link></li>
           <li><Link to="/workflow" onClick={closeMenu}>Workflow</Link></li>
+          <li><Link to="/news" onClick={closeMenu}>News</Link></li>
           <li><Link to="/contact" onClick={closeMenu}>Contact</Link></li>
           {(isLoggedIn || isAuthenticated()) && userName && (
             <li className="user-greeting" aria-label={`Logged in as ${userName}`}>
