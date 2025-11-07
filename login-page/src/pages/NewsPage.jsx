@@ -1,5 +1,14 @@
 import React, { useMemo, useState } from 'react';
 import './NewsPage.css';
+// Local images from src/images
+import img1 from '../images/newsimage-1.png';
+import img2 from '../images/newsimage-2.png';
+import img3 from '../images/newsimage-3.png';
+import img4 from '../images/newsimage-4.png';
+import img5 from '../images/newsimage-5.png';
+import img6 from '../images/newsimage-6.png';
+import img7 from '../images/newsimage-7.png';
+import img8 from '../images/newsimage-8.png';
 
 // Helper: get greeting by local time
 function getGreeting() {
@@ -40,7 +49,7 @@ const newsData = [
     id: 1,
     date: 'Nov 06, 2025, 12:35 IST',
     source: '[TOI]',
-    image: '/news/newsimage-1.jpg',
+    image: img1,
     title:
       'Drunk driving, dozing off at wheel, or dodging pothole? What caused Telangana bus tragedy that killed 19?',
     description:
@@ -50,7 +59,7 @@ const newsData = [
     id: 2,
     date: 'Oct 16, 2025, 16:41 IST',
     source: '[NDTV]',
-    image: '/news/newsimage-2.jpg',
+    image: img2,
     title:
       '10 Students Injured As Bus Falls Off Maharashtra Bridge Because Of Potholes',
     description:
@@ -60,7 +69,7 @@ const newsData = [
     id: 3,
     date: 'Oct 21, 2025, 18:26 IST',
     source: '[Hindustan Times]',
-    image: '/news/newsimage-3.jpg',
+    image: img3,
     title:
       'Bengaluru to get pothole-free? Siddaramaiah gives ultimatum, his deputy shares update',
     description:
@@ -70,7 +79,7 @@ const newsData = [
     id: 4,
     date: 'Oct 25, 2025, 13:28 IST',
     source: '[NDTV]',
-    image: '/news/newsimage-4.jpg',
+    image: img4,
     title:
       'Bengaluru Pothole Claims Another Life, 26-Year-Old Banker Run Over By Truck',
     description:
@@ -80,7 +89,7 @@ const newsData = [
     id: 5,
     date: 'Oct 14, 2025, 05:40 IST',
     source: '[Hindustan Times]',
-    image: '/news/newsimage-5.jpg',
+    image: img5,
     title:
       'Pay ₹6 lakh to families of pothole-death victims: HC to civic bodies',
     description:
@@ -90,7 +99,7 @@ const newsData = [
     id: 6,
     date: 'Nov 02, 2024, 22:25 IST',
     source: '[TOI]',
-    image: '/news/newsimage-6.jpg',
+    image: img6,
     title:
       'Andhra Pradesh CM Naidu vows pothole-free roads by Sankranti, announces infrastructure plans',
     description:
@@ -100,7 +109,7 @@ const newsData = [
     id: 7,
     date: 'Apr 21, 2025',
     source: '[BBC]',
-    image: '/news/newsimage-7.jpg',
+    image: img7,
     title: "Why India's roads are among the world's deadliest",
     description:
       "A deep dive into road safety challenges in India — from speeding to infrastructure gaps — and what it takes to reverse the trend..."
@@ -109,7 +118,7 @@ const newsData = [
     id: 8,
     date: 'Feb 28, 2025, 11:58 IST',
     source: '[Business Standard]',
-    image: '/news/newsimage-8.jpg',
+    image: img8,
     title:
       'Over-speeding to potholes: The many reasons Indian roads are unsafe',
     description:
