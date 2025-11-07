@@ -315,7 +315,8 @@
 }
 
 .complaint-input::placeholder {
-  color: rgba(0, 0, 0, 0.4);
+  color: rgba(224, 230, 237, 0.6);
+  font-size: 0.95rem;
 }
 
 textarea.complaint-input {

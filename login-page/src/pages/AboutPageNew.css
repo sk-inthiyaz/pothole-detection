@@ -35,7 +35,9 @@
 
 .about {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: radial-gradient(circle at 20% 30%, rgba(58,123,213,0.18), transparent 60%),
+              radial-gradient(circle at 80% 75%, rgba(65,90,119,0.22), transparent 65%),
+              var(--color-bg-alt);
   padding: 100px 0 80px;
 }
 
