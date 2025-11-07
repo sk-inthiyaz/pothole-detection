@@ -112,6 +112,36 @@
   transform: translateY(-1px);
 }
 
+/* Upload button loading state */
+.upload-button .btn-spinner {
+  display: none;
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgba(255,255,255,0.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+  vertical-align: middle;
+}
+
+.upload-button.btn-loading {
+  cursor: progress;
+}
+
+.upload-button.btn-loading .btn-label {
+  opacity: 0;
+}
+
+.upload-button.btn-loading .btn-spinner {
+  display: inline-block;
+}
+
+.upload-button[disabled] {
+  opacity: 0.75;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
 /* Preview Container */
 .preview-container {
   background: rgba(255, 255, 255, 0.15);

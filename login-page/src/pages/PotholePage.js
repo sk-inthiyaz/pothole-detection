@@ -41,6 +41,12 @@ const PotholeImageUpload = () => {
   const aiServiceUrl = getAiServiceUrl();
   console.log('[Pothole Detect] Using AI service:', aiServiceUrl);
     try {
+      // show loading on button
+      const submitBtn = event.currentTarget.querySelector('button[type="submit"]');
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.classList.add('btn-loading');
+      }
       const startTime = Date.now();
       const response = await axios.post(
         `${aiServiceUrl}/predict`,
@@ -80,6 +86,12 @@ const PotholeImageUpload = () => {
     setTimeout(() => {
       setAlert({ message: "", type: "" });
     }, 3000);
+    // remove loading
+    const submitBtn2 = event.currentTarget.querySelector('button[type="submit"]');
+    if (submitBtn2) {
+      submitBtn2.disabled = false;
+      submitBtn2.classList.remove('btn-loading');
+    }
   };
 
   return (
@@ -92,8 +104,9 @@ const PotholeImageUpload = () => {
             accept="image/*"
             onChange={handleFileChange}
           />
-          <button className="upload-button" type="submit">
-            Upload Image
+          <button className="upload-button" type="submit" aria-busy="false">
+            <span className="btn-label">Upload Image</span>
+            <span className="btn-spinner" aria-hidden="true"></span>
           </button>
         </form>
 
