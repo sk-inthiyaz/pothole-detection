@@ -1,22 +1,7 @@
 const nodemailer = require('nodemailer');
 require('../config/loadEnv');
 
-// Optional: SendGrid HTTP API as primary (avoids SMTP port issues like ETIMEDOUT)
-const useSendgrid = !!process.env.SENDGRID_API_KEY;
-let sgMail = null;
-if (useSendgrid) {
-    try {
-        sgMail = require('@sendgrid/mail');
-        sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-        if (process.env.NODE_ENV !== 'production') {
-            console.log('✓ SendGrid mailer initialized');
-        }
-    } catch (err) {
-        console.error('✗ Failed to initialize SendGrid:', err?.message || err);
-    }
-}
-
-// Create SMTP transporter (fallback when SENDGRID_API_KEY is not provided)
+// Create SMTP transporter (Nodemailer only)
 const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST || 'smtp.gmail.com',
     port: Number(process.env.SMTP_PORT || 587),
@@ -25,6 +10,9 @@ const transporter = nodemailer.createTransport({
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
     } : undefined,
+    pool: String(process.env.SMTP_POOL || 'true') === 'true',
+    maxConnections: Number(process.env.SMTP_MAX_CONNECTIONS || 5),
+    maxMessages: Number(process.env.SMTP_MAX_MESSAGES || 100),
     tls: {
         rejectUnauthorized: false // Allow self-signed certificates
     },
@@ -35,19 +23,16 @@ const transporter = nodemailer.createTransport({
 });
 
 // Test transporter configuration
-// Only verify SMTP transporter when not using SendGrid
-if (!useSendgrid) {
-    transporter.verify((error, success) => {
-        const isProd = process.env.NODE_ENV === 'production';
-        if (error) {
-            console.error('Email service configuration error:', error);
-        } else if (!isProd) {
-            console.log('✓ Email SMTP service is ready');
-        }
-    });
-}
+transporter.verify((error, success) => {
+    const isProd = process.env.NODE_ENV === 'production';
+    if (error) {
+        console.error('Email service configuration error:', error);
+    } else if (!isProd) {
+        console.log('✓ Email SMTP service is ready');
+    }
+});
 
-// Helper: deliver mail via SendGrid (preferred) or SMTP fallback
+// Helper: deliver mail via SMTP (Nodemailer)
 async function deliver(mailOptions) {
     if (String(process.env.EMAIL_DISABLE || 'false') === 'true') {
         console.warn('⚠️ Email sending is disabled via EMAIL_DISABLE=true');
@@ -55,20 +40,6 @@ async function deliver(mailOptions) {
     }
 
     const fromAddress = process.env.EMAIL_FROM || process.env.EMAIL_USER || mailOptions.from;
-
-    if (useSendgrid && sgMail) {
-        const msg = {
-            to: mailOptions.to,
-            from: fromAddress,
-            subject: mailOptions.subject,
-            html: mailOptions.html,
-            text: mailOptions.text,
-        };
-        await sgMail.send(msg);
-        return { success: true, messageId: 'sendgrid' };
-    }
-
-    // Fallback to SMTP
     const info = await transporter.sendMail({ ...mailOptions, from: fromAddress });
     return { success: true, messageId: info.messageId };
 }
@@ -604,7 +575,7 @@ module.exports = {
     sendPotholeComplaintEmail,
     // Export transporter for reuse (e.g., contact form)
     transporter,
-    // Generic sendMail that respects SendGrid fallback logic
+    // Generic sendMail using SMTP transporter
     sendGenericEmail: async (mailOptions) => {
         return deliver(mailOptions);
     }

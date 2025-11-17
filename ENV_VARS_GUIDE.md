@@ -9,7 +9,7 @@ This document lists ALL environment variables needed for deployment across all s
 | Service | Platform | Env Vars Count | Critical |
 |---------|----------|----------------|----------|
 | Frontend (React) | Vercel | 3 | ⚠️ Medium |
-| Backend (Node.js) | Render | 13 | 🔴 Critical |
+| Backend (Node.js) | Render | 18 | 🔴 Critical |
 | AI Service (Flask) | Render | 0 | ✅ None |
 
 ---
@@ -50,7 +50,7 @@ REACT_APP_GOOGLE_CLIENT_ID=123456789-abc123def456.apps.googleusercontent.com
 
 **Platform:** Render Dashboard → Your Service → Environment → Add Environment Variable
 
-### Required Variables (13)
+### Required Variables (18)
 
 #### Application Settings (2)
 ```bash
@@ -73,14 +73,20 @@ JWT_SECRET=a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a7b8c9d0e1f2
 SESSION_SECRET=z9y8x7w6v5u4t3s2r1q0p9o8n7m6l5k4j3i2h1g0f9e8d7c6b5a4z3y2x1w0v9u8
 ```
 
-#### Email (2)
+#### Email via SMTP (6)
 ```bash
-# Gmail account for sending emails
-EMAIL_USER=your-email@gmail.com
+# SMTP username and password (for authentication)
+EMAIL_USER=your-email@example.com
+EMAIL_PASS=your-smtp-password-or-app-password
 
-# Gmail App Password (NOT regular password)
-# Generate at: https://myaccount.google.com/apppasswords
-EMAIL_PASS=abcd efgh ijkl mnop
+# SMTP connection settings
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_SECURE=false
+
+# Optional: From override and pooling
+EMAIL_FROM="Pothole Detection <your-email@example.com>"
+SMTP_POOL=true
 ```
 
 #### External Services (2)
@@ -125,8 +131,12 @@ MICROSOFT_CALLBACK_URL=https://pothole-detection-backend.onrender.com/auth/micro
 | `MONGO_URI` | MongoDB Atlas → Connect → Connect your application |
 | `JWT_SECRET` | Generate: `node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"` |
 | `SESSION_SECRET` | Generate: `node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"` |
-| `EMAIL_USER` | Your Gmail address |
-| `EMAIL_PASS` | Gmail → Account → Security → App passwords |
+| `EMAIL_USER` | Your SMTP username (e.g., full email address) |
+| `EMAIL_PASS` | SMTP password or App Password from your provider |
+| `SMTP_HOST` | SMTP host from your email provider (e.g., smtp.gmail.com) |
+| `SMTP_PORT` | Typically 587 (TLS) or 465 (SSL) |
+| `SMTP_SECURE` | `false` for 587 (STARTTLS), `true` for 465 (SSL) |
+| `EMAIL_FROM` | Optional display name and email for From header |
 | `FRONTEND_URL` | From Vercel deployment |
 | `AI_SERVICE_URL` | From Render AI service deployment |
 | `GOOGLE_CLIENT_ID` | Google Cloud Console → Credentials |
@@ -167,8 +177,11 @@ PORT=5001
 MONGO_URI=mongodb+srv://skinthiyaz777:Z9L0mKb7emEBorIp@cluster0.psuc0.mongodb.net/potholeDB
 JWT_SECRET=<COPY_FROM_YOUR_LOCAL_ENV>
 SESSION_SECRET=<COPY_FROM_YOUR_LOCAL_ENV>
-EMAIL_USER=<YOUR_GMAIL>
-EMAIL_PASS=<YOUR_GMAIL_APP_PASSWORD>
+EMAIL_USER=<YOUR_SMTP_USERNAME>
+EMAIL_PASS=<YOUR_SMTP_PASSWORD_OR_APP_PASSWORD>
+SMTP_HOST=<YOUR_SMTP_HOST>
+SMTP_PORT=<587_OR_465>
+SMTP_SECURE=<false_or_true>
 FRONTEND_URL=https://pothole-detection.vercel.app
 AI_SERVICE_URL=https://pothole-detection-ai.onrender.com
 GOOGLE_CLIENT_ID=<YOUR_GOOGLE_CLIENT_ID>
@@ -237,8 +250,12 @@ Before deploying, verify:
 ✅ **Fix:** Set `JWT_SECRET` in Render env vars (persistent)
 
 ### "Email not sent" or "Authentication failed"
-❌ **Problem:** `EMAIL_PASS` is regular password, not app password  
-✅ **Fix:** Generate App Password at https://myaccount.google.com/apppasswords
+❌ **Problem:** SMTP credentials or host/port incorrect  
+✅ **Fix:**
+- Verify `SMTP_HOST`, `SMTP_PORT`, and `SMTP_SECURE` match your provider
+- Use an App Password if your provider requires it (e.g., Gmail/Outlook)
+- Ensure your hosting provider allows outbound SMTP (Render generally does)
+- Try port 587 (`SMTP_SECURE=false`) before 465 (`SMTP_SECURE=true`)
 
 ### "CORS error" in browser
 ❌ **Problem:** `FRONTEND_URL` in backend doesn't match actual frontend URL  
