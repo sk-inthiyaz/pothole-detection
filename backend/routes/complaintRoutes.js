@@ -14,7 +14,7 @@ router.post('/', async (req, res) => {
     console.log("💥 Complaint received:", req.body);
   }
 
-  const { location, description } = req.body;
+  const { location, description, imageData, confidence } = req.body;
 
   // Validate required fields
   if (!location || !description) {
@@ -45,12 +45,14 @@ router.post('/', async (req, res) => {
   }
 
   try {
-    // Save complaint to database with optional user info
+    // Save complaint to database with optional user info and image
     const newComplaint = new Complaint({
       location,
       description,
       userEmail: currentUser?.email || null,
       userName: currentUser?.name || null,
+      imageData: imageData || null, // Base64 pothole image
+      confidence: confidence || null, // AI confidence score
       status: 'pending'
     });
 
@@ -111,6 +113,29 @@ router.get('/', async (req, res) => {
     }
     
     res.status(500).json({ message: 'Failed to fetch complaints.' });
+  }
+});
+
+// Get complaint by ID with full details including image
+router.get('/:id', async (req, res) => {
+  try {
+    const complaint = await Complaint.findById(req.params.id);
+    
+    if (!complaint) {
+      return res.status(404).json({ message: 'Complaint not found.' });
+    }
+    
+    res.status(200).json(complaint);
+  } catch (err) {
+    const isProd = process.env.NODE_ENV === 'production';
+    
+    if (isProd) {
+      console.error("Error fetching complaint:", err.message);
+    } else {
+      console.error("❌ Error fetching complaint:", err);
+    }
+    
+    res.status(500).json({ message: 'Failed to fetch complaint.' });
   }
 });
 

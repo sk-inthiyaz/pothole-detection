@@ -7,6 +7,8 @@ const complaintSchema = new mongoose.Schema({
   description: { type: String, required: true },
   userEmail: { type: String, required: false }, // User email for notifications
   userName: { type: String, required: false }, // User name
+  imageData: { type: String, required: false }, // Base64 encoded pothole image
+  confidence: { type: Number, required: false }, // AI detection confidence
   status: { 
     type: String, 
     enum: ['pending', 'in-progress', 'resolved'], 

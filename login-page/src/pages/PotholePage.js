@@ -147,9 +147,18 @@ const PotholeImageUpload = () => {
                     const token = localStorage.getItem('authToken');
                     const backendUrl = getBackendUrl();
                     console.log('[Complaint] Using backend:', backendUrl);
+                    
+                    // Include image data and confidence in complaint
+                    const complaintData = {
+                      location,
+                      description,
+                      imageData: preview, // Base64 image from preview
+                      confidence: parseFloat(confidence.replace('Confidence: ', '').replace('%', '')) / 100
+                    };
+                    
                     const response = await axios.post(
                       `${backendUrl}/api/complaints`,
-                      { location, description },
+                      complaintData,
                       token ? { headers: { Authorization: `Bearer ${token}` } } : undefined
                     );
                     setAlert({ message: response.data.message, type: "success" });
