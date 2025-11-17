@@ -9,6 +9,7 @@ const PotholeImageUpload = () => {
   const [preview, setPreview] = useState(null);
   const [prediction, setPrediction] = useState("");
   const [confidence, setConfidence] = useState("");
+  const [confidenceRaw, setConfidenceRaw] = useState(0); // Store raw confidence value
   const [time, setTime] = useState("");
   const [recommendation, setRecommendation] = useState("");
   const [alert, setAlert] = useState({ message: "", type: "" });
@@ -58,6 +59,9 @@ const PotholeImageUpload = () => {
       const endTime = Date.now();
       const predictionTime = prediction_time || ((endTime - startTime) / 1000).toFixed(2);
       const confidencePercent = (confidence * 100).toFixed(2);
+      
+      // Store raw confidence value for later use
+      setConfidenceRaw(confidence);
 
       if (is_pothole) {
         setPrediction("Pothole Detected");
@@ -147,13 +151,15 @@ const PotholeImageUpload = () => {
                     const token = localStorage.getItem('authToken');
                     const backendUrl = getBackendUrl();
                     console.log('[Complaint] Using backend:', backendUrl);
+                    console.log('[Complaint] Image data length:', preview ? preview.length : 0);
+                    console.log('[Complaint] Confidence:', confidenceRaw);
                     
                     // Include image data and confidence in complaint
                     const complaintData = {
                       location,
                       description,
                       imageData: preview, // Base64 image from preview
-                      confidence: parseFloat(confidence.replace('Confidence: ', '').replace('%', '')) / 100
+                      confidence: confidenceRaw // Use raw confidence value (0-1)
                     };
                     
                     const response = await axios.post(
