@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import "./Navbar.css";
+import logoIcon from './images/Icons.png';
 
 import { isAuthenticated } from './utils/auth';
 
@@ -41,7 +42,7 @@ const Navbar = ({ isLoggedIn, handleLogout }) => {
     <nav className="navbar">
       <div className="navbar-container">
         <Link to="/" className="logo" onClick={closeMenu}>
-          <span className="logo-icon"></span>
+          <img src={logoIcon} alt="Logo" className="logo-icon" />
           <span className="logo-text">Pothole Detector</span>
         </Link>
         
