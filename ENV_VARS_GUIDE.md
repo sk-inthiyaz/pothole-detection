@@ -76,18 +76,24 @@ SESSION_SECRET=z9y8x7w6v5u4t3s2r1q0p9o8n7m6l5k4j3i2h1g0f9e8d7c6b5a4z3y2x1w0v9u8
 #### Email via SMTP (6)
 ```bash
 # SMTP username and password (for authentication)
-EMAIL_USER=your-email@example.com
-EMAIL_PASS=your-smtp-password-or-app-password
+EMAIL_USER=your-brevo-email@example.com
+EMAIL_PASS=your-brevo-smtp-key
 
-# SMTP connection settings
-SMTP_HOST=smtp.gmail.com
+# SMTP connection settings (Brevo recommended for Render)
+SMTP_HOST=smtp-relay.brevo.com
 SMTP_PORT=587
 SMTP_SECURE=false
 
 # Optional: From override and pooling
-EMAIL_FROM="Pothole Detection <your-email@example.com>"
+EMAIL_FROM="Pothole Detection <no-reply@yourdomain.com>"
 SMTP_POOL=true
 ```
+
+**⚠️ Important:** Gmail SMTP often fails on Render due to port blocking. Use **Brevo** (Sendinblue) instead:
+1. Sign up: https://www.brevo.com/
+2. Go to: Settings → SMTP & API → Create SMTP key
+3. Use those credentials above
+4. Free tier: 300 emails/day
 
 #### External Services (2)
 ```bash
@@ -182,6 +188,13 @@ EMAIL_PASS=<YOUR_SMTP_PASSWORD_OR_APP_PASSWORD>
 SMTP_HOST=<YOUR_SMTP_HOST>
 SMTP_PORT=<587_OR_465>
 SMTP_SECURE=<false_or_true>
+
+# Example for Brevo (recommended for Render):
+# SMTP_HOST=smtp-relay.brevo.com
+# SMTP_PORT=587
+# SMTP_SECURE=false
+# EMAIL_USER=your-brevo-email@example.com
+# EMAIL_PASS=your-brevo-smtp-key
 FRONTEND_URL=https://pothole-detection.vercel.app
 AI_SERVICE_URL=https://pothole-detection-ai.onrender.com
 GOOGLE_CLIENT_ID=<YOUR_GOOGLE_CLIENT_ID>
@@ -250,12 +263,28 @@ Before deploying, verify:
 ✅ **Fix:** Set `JWT_SECRET` in Render env vars (persistent)
 
 ### "Email not sent" or "Authentication failed"
-❌ **Problem:** SMTP credentials or host/port incorrect  
+❌ **Problem:** SMTP credentials or host/port incorrect, or hosting provider blocks SMTP ports  
 ✅ **Fix:**
+- **For Render/Railway/Fly.io:** Use Brevo (smtp-relay.brevo.com) instead of Gmail
+- Gmail SMTP often fails on cloud hosting due to port blocking
+- Get free Brevo account: https://www.brevo.com/ → Settings → SMTP & API
 - Verify `SMTP_HOST`, `SMTP_PORT`, and `SMTP_SECURE` match your provider
 - Use an App Password if your provider requires it (e.g., Gmail/Outlook)
-- Ensure your hosting provider allows outbound SMTP (Render generally does)
 - Try port 587 (`SMTP_SECURE=false`) before 465 (`SMTP_SECURE=true`)
+- Check Render logs for "ETIMEDOUT" error (indicates port blocking)
+
+### SMTP Timeout (ETIMEDOUT) on Render
+❌ **Problem:** `Error: Connection timeout` with code `ETIMEDOUT`  
+✅ **Fix:**
+1. **Switch to Brevo SMTP** (most reliable on Render):
+   - Sign up at https://www.brevo.com/
+   - Get SMTP credentials from Settings → SMTP & API
+   - Update env vars: `SMTP_HOST=smtp-relay.brevo.com`, `SMTP_PORT=587`
+2. **Alternative:** Use Resend API (HTTP-based, no SMTP): https://resend.com/
+3. **Development workaround:** Use `/dev/otp/:email` endpoint to get OTPs without email
+4. **Current behavior:** App continues working, emails logged (not sent) when SMTP fails
+
+See `SMTP_TROUBLESHOOTING.md` for detailed solutions.
 
 ### "CORS error" in browser
 ❌ **Problem:** `FRONTEND_URL` in backend doesn't match actual frontend URL  

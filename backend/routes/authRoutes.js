@@ -72,20 +72,31 @@ router.post('/signup', async (req, res) => {
     // Send OTP email
     try {
       console.log('[SIGNUP] Sending OTP email via provider...');
-      await sendOTPEmail(email, otp, name);
-      console.log('[SIGNUP] OTP email sent');
+      const emailResult = await sendOTPEmail(email, otp, name);
+      
+      if (emailResult.success) {
+        console.log('[SIGNUP] OTP email sent successfully');
+      } else {
+        console.warn('[SIGNUP] OTP email failed but continuing signup flow');
+        console.warn('[SIGNUP] For production, ensure SMTP is properly configured');
+      }
+      
+      // Always return success - user is created, OTP is stored
+      // Email failure should not block user registration
       return res.status(201).json({ 
         message: 'User registered successfully! Please check your email for OTP verification.',
         email: email,
-        requiresVerification: true
+        requiresVerification: true,
+        emailSent: emailResult.success
       });
     } catch (emailError) {
-      console.error('[SIGNUP] Error sending OTP email:', emailError?.message || emailError);
-      // Delete the user if email fails
-      await User.deleteOne({ email });
-      console.log('[SIGNUP] Rolled back user due to email failure:', email);
-      return res.status(500).json({ 
-        error: 'Failed to send verification email. Please try again.' 
+      console.error('[SIGNUP] Unexpected error in email service:', emailError?.message || emailError);
+      // Still continue - user and OTP are saved
+      return res.status(201).json({ 
+        message: 'User registered successfully! Please check your email for OTP verification.',
+        email: email,
+        requiresVerification: true,
+        emailSent: false
       });
     }
 
@@ -259,5 +270,31 @@ router.post('/login', async (req, res) => {
     res.status(500).json({ error: 'Error logging in' });
   }
 });
+
+// Development-only: Get OTP for testing when email is unavailable
+// WARNING: Remove this in production or protect with authentication
+if (process.env.NODE_ENV !== 'production' || process.env.ALLOW_OTP_LOOKUP === 'true') {
+  router.get('/dev/otp/:email', async (req, res) => {
+    try {
+      const { email } = req.params;
+      const otpRecord = await OTP.findOne({ email }).sort({ createdAt: -1 });
+      
+      if (!otpRecord) {
+        return res.status(404).json({ error: 'No OTP found for this email' });
+      }
+      
+      return res.status(200).json({
+        email: email,
+        otp: otpRecord.otp,
+        createdAt: otpRecord.createdAt,
+        expiresAt: otpRecord.expiresAt,
+        warning: 'This endpoint is for development only'
+      });
+    } catch (error) {
+      console.error('Error fetching OTP:', error);
+      return res.status(500).json({ error: 'Error fetching OTP' });
+    }
+  });
+}
 
 module.exports = router;

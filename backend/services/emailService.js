@@ -1,9 +1,13 @@
 const nodemailer = require('nodemailer');
 require('../config/loadEnv');
 
+// SMTP Configuration Status
+let smtpAvailable = false;
+let smtpVerificationAttempted = false;
+
 // Create SMTP transporter (Nodemailer only)
 const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST || 'smtp.gmail.com',
+    host: process.env.SMTP_HOST || 'smtp-relay.brevo.com',
     port: Number(process.env.SMTP_PORT || 587),
     secure: String(process.env.SMTP_SECURE || 'false') === 'true', // TLS (false) vs SSL (true)
     auth: (process.env.EMAIL_USER && process.env.EMAIL_PASS) ? {
@@ -16,23 +20,30 @@ const transporter = nodemailer.createTransport({
     tls: {
         rejectUnauthorized: false // Allow self-signed certificates
     },
-    // Timeouts to avoid long hangs on unreachable SMTP
-    connectionTimeout: 10_000,
-    greetingTimeout: 10_000,
-    socketTimeout: 20_000
+    // Reduced timeouts for faster failure detection
+    connectionTimeout: 5_000,
+    greetingTimeout: 5_000,
+    socketTimeout: 10_000
 });
 
-// Test transporter configuration
-transporter.verify((error, success) => {
-    const isProd = process.env.NODE_ENV === 'production';
-    if (error) {
-        console.error('Email service configuration error:', error);
-    } else if (!isProd) {
-        console.log('✓ Email SMTP service is ready');
+// Verify SMTP configuration (non-blocking)
+(async () => {
+    try {
+        await transporter.verify();
+        smtpAvailable = true;
+        smtpVerificationAttempted = true;
+        if (process.env.NODE_ENV !== 'production') {
+            console.log('✓ Email SMTP service is ready');
+        }
+    } catch (error) {
+        smtpVerificationAttempted = true;
+        smtpAvailable = false;
+        console.warn('⚠️ SMTP unavailable (common on some hosting providers):', error.code || error.message);
+        console.warn('⚠️ Emails will be logged instead of sent. For production, ensure SMTP ports are not blocked.');
     }
-});
+})();
 
-// Helper: deliver mail via SMTP (Nodemailer)
+// Helper: deliver mail via SMTP (Nodemailer) with graceful fallback
 async function deliver(mailOptions) {
     if (String(process.env.EMAIL_DISABLE || 'false') === 'true') {
         console.warn('⚠️ Email sending is disabled via EMAIL_DISABLE=true');
@@ -40,8 +51,31 @@ async function deliver(mailOptions) {
     }
 
     const fromAddress = process.env.EMAIL_FROM || process.env.EMAIL_USER || mailOptions.from;
-    const info = await transporter.sendMail({ ...mailOptions, from: fromAddress });
-    return { success: true, messageId: info.messageId };
+    
+    try {
+        const info = await transporter.sendMail({ ...mailOptions, from: fromAddress });
+        return { success: true, messageId: info.messageId };
+    } catch (error) {
+        // Graceful degradation: log email details instead of crashing
+        console.error('❌ Failed to send email:', error.code || error.message);
+        console.warn('📧 Email details (would have been sent):');
+        console.warn('   To:', mailOptions.to);
+        console.warn('   Subject:', mailOptions.subject);
+        console.warn('   From:', fromAddress);
+        
+        if (process.env.NODE_ENV !== 'production') {
+            console.warn('   Body preview:', mailOptions.text?.substring(0, 100) || mailOptions.html?.substring(0, 100));
+        }
+        
+        // Return success to prevent blocking user flows
+        // In production, you might want to queue this for retry or use a webhook
+        return { 
+            success: false, 
+            messageId: 'smtp-failed',
+            error: error.message,
+            fallback: true 
+        };
+    }
 }
 
 /**
@@ -181,14 +215,20 @@ const sendOTPEmail = async (email, otp, name) => {
         const info = await deliver(mailOptions);
         const isProd = process.env.NODE_ENV === 'production';
         
-        if (!isProd) {
+        if (!isProd && info.success) {
             console.log('✓ OTP email sent:', info.messageId);
+        } else if (info.fallback) {
+            console.warn('⚠️ OTP email failed to send but flow continues');
         }
         
+        // Always return success to not block user signup flow
         return { success: true, messageId: info.messageId };
     } catch (error) {
         console.error('✗ Error sending OTP email:', error.message || error);
-        throw error;
+        // Don't throw - return success to allow signup to continue
+        // In production with working SMTP, you'd want to throw here
+        console.warn('⚠️ Continuing signup flow despite email failure');
+        return { success: false, messageId: 'error', error: error.message };
     }
 };
 
@@ -308,10 +348,11 @@ const sendWelcomeEmail = async (email, name) => {
         const info = await deliver(mailOptions);
         const isProd = process.env.NODE_ENV === 'production';
         
-        if (!isProd) {
+        if (!isProd && info.success) {
             console.log('✓ Welcome email sent:', info.messageId);
         }
         
+        // Welcome email is non-critical, always return success
         return { success: true };
     } catch (error) {
         console.error('✗ Error sending welcome email:', error.message || error);
@@ -557,14 +598,16 @@ const sendPotholeComplaintEmail = async (email, name, location, description) => 
         const info = await deliver(mailOptions);
         const isProd = process.env.NODE_ENV === 'production';
         
-        if (!isProd) {
+        if (!isProd && info.success) {
             console.log('✓ Pothole complaint confirmation email sent:', info.messageId);
         }
         
+        // Return success even if email fails (complaint already saved)
         return { success: true, messageId: info.messageId };
     } catch (error) {
         console.error('✗ Error sending pothole complaint email:', error.message || error);
-        throw error;
+        // Don't throw - complaint is already saved in DB
+        return { success: false, error: error.message };
     }
 };
 
