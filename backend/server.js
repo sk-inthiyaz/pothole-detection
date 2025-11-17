@@ -120,9 +120,9 @@ app.use(cors({
     credentials: true // Allow cookies and authentication headers
 }));
 
-// Body parser middleware
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+// Body parser middleware (increased limit for base64 images)
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
 
 // Session middleware (required for Passport OAuth)
 app.use(session({

@@ -90,12 +90,6 @@ const PotholeImageUpload = () => {
     setTimeout(() => {
       setAlert({ message: "", type: "" });
     }, 3000);
-    // remove loading
-    const submitBtn2 = event.currentTarget.querySelector('button[type="submit"]');
-    if (submitBtn2) {
-      submitBtn2.disabled = false;
-      submitBtn2.classList.remove('btn-loading');
-    }
   };
 
   return (
