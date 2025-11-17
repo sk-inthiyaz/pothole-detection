@@ -544,6 +544,67 @@
   font-weight: 600;
 }
 
+/* Spam Notice Banner */
+.spamNotice {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 1.2rem 1.5rem;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.15) 0%, rgba(255, 152, 0, 0.15) 100%);
+  border-left: 4px solid #FFC107;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  animation: fadeInScale 0.6s ease-out 0.2s both;
+  border: 1px solid rgba(255, 193, 7, 0.2);
+}
+
+.spamIcon {
+  font-size: 2rem;
+  line-height: 1;
+  flex-shrink: 0;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.spamContent {
+  flex: 1;
+}
+
+.spamContent h3 {
+  color: var(--color-text);
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.spamContent p {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0 0 0.75rem 0;
+}
+
+.spamContent strong {
+  color: #FFC107;
+  font-weight: 700;
+}
+
+.spamTip {
+  display: inline-block;
+  padding: 0.5rem 0.75rem;
+  background: rgba(255, 193, 7, 0.2);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: var(--color-text);
+  font-weight: 600;
+  border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.spamTip strong {
+  color: #f093fb;
+}
+
 /* OAuth Callback Page Styles */
 .callbackContainer {
   text-align: center;
@@ -636,6 +697,29 @@
     width: 40px;
     height: 50px;
     font-size: 1.3rem;
+  }
+
+  .spamNotice {
+    flex-direction: column;
+    padding: 1rem 1.2rem;
+    gap: 0.75rem;
+  }
+
+  .spamIcon {
+    font-size: 1.75rem;
+  }
+
+  .spamContent h3 {
+    font-size: 0.95rem;
+  }
+
+  .spamContent p {
+    font-size: 0.85rem;
+  }
+
+  .spamTip {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.6rem;
   }
 
   .divider {

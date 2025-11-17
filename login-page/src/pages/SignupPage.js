@@ -107,6 +107,18 @@ const SignUpPage = () => {
           </div>
         )}
 
+        {/* Email Deliverability Notice */}
+        <div className={styles.spamNotice}>
+          <div className={styles.spamIcon}>📧</div>
+          <div className={styles.spamContent}>
+            <h3>Check your spam folder!</h3>
+            <p>
+              Our verification emails may land in <strong>Spam</strong> or <strong>Promotions</strong>.
+              Mark us as safe to ensure smooth communication!
+            </p>
+          </div>
+        </div>
+
         {/* Signup Form */}
         <form className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.inputGroup}>

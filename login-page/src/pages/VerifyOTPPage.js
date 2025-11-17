@@ -180,6 +180,21 @@ const VerifyOTPPage = ({ setIsLoggedIn }) => {
           <p className={styles.emailDisplay}>{email}</p>
         </div>
 
+        {/* Spam Warning Banner */}
+        <div className={styles.spamNotice}>
+          <div className={styles.spamIcon}>📬</div>
+          <div className={styles.spamContent}>
+            <h3>Can't find the email?</h3>
+            <p>
+              Your verification code may be in your <strong>Spam</strong> or <strong>Junk</strong> folder.
+              Please check there and mark us as <strong>Not Spam</strong> to receive future emails directly in your inbox.
+            </p>
+            <div className={styles.spamTip}>
+              💡 Add <strong>no-reply@mydomain.com</strong> to your contacts for better delivery
+            </div>
+          </div>
+        </div>
+
         {alertMessage && (
           <div className={`${styles.alert} ${
             alertType === 'success' ? styles.success : styles.error
