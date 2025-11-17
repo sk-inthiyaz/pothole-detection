@@ -44,7 +44,7 @@ const OAuthCallbackPage = ({ setIsLoggedIn }) => {
   }, [searchParams, navigate, setIsLoggedIn]);
 
   return (
-    <div className={styles.container}>
+    <div className={styles.pageContainer}>
       <div className={styles.callbackContainer}>
         {status === 'processing' && (
           <>
