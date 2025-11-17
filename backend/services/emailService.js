@@ -1,15 +1,31 @@
 const nodemailer = require('nodemailer');
 require('../config/loadEnv');
 
-// SMTP Configuration Status
-let smtpAvailable = false;
-let smtpVerificationAttempted = false;
+// Brevo API Configuration (preferred - works on all hosting providers)
+let brevoClient = null;
+let brevoAvailable = false;
 
-// Create SMTP transporter (Nodemailer only)
+if (process.env.BREVO_API_KEY) {
+    try {
+        const brevo = require('@getbrevo/brevo');
+        const apiInstance = new brevo.TransactionalEmailsApi();
+        apiInstance.setApiKey(brevo.TransactionalEmailsApiApiKeys.apiKey, process.env.BREVO_API_KEY);
+        brevoClient = apiInstance;
+        brevoAvailable = true;
+        if (process.env.NODE_ENV !== 'production') {
+            console.log('✓ Brevo API email service initialized');
+        }
+    } catch (error) {
+        console.warn('⚠️ Failed to initialize Brevo API:', error.message);
+    }
+}
+
+// SMTP Fallback Configuration
+let smtpAvailable = false;
 const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST || 'smtp-relay.brevo.com',
     port: Number(process.env.SMTP_PORT || 587),
-    secure: String(process.env.SMTP_SECURE || 'false') === 'true', // TLS (false) vs SSL (true)
+    secure: String(process.env.SMTP_SECURE || 'false') === 'true',
     auth: (process.env.EMAIL_USER && process.env.EMAIL_PASS) ? {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
@@ -17,33 +33,32 @@ const transporter = nodemailer.createTransport({
     pool: String(process.env.SMTP_POOL || 'true') === 'true',
     maxConnections: Number(process.env.SMTP_MAX_CONNECTIONS || 5),
     maxMessages: Number(process.env.SMTP_MAX_MESSAGES || 100),
-    tls: {
-        rejectUnauthorized: false // Allow self-signed certificates
-    },
-    // Reduced timeouts for faster failure detection
+    tls: { rejectUnauthorized: false },
     connectionTimeout: 5_000,
     greetingTimeout: 5_000,
     socketTimeout: 10_000
 });
 
-// Verify SMTP configuration (non-blocking)
-(async () => {
-    try {
-        await transporter.verify();
-        smtpAvailable = true;
-        smtpVerificationAttempted = true;
-        if (process.env.NODE_ENV !== 'production') {
-            console.log('✓ Email SMTP service is ready');
+// Verify SMTP configuration (non-blocking, only if Brevo API not available)
+if (!brevoAvailable && (process.env.EMAIL_USER && process.env.EMAIL_PASS)) {
+    (async () => {
+        try {
+            await transporter.verify();
+            smtpAvailable = true;
+            if (process.env.NODE_ENV !== 'production') {
+                console.log('✓ SMTP email service is ready');
+            }
+        } catch (error) {
+            smtpAvailable = false;
+            console.warn('⚠️ SMTP unavailable:', error.code || error.message);
+            if (!brevoAvailable) {
+                console.warn('⚠️ Configure BREVO_API_KEY for reliable email delivery on cloud hosting');
+            }
         }
-    } catch (error) {
-        smtpVerificationAttempted = true;
-        smtpAvailable = false;
-        console.warn('⚠️ SMTP unavailable (common on some hosting providers):', error.code || error.message);
-        console.warn('⚠️ Emails will be logged instead of sent. For production, ensure SMTP ports are not blocked.');
-    }
-})();
+    })();
+}
 
-// Helper: deliver mail via SMTP (Nodemailer) with graceful fallback
+// Helper: deliver mail via Brevo API (preferred) or SMTP fallback
 async function deliver(mailOptions) {
     if (String(process.env.EMAIL_DISABLE || 'false') === 'true') {
         console.warn('⚠️ Email sending is disabled via EMAIL_DISABLE=true');
@@ -51,31 +66,67 @@ async function deliver(mailOptions) {
     }
 
     const fromAddress = process.env.EMAIL_FROM || process.env.EMAIL_USER || mailOptions.from;
-    
-    try {
-        const info = await transporter.sendMail({ ...mailOptions, from: fromAddress });
-        return { success: true, messageId: info.messageId };
-    } catch (error) {
-        // Graceful degradation: log email details instead of crashing
-        console.error('❌ Failed to send email:', error.code || error.message);
-        console.warn('📧 Email details (would have been sent):');
-        console.warn('   To:', mailOptions.to);
-        console.warn('   Subject:', mailOptions.subject);
-        console.warn('   From:', fromAddress);
-        
-        if (process.env.NODE_ENV !== 'production') {
-            console.warn('   Body preview:', mailOptions.text?.substring(0, 100) || mailOptions.html?.substring(0, 100));
+    const fromName = fromAddress.match(/"([^"]+)"/)?.[1] || 'Pothole Detection';
+    const fromEmail = fromAddress.match(/<([^>]+)>|^([^\s]+)$/)?.[1] || fromAddress;
+
+    // Try Brevo API first (reliable on all platforms)
+    if (brevoAvailable && brevoClient) {
+        try {
+            const brevo = require('@getbrevo/brevo');
+            const sendSmtpEmail = new brevo.SendSmtpEmail();
+            
+            sendSmtpEmail.sender = { name: fromName, email: fromEmail };
+            sendSmtpEmail.to = [{ email: mailOptions.to }];
+            sendSmtpEmail.subject = mailOptions.subject;
+            sendSmtpEmail.htmlContent = mailOptions.html;
+            
+            if (mailOptions.text) {
+                sendSmtpEmail.textContent = mailOptions.text;
+            }
+
+            const result = await brevoClient.sendTransacEmail(sendSmtpEmail);
+            
+            if (process.env.NODE_ENV !== 'production') {
+                console.log('✓ Email sent via Brevo API:', result.response?.messageId);
+            }
+            
+            return { success: true, messageId: result.response?.messageId || 'brevo-api', provider: 'brevo-api' };
+        } catch (error) {
+            console.error('❌ Brevo API failed:', error.message);
+            // Fall through to SMTP
         }
-        
-        // Return success to prevent blocking user flows
-        // In production, you might want to queue this for retry or use a webhook
-        return { 
-            success: false, 
-            messageId: 'smtp-failed',
-            error: error.message,
-            fallback: true 
-        };
     }
+
+    // Try SMTP as fallback
+    if (smtpAvailable) {
+        try {
+            const info = await transporter.sendMail({ ...mailOptions, from: fromAddress });
+            if (process.env.NODE_ENV !== 'production') {
+                console.log('✓ Email sent via SMTP:', info.messageId);
+            }
+            return { success: true, messageId: info.messageId, provider: 'smtp' };
+        } catch (error) {
+            console.error('❌ SMTP failed:', error.message);
+        }
+    }
+
+    // Both failed - log details
+    console.error('❌ All email delivery methods failed');
+    console.warn('📧 Email details (not sent):');
+    console.warn('   To:', mailOptions.to);
+    console.warn('   Subject:', mailOptions.subject);
+    console.warn('   From:', fromAddress);
+    
+    if (process.env.NODE_ENV !== 'production') {
+        console.warn('   Body preview:', mailOptions.text?.substring(0, 100) || mailOptions.html?.substring(0, 100));
+    }
+    
+    return { 
+        success: false, 
+        messageId: 'all-failed',
+        error: 'No email delivery method available',
+        fallback: true 
+    };
 }
 
 /**
