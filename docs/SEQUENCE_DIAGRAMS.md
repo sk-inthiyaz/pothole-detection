@@ -439,7 +439,7 @@ Note over React Frontend: formData.append('file', selectedFile)
 
 React Frontend -> React Frontend: 14. Record start timestamp
 React Frontend -> Flask AI Service: 15. POST /predict (multipart/form-data)
-Note over Flask AI Service: URL: pothole-detection-ai.herokuapp.com/predict
+Note over Flask AI Service: URL: pothole-detection-ai-xxxx.herokuapp.com/predict (Heroku paid dyno)
 
 Flask AI Service -> Flask AI Service: 16. Receive image file
 Flask AI Service -> Flask AI Service: 17. Validate image format

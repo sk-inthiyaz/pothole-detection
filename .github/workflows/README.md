@@ -27,7 +27,7 @@ This GitHub Action pings your services every 14 minutes to keep them active.
 
 **Secret 2: AI_SERVICE_URL**
 - Name: `AI_SERVICE_URL`
-- Value: `https://your-ai-service-url.onrender.com`
+- Value: `https://your-ai-service-url.herokuapp.com` (Heroku paid dyno)
 - Click **Add secret**
 
 ### 3. Enable Workflow
@@ -57,6 +57,7 @@ Actions:
 - ✅ Faster response times
 - ✅ Better user experience
 - ✅ Free (GitHub Actions: 2,000 minutes/month for free accounts)
+- ℹ️ Note: AI service is hosted on Heroku (paid dyno via a subscribed account); keep-warm pings primarily help Render backend.
 
 ## Cost Calculation
 

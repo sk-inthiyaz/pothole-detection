@@ -11,8 +11,8 @@ This guide will help you deploy your full-stack MERN + AI application to free ho
 ```
 Frontend (React)     →  Vercel (Free)
 Backend (Node.js)    →  Render (Free)
-AI Service (Flask)   →  Heroko (Free)//Here i took(Senior 's subsciption) 
-Database             →  MongoDB Atlas 
+AI Service (Flask)   →  Heroku (Paid – deployed using my brother’s subscribed account)
+Database             →  MongoDB Atlas
 ```
 
 ---
@@ -28,40 +28,37 @@ Database             →  MongoDB Atlas
 
 ---
 
-## 1️⃣ Deploy Python AI Service (Flask) on heroku
+## 1️⃣ Deploy Python AI Service (Flask) on Heroku (Paid)
 
 ### Step 1.1: Prepare Python App for Deployment
 
 **Create `CNNModel/Procfile`** (already created below)
-**Create `CNNModel/render.yaml`** (already created below)
+Note: Heroku requires a `Procfile`; `render.yaml` is not needed for Heroku.
 
 ### Step 1.2: Fix Model Path in AppF.py
 
 The model path needs to be relative for deployment. I'll update it automatically.
 
-### Step 1.3: Deploy to Render
+### Step 1.3: Deploy to Heroku
 
-1. **Go to [Render Dashboard](https://dashboard.render.com/)**
-2. Click **"New +" → "Web Service"**
-3. Connect your GitHub repository `pothole-detection`
-4. Configure:
-   - **Name:** `pothole-detection-ai`
-   - **Region:** Choose closest to you (e.g., Oregon USA)
-   - **Branch:** `main`
-   - **Root Directory:** `CNNModel`
-   - **Runtime:** `Python 3`
-   - **Build Command:** `pip install -r requirements.txt`
-   - **Start Command:** `gunicorn --bind 0.0.0.0:$PORT AppF:app`
-   - **Instance Type:** `Free`
-5. **Environment Variables:** None needed for AI service
-6. Click **"Create Web Service"**
-7. Wait 5-10 minutes for deployment
-8. **Copy the URL:** `https://pothole-detection-ai.onrender.com` (example)
+Heroku dynos are not free. I deployed the AI service using a paid plan on my brother’s Heroku account.
+
+1. Install the Heroku CLI and login: `heroku login`
+2. Create the app: `heroku create pothole-detection-ai`
+3. Set stack and buildpack:
+   - `heroku stack:set heroku-22`
+   - `heroku buildpacks:add heroku/python`
+4. Ensure `CNNModel/Procfile` contains:
+   - `web: gunicorn AppF:app --bind 0.0.0.0:$PORT`
+5. Deploy from the repository root:
+   - `git push heroku main`
+6. Verify dyno is running: `heroku ps`
+7. Copy the app URL (example): `https://pothole-detection-ai-xxxx.herokuapp.com`
 
 ### Step 1.4: Test AI Service
 
 ```bash
-curl -X POST https://pothole-detection-ai.onrender.com/process \
+curl -X POST https://pothole-detection-ai-xxxx.herokuapp.com/process \
   -F "file=@test_image.jpg"
 ```
 
@@ -372,13 +369,12 @@ app.use(helmet({
 3. Set interval: 5 minutes
 4. Free tier: 50 monitors
 
-**Option 3: GitHub Actions (Advanced)**
-I can create a GitHub Action to ping your services every 14 minutes.
+
 
 ---
 
 ## 9️⃣ Custom Domain (Optional)
-
+## This is optional but i had plan to do this(In future)
 ### Connect Custom Domain to Vercel
 
 1. Purchase a domain from any domain registrar (e.g., GoDaddy, Google Domains, Cloudflare) (~$10-15/year)
@@ -511,6 +507,5 @@ Add these to your resume:
 
 ---
 
-**Made with ❤️ for Resume Projects**
 
 *For issues, check logs in Render/Vercel dashboards or open a GitHub issue.*

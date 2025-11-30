@@ -17,7 +17,7 @@ This intelligent system combines computer vision, cloud infrastructure, and mode
 ✨ **Real-time AI Detection** - PyTorch CNN model with 92%+ accuracy deployed on Flask microservice  
 🔐 **Enterprise Authentication** - JWT-based auth with OAuth 2.0 (Google, Microsoft), OTP email verification via Brevo API  
 📱 **Mobile-First Design** - Fully responsive React UI with glass-morphism effects, optimized for all devices  
-☁️ **Cloud-Native Architecture** - Deployed on Vercel (frontend) + Render (backend) + Heroku (ML service)  
+☁️ **Cloud-Native Architecture** - Deployed on Vercel (frontend) + Render (backend) + Heroku (ML service, paid dyno via a subscribed account)  
 🗄️ **Scalable Data Pipeline** - MongoDB Atlas with base64 image storage, complaint tracking, and analytics  
 🛡️ **Production-Grade Security** - Helmet.js, rate limiting, NoSQL injection protection, CORS policies  
 📊 **Comprehensive Monitoring** - Detailed logging, error tracking, and prediction confidence metrics

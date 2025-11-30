@@ -10,7 +10,7 @@ This document lists ALL environment variables needed for deployment across all s
 |---------|----------|----------------|----------|
 | Frontend (React) | Vercel | 3 | ⚠️ Medium |
 | Backend (Node.js) | Render | 18 | 🔴 Critical |
-| AI Service (Flask) | Render | 0 | ✅ None |
+| AI Service (Flask) | Heroku (Paid) | 0 | ✅ None |
 
 ---
 
@@ -25,7 +25,7 @@ This document lists ALL environment variables needed for deployment across all s
 REACT_APP_BACKEND_URL=https://pothole-detection-backend.onrender.com
 
 # AI Service base URL (may not be used directly, but good to have)
-REACT_APP_AI_SERVICE_URL=https://pothole-detection-ai.onrender.com
+REACT_APP_AI_SERVICE_URL=https://pothole-detection-ai-xxxx.herokuapp.com
 
 # Google OAuth Client ID (for frontend Google login button)
 REACT_APP_GOOGLE_CLIENT_ID=123456789-abc123def456.apps.googleusercontent.com
@@ -36,7 +36,7 @@ REACT_APP_GOOGLE_CLIENT_ID=123456789-abc123def456.apps.googleusercontent.com
 | Variable | Source |
 |----------|--------|
 | `REACT_APP_BACKEND_URL` | From Render backend deployment (Step 2 of deployment) |
-| `REACT_APP_AI_SERVICE_URL` | From Render AI service deployment (Step 1 of deployment) |
+| `REACT_APP_AI_SERVICE_URL` | From Heroku AI service deployment (paid dyno) |
 | `REACT_APP_GOOGLE_CLIENT_ID` | From Google Cloud Console → APIs & Services → Credentials |
 
 ### Notes
@@ -161,9 +161,9 @@ MICROSOFT_CALLBACK_URL=https://pothole-detection-backend.onrender.com/auth/micro
 
 ---
 
-## 3️⃣ AI Service (Render)
+## 3️⃣ AI Service (Heroku)
 
-**Platform:** Render Dashboard → AI Service → Environment
+**Platform:** Heroku Dashboard → AI App → Settings → Config Vars
 
 ### Required Variables (0)
 
@@ -196,7 +196,7 @@ SMTP_SECURE=<false_or_true>
 # EMAIL_USER=your-brevo-email@example.com
 # EMAIL_PASS=your-brevo-smtp-key
 FRONTEND_URL=https://pothole-detection.vercel.app
-AI_SERVICE_URL=https://pothole-detection-ai.onrender.com
+AI_SERVICE_URL=https://pothole-detection-ai-xxxx.herokuapp.com
 GOOGLE_CLIENT_ID=<YOUR_GOOGLE_CLIENT_ID>
 GOOGLE_CLIENT_SECRET=<YOUR_GOOGLE_CLIENT_SECRET>
 GOOGLE_CALLBACK_URL=https://pothole-detection-backend.onrender.com/auth/google/callback
@@ -206,7 +206,7 @@ GOOGLE_CALLBACK_URL=https://pothole-detection-backend.onrender.com/auth/google/c
 
 ```bash
 REACT_APP_BACKEND_URL=https://pothole-detection-backend.onrender.com
-REACT_APP_AI_SERVICE_URL=https://pothole-detection-ai.onrender.com
+REACT_APP_AI_SERVICE_URL=https://pothole-detection-ai-xxxx.herokuapp.com
 REACT_APP_GOOGLE_CLIENT_ID=<YOUR_GOOGLE_CLIENT_ID>
 ```
 
@@ -243,7 +243,7 @@ Before deploying, verify:
 - [ ] EMAIL_PASS is Gmail App Password (16 chars with spaces)
 - [ ] MONGO_URI includes database name (`/potholeDB`)
 - [ ] FRONTEND_URL matches actual Vercel URL (no trailing slash)
-- [ ] AI_SERVICE_URL matches actual Render AI service URL
+- [ ] AI_SERVICE_URL matches actual Heroku AI service URL
 - [ ] GOOGLE_CALLBACK_URL matches backend URL + `/auth/google/callback`
 - [ ] OAuth redirect URIs updated in Google Cloud Console
 - [ ] OAuth redirect URIs updated in Azure Portal (if using Microsoft)

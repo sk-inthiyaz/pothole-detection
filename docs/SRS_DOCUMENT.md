@@ -76,7 +76,7 @@ The system operates as a **three-tier cloud-native application**:
 
 1. **Presentation Layer:** React-based responsive web interface (Vercel)
 2. **Application Layer:** Node.js/Express REST API server (Render)
-3. **AI Inference Layer:** Python/Flask ML microservice (Heroku)
+3. **AI Inference Layer:** Python/Flask ML microservice (Heroku – paid dyno via a subscribed account)
 4. **Data Layer:** MongoDB Atlas cloud database
 
 The system integrates with external services:
@@ -132,7 +132,7 @@ The system integrates with external services:
 **Server-Side Environment:**
 - **Frontend:** Vercel Edge Network (global CDN)
 - **Backend:** Render cloud platform (Node.js 18+)
-- **AI Service:** Heroku dyno (Python 3.10+)
+- **AI Service:** Heroku dyno (Python 3.10+, paid)
 - **Database:** MongoDB Atlas M0 cluster (shared tier)
 
 **Third-Party Services:**
@@ -173,7 +173,7 @@ The system integrates with external services:
 - MongoDB Atlas uptime (99.95% SLA)
 - Vercel CDN availability
 - Render platform reliability
-- Heroku dyno uptime
+- Heroku dyno uptime (paid plan)
 - Google/Microsoft OAuth service availability
 - Brevo email delivery infrastructure
 

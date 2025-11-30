@@ -256,6 +256,7 @@ Fill in after deployment:
   - **Expected:** < 5 seconds (first request may be slower due to cold start)
 
 ### 5.2 Cold Start Handling (Render Free Tier)
+Note: The Flask AI service is hosted on Heroku (paid dyno via a subscribed account). Cold start notes here apply to the Render backend only; the AI service does not use a free tier.
 
 - [ ] **First request after 15 min inactivity**
   - Wait 20 minutes without accessing site
