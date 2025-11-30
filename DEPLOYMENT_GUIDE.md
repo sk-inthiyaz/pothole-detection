@@ -11,7 +11,7 @@ This guide will help you deploy your full-stack MERN + AI application to free ho
 ```
 Frontend (React)     →  Vercel (Free)
 Backend (Node.js)    →  Render (Free)
-AI Service (Flask)   →  Heroko (Free)(Senior 's subsciption)
+AI Service (Flask)   →  Heroko (Free)//Here i took(Senior 's subsciption) 
 Database             →  MongoDB Atlas 
 ```
 
@@ -22,13 +22,13 @@ Database             →  MongoDB Atlas
 - [x] GitHub repository: `sk-inthiyaz/pothole-detection`
 - [x] MongoDB Atlas configured
 - [x] All environment variables documented in `.env.example`
-- [ ] Vercel account (free)
-- [ ] Render account (free)
+- [ ] Vercel account 
+- [ ] Render account 
 - [ ] Domain names noted for cross-service communication
 
 ---
 
-## 1️⃣ Deploy Python AI Service (Flask) on Render
+## 1️⃣ Deploy Python AI Service (Flask) on heroku
 
 ### Step 1.1: Prepare Python App for Deployment
 
