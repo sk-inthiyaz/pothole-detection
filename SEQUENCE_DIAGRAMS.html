@@ -1,0 +1,1689 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>SEQUENCE_DIAGRAMS.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="sequence-diagrams---ai-powered-pothole-detection-system">Sequence Diagrams - AI-Powered Pothole Detection System</h1>
+<p><strong>Document Version:</strong> 1.0<br>
+<strong>Date:</strong> November 18, 2025<br>
+<strong>Project:</strong> AI-Powered Pothole Detection &amp; Reporting System</p>
+<hr>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#1-user-registration-with-otp">User Registration with OTP</a></li>
+<li><a href="#2-emailpassword-login">Email/Password Login</a></li>
+<li><a href="#3-google-oauth-authentication">Google OAuth Authentication</a></li>
+<li><a href="#4-microsoft-oauth-authentication">Microsoft OAuth Authentication</a></li>
+<li><a href="#5-pothole-image-detection">Pothole Image Detection</a></li>
+<li><a href="#6-complaint-submission-with-image">Complaint Submission with Image</a></li>
+<li><a href="#7-complete-end-to-end-flow">Complete End-to-End Flow</a></li>
+<li><a href="#8-error-handling-scenarios">Error Handling Scenarios</a></li>
+</ol>
+<hr>
+<h2 id="1-user-registration-with-otp">1. User Registration with OTP</h2>
+<h3 id="sequence-diagram">Sequence Diagram</h3>
+<pre class="hljs"><code><div>Actor: User
+Participant: React Frontend
+Participant: Express Backend
+Participant: MongoDB
+Participant: Brevo Email API
+
+User -&gt; React Frontend: 1. Fill signup form (name, email, password)
+React Frontend -&gt; React Frontend: 2. Validate input (email format, password length)
+React Frontend -&gt; Express Backend: 3. POST /signup
+Note over Express Backend: Request body: { name, email, password }
+
+Express Backend -&gt; Express Backend: 4. Validate request fields
+Express Backend -&gt; MongoDB: 5. Check if email exists
+MongoDB --&gt; Express Backend: 6. Return user query result
+
+alt Email already exists and verified
+    Express Backend --&gt; React Frontend: 7a. 409 Conflict: &quot;Email already registered&quot;
+    React Frontend --&gt; User: 8a. Show error message
+else Email exists but unverified
+    Express Backend -&gt; Express Backend: 7b. Allow re-registration
+end
+
+Express Backend -&gt; Express Backend: 8. Hash password (bcrypt, 12 rounds)
+Express Backend -&gt; MongoDB: 9. Create User document
+Note over MongoDB: { name, email, hashedPassword, verified: false }
+MongoDB --&gt; Express Backend: 10. User created successfully
+
+Express Backend -&gt; Express Backend: 11. Generate 6-digit OTP
+Express Backend -&gt; MongoDB: 12. Save OTP with TTL (10 min)
+Note over MongoDB: OTP Collection: { email, hashedOTP, expiresAt }
+MongoDB --&gt; Express Backend: 13. OTP saved
+
+Express Backend -&gt; Brevo Email API: 14. Send OTP email
+Note over Brevo Email API: POST /v3/smtp/email
+Note over Brevo Email API: Template: HTML with OTP code
+Brevo Email API --&gt; Express Backend: 15. Email queued (202 Accepted)
+
+Express Backend --&gt; React Frontend: 16. 201 Created: &quot;User registered! Check email&quot;
+React Frontend --&gt; User: 17. Show success message
+React Frontend -&gt; React Frontend: 18. Redirect to OTP verification page
+
+User -&gt; User: 19. Check email inbox
+User -&gt; User: 20. Copy 6-digit OTP
+
+User -&gt; React Frontend: 21. Enter OTP on verification page
+React Frontend -&gt; Express Backend: 22. POST /verify-otp
+Note over Express Backend: Request body: { email, otp }
+
+Express Backend -&gt; MongoDB: 23. Find OTP document
+MongoDB --&gt; Express Backend: 24. Return OTP record (or null if expired)
+
+alt OTP invalid or expired
+    Express Backend --&gt; React Frontend: 25a. 400 Bad Request: &quot;Invalid OTP&quot;
+    React Frontend --&gt; User: 26a. Show error with resend option
+else OTP valid
+    Express Backend -&gt; MongoDB: 25b. Update user.verified = true
+    MongoDB --&gt; Express Backend: 26b. User updated
+    
+    Express Backend -&gt; MongoDB: 27. Delete used OTP
+    MongoDB --&gt; Express Backend: 28. OTP deleted
+    
+    Express Backend -&gt; Express Backend: 29. Generate JWT token (24h expiry)
+    Note over Express Backend: jwt.sign({ userId }, JWT_SECRET)
+    
+    Express Backend -&gt; Brevo Email API: 30. Send welcome email
+    Brevo Email API --&gt; Express Backend: 31. Email sent
+    
+    Express Backend --&gt; React Frontend: 32. 200 OK: { token, user }
+    React Frontend -&gt; React Frontend: 33. Store token in localStorage
+    React Frontend -&gt; React Frontend: 34. Update auth state (setIsLoggedIn)
+    React Frontend -&gt; React Frontend: 35. Redirect to /pothole
+    React Frontend --&gt; User: 36. Show welcome message
+end
+</div></code></pre>
+<h3 id="key-points">Key Points</h3>
+<ul>
+<li><strong>OTP Generation:</strong> 6-digit random number, hashed before storage</li>
+<li><strong>OTP Expiry:</strong> Automatic deletion after 10 minutes via MongoDB TTL index</li>
+<li><strong>Password Security:</strong> bcrypt with 12 salt rounds</li>
+<li><strong>JWT Token:</strong> HS256 algorithm, 24-hour expiration</li>
+<li><strong>Email Template:</strong> HTML formatted with project branding</li>
+</ul>
+<h3 id="error-scenarios">Error Scenarios</h3>
+<table>
+<thead>
+<tr>
+<th>Error</th>
+<th>Status Code</th>
+<th>User Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Email already exists</td>
+<td>409</td>
+<td>Redirect to login</td>
+</tr>
+<tr>
+<td>Invalid email format</td>
+<td>400</td>
+<td>Show inline error</td>
+</tr>
+<tr>
+<td>Weak password</td>
+<td>400</td>
+<td>Show password requirements</td>
+</tr>
+<tr>
+<td>OTP expired</td>
+<td>400</td>
+<td>Offer resend OTP button</td>
+</tr>
+<tr>
+<td>Email service down</td>
+<td>500</td>
+<td>Log error, show generic success</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="2-emailpassword-login">2. Email/Password Login</h2>
+<h3 id="sequence-diagram">Sequence Diagram</h3>
+<pre class="hljs"><code><div>Actor: User
+Participant: React Frontend
+Participant: Express Backend
+Participant: MongoDB
+
+User -&gt; React Frontend: 1. Fill login form (email, password)
+React Frontend -&gt; React Frontend: 2. Validate input (non-empty fields)
+React Frontend -&gt; Express Backend: 3. POST /login
+Note over Express Backend: Request body: { email, password }
+
+Express Backend -&gt; Express Backend: 4. Validate request fields
+Express Backend -&gt; MongoDB: 5. Find user by email
+MongoDB --&gt; Express Backend: 6. Return user document (or null)
+
+alt User not found
+    Express Backend --&gt; React Frontend: 7a. 404 Not Found: &quot;User not found&quot;
+    React Frontend --&gt; User: 8a. Show error message
+else User found
+    Express Backend -&gt; Express Backend: 7b. Check authProvider field
+    
+    alt AuthProvider is OAuth (google/microsoft)
+        Express Backend --&gt; React Frontend: 8a. 400 Bad Request
+        Note over React Frontend: &quot;This account uses Google login&quot;
+        React Frontend --&gt; User: 9a. Show OAuth login suggestion
+    else AuthProvider is local
+        Express Backend -&gt; Express Backend: 8b. Check verification status
+        
+        alt User not verified
+            Express Backend --&gt; React Frontend: 9b. 403 Forbidden
+            Note over React Frontend: &quot;Please verify email first&quot;
+            React Frontend --&gt; User: 10b. Show verification prompt
+            React Frontend --&gt; User: 11b. Display &quot;Verify Email&quot; button
+        else User verified
+            Express Backend -&gt; Express Backend: 9c. Compare password hash
+            Note over Express Backend: bcrypt.compare(password, hashedPassword)
+            
+            alt Password incorrect
+                Express Backend --&gt; React Frontend: 10c. 401 Unauthorized
+                React Frontend --&gt; User: 11c. Show &quot;Invalid credentials&quot;
+            else Password correct
+                Express Backend -&gt; Express Backend: 10d. Generate JWT token
+                Note over Express Backend: jwt.sign({ userId }, JWT_SECRET, { expiresIn: '24h' })
+                
+                Express Backend --&gt; React Frontend: 11d. 200 OK: { token, user }
+                Note over React Frontend: Response: { message, token, user: { id, name, email, verified } }
+                
+                React Frontend -&gt; React Frontend: 12. Store token in localStorage
+                React Frontend -&gt; React Frontend: 13. Store user object in localStorage
+                React Frontend -&gt; React Frontend: 14. Update auth state (setIsLoggedIn(true))
+                React Frontend -&gt; React Frontend: 15. Redirect to /pothole page
+                React Frontend --&gt; User: 16. Show &quot;Login successful&quot; message
+            end
+        end
+    end
+end
+</div></code></pre>
+<h3 id="key-points">Key Points</h3>
+<ul>
+<li><strong>Password Comparison:</strong> bcrypt.compare() handles hashing internally</li>
+<li><strong>Auth Provider Check:</strong> Prevents OAuth users from using password login</li>
+<li><strong>Verification Check:</strong> Ensures email is verified before allowing login</li>
+<li><strong>Token Storage:</strong> localStorage for persistence across sessions</li>
+<li><strong>Automatic Redirect:</strong> Seamless navigation to main application</li>
+</ul>
+<h3 id="security-features">Security Features</h3>
+<ol>
+<li><strong>Rate Limiting:</strong> 5 login attempts per 15 minutes per IP</li>
+<li><strong>Password Hashing:</strong> bcrypt (12 rounds) prevents rainbow table attacks</li>
+<li><strong>JWT Signing:</strong> HS256 with 256-bit secret key</li>
+<li><strong>No Plain Text:</strong> Passwords never logged or exposed in responses</li>
+</ol>
+<hr>
+<h2 id="3-google-oauth-authentication">3. Google OAuth Authentication</h2>
+<h3 id="sequence-diagram">Sequence Diagram</h3>
+<pre class="hljs"><code><div>Actor: User
+Participant: React Frontend
+Participant: Express Backend
+Participant: Passport.js
+Participant: Google OAuth API
+Participant: MongoDB
+
+User -&gt; React Frontend: 1. Click &quot;Continue with Google&quot; button
+React Frontend -&gt; React Frontend: 2. Construct OAuth redirect URL
+Note over React Frontend: window.location.href = '/auth/google'
+
+React Frontend -&gt; Express Backend: 3. GET /auth/google
+Express Backend -&gt; Passport.js: 4. Invoke Google OAuth strategy
+Passport.js -&gt; Passport.js: 5. Generate OAuth authorization URL
+Note over Passport.js: Includes: client_id, redirect_uri, scope
+
+Passport.js --&gt; React Frontend: 6. 302 Redirect to Google
+React Frontend -&gt; Google OAuth API: 7. Redirect user to Google consent page
+Note over Google OAuth API: URL: accounts.google.com/o/oauth2/v2/auth
+
+User -&gt; Google OAuth API: 8. Sign in to Google account
+User -&gt; Google OAuth API: 9. Review requested permissions (profile, email)
+User -&gt; Google OAuth API: 10. Click &quot;Allow&quot; to grant permissions
+
+Google OAuth API -&gt; Express Backend: 11. Redirect to /auth/google/callback
+Note over Express Backend: Query params: ?code=AUTH_CODE&amp;state=...
+
+Express Backend -&gt; Passport.js: 12. Handle callback
+Passport.js -&gt; Google OAuth API: 13. Exchange authorization code for access token
+Note over Passport.js: POST /token with client_secret
+Google OAuth API --&gt; Passport.js: 14. Return access token
+
+Passport.js -&gt; Google OAuth API: 15. Fetch user profile with access token
+Note over Passport.js: GET /oauth2/v2/userinfo
+Google OAuth API --&gt; Passport.js: 16. Return user profile
+Note over Google OAuth API: { id, email, name, picture }
+
+Passport.js -&gt; MongoDB: 17. Check if user exists (by googleId)
+MongoDB --&gt; Passport.js: 18. Return user or null
+
+alt User exists
+    Passport.js -&gt; Passport.js: 19a. Return existing user
+else User not found
+    Passport.js -&gt; MongoDB: 19b. Check if email already exists
+    MongoDB --&gt; Passport.js: 20b. Return user by email
+    
+    alt Email exists (local account)
+        Passport.js -&gt; MongoDB: 21b. Link Google account to existing user
+        Note over MongoDB: Update: googleId, authProvider: 'google', verified: true
+        MongoDB --&gt; Passport.js: 22b. User updated
+    else Email doesn't exist
+        Passport.js -&gt; MongoDB: 21c. Create new user
+        Note over MongoDB: { googleId, name, email, authProvider: 'google', verified: true, profilePicture }
+        MongoDB --&gt; Passport.js: 22c. User created
+    end
+end
+
+Passport.js --&gt; Express Backend: 23. OAuth success with user object
+Express Backend -&gt; Express Backend: 24. Generate JWT token
+Note over Express Backend: jwt.sign({ userId }, JWT_SECRET, { expiresIn: '24h' })
+
+Express Backend --&gt; React Frontend: 25. 302 Redirect to /auth/callback
+Note over Express Backend: URL: /auth/callback?token=JWT&amp;provider=google&amp;name=...&amp;email=...
+
+React Frontend -&gt; React Frontend: 26. Parse URL parameters
+React Frontend -&gt; React Frontend: 27. Extract token, provider, name, email
+React Frontend -&gt; React Frontend: 28. Store authToken in localStorage
+React Frontend -&gt; React Frontend: 29. Store user object in localStorage
+Note over React Frontend: { name, email, authProvider: 'google', verified: true }
+
+React Frontend -&gt; React Frontend: 30. Update auth state (setIsLoggedIn(true))
+React Frontend -&gt; React Frontend: 31. Display success message (2 seconds)
+React Frontend -&gt; React Frontend: 32. Redirect to /pothole page
+React Frontend --&gt; User: 33. Show &quot;Login successful&quot; message
+</div></code></pre>
+<h3 id="key-points">Key Points</h3>
+<ul>
+<li><strong>Auto-Verification:</strong> OAuth users skip OTP verification (Google verifies email)</li>
+<li><strong>Account Linking:</strong> Existing email accounts can be linked with Google</li>
+<li><strong>Profile Picture:</strong> Imported from Google profile (stored in profilePicture field)</li>
+<li><strong>No Password:</strong> OAuth users don't have password field in database</li>
+<li><strong>Seamless Flow:</strong> User doesn't see backend redirect, appears instant</li>
+</ul>
+<h3 id="oauth-scopes-requested">OAuth Scopes Requested</h3>
+<table>
+<thead>
+<tr>
+<th>Scope</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>profile</code></td>
+<td>Get user's name and profile picture</td>
+</tr>
+<tr>
+<td><code>email</code></td>
+<td>Get user's verified email address</td>
+</tr>
+</tbody>
+</table>
+<h3 id="error-handling">Error Handling</h3>
+<table>
+<thead>
+<tr>
+<th>Error</th>
+<th>Cause</th>
+<th>User Experience</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OAuth consent denied</td>
+<td>User clicked &quot;Cancel&quot;</td>
+<td>Redirect to /login with error message</td>
+</tr>
+<tr>
+<td>Invalid client credentials</td>
+<td>Wrong GOOGLE_CLIENT_ID/SECRET</td>
+<td>Show generic error, log details</td>
+</tr>
+<tr>
+<td>Token generation failed</td>
+<td>Backend JWT error</td>
+<td>Redirect to /login with error message</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="4-microsoft-oauth-authentication">4. Microsoft OAuth Authentication</h2>
+<h3 id="sequence-diagram">Sequence Diagram</h3>
+<pre class="hljs"><code><div>Actor: User
+Participant: React Frontend
+Participant: Express Backend
+Participant: Passport.js
+Participant: Microsoft Identity Platform
+Participant: MongoDB
+
+User -&gt; React Frontend: 1. Click &quot;Continue with Microsoft&quot; button
+React Frontend -&gt; React Frontend: 2. Construct OAuth redirect URL
+Note over React Frontend: window.location.href = '/auth/microsoft'
+
+React Frontend -&gt; Express Backend: 3. GET /auth/microsoft
+Express Backend -&gt; Passport.js: 4. Invoke Microsoft OAuth strategy
+Passport.js -&gt; Passport.js: 5. Generate OAuth authorization URL
+Note over Passport.js: Includes: client_id, redirect_uri, scope: user.read
+
+Passport.js --&gt; React Frontend: 6. 302 Redirect to Microsoft
+React Frontend -&gt; Microsoft Identity Platform: 7. Redirect user to Microsoft login
+Note over Microsoft Identity Platform: URL: login.microsoftonline.com/common/oauth2/v2.0/authorize
+
+User -&gt; Microsoft Identity Platform: 8. Sign in with Microsoft account
+Note over Microsoft Identity Platform: Supports personal, work, school accounts
+User -&gt; Microsoft Identity Platform: 9. Review requested permissions
+User -&gt; Microsoft Identity Platform: 10. Click &quot;Yes&quot; to grant access
+
+Microsoft Identity Platform -&gt; Express Backend: 11. Redirect to /auth/microsoft/callback
+Note over Express Backend: Query params: ?code=AUTH_CODE&amp;state=...
+
+Express Backend -&gt; Passport.js: 12. Handle callback
+Passport.js -&gt; Microsoft Identity Platform: 13. Exchange code for access token
+Note over Passport.js: POST /token with client_secret
+Microsoft Identity Platform --&gt; Passport.js: 14. Return access token
+
+Passport.js -&gt; Microsoft Identity Platform: 15. Fetch user profile
+Note over Passport.js: GET /v1.0/me (Microsoft Graph API)
+Microsoft Identity Platform --&gt; Passport.js: 16. Return user profile
+Note over Microsoft Identity Platform: { id, displayName, userPrincipalName }
+
+Passport.js -&gt; MongoDB: 17. Check if user exists (by microsoftId)
+MongoDB --&gt; Passport.js: 18. Return user or null
+
+alt User exists
+    Passport.js -&gt; Passport.js: 19a. Return existing user
+else User not found
+    Passport.js -&gt; MongoDB: 19b. Check if email already exists
+    MongoDB --&gt; Passport.js: 20b. Return user by email
+    
+    alt Email exists (local account)
+        Passport.js -&gt; MongoDB: 21b. Link Microsoft account
+        Note over MongoDB: Update: microsoftId, authProvider: 'microsoft', verified: true
+        MongoDB --&gt; Passport.js: 22b. User updated
+    else Email doesn't exist
+        Passport.js -&gt; MongoDB: 21c. Create new user
+        Note over MongoDB: { microsoftId, name, email, authProvider: 'microsoft', verified: true }
+        MongoDB --&gt; Passport.js: 22c. User created
+    end
+end
+
+Passport.js --&gt; Express Backend: 23. OAuth success with user object
+Express Backend -&gt; Express Backend: 24. Generate JWT token
+Note over Express Backend: jwt.sign({ userId }, JWT_SECRET, { expiresIn: '24h' })
+
+Express Backend --&gt; React Frontend: 25. 302 Redirect to /auth/callback
+Note over Express Backend: URL: /auth/callback?token=JWT&amp;provider=microsoft&amp;name=...&amp;email=...
+
+React Frontend -&gt; React Frontend: 26. Parse URL parameters (OAuthCallbackPage.js)
+React Frontend -&gt; React Frontend: 27. Extract token, provider, name, email
+React Frontend -&gt; React Frontend: 28. Store authToken in localStorage
+React Frontend -&gt; React Frontend: 29. Store user object in localStorage
+Note over React Frontend: { name, email, authProvider: 'microsoft', verified: true }
+
+React Frontend -&gt; React Frontend: 30. Update auth state (setIsLoggedIn(true))
+React Frontend -&gt; React Frontend: 31. Display success icon and message
+React Frontend -&gt; React Frontend: 32. Wait 2 seconds (smooth UX)
+React Frontend -&gt; React Frontend: 33. Redirect to /pothole page
+React Frontend --&gt; User: 34. Application ready to use
+</div></code></pre>
+<h3 id="key-points">Key Points</h3>
+<ul>
+<li><strong>Account Types:</strong> Supports personal Microsoft accounts, work, and school accounts</li>
+<li><strong>Auto-Verification:</strong> Microsoft accounts are pre-verified</li>
+<li><strong>Graph API:</strong> Uses Microsoft Graph for profile data</li>
+<li><strong>Account Linking:</strong> Links to existing email accounts automatically</li>
+<li><strong>Same Flow:</strong> Nearly identical to Google OAuth for consistency</li>
+</ul>
+<h3 id="microsoft-graph-api-scope">Microsoft Graph API Scope</h3>
+<table>
+<thead>
+<tr>
+<th>Scope</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>user.read</code></td>
+<td>Read basic profile information (name, email)</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="5-pothole-image-detection">5. Pothole Image Detection</h2>
+<h3 id="sequence-diagram">Sequence Diagram</h3>
+<pre class="hljs"><code><div>Actor: User
+Participant: React Frontend
+Participant: Express Backend (optional)
+Participant: Flask AI Service
+Participant: PyTorch CNN Model
+
+User -&gt; React Frontend: 1. Navigate to /pothole page
+React Frontend --&gt; User: 2. Display upload interface
+
+User -&gt; React Frontend: 3. Click &quot;Choose File&quot; or drag &amp; drop
+User -&gt; React Frontend: 4. Select image file (JPEG/PNG/WebP)
+
+React Frontend -&gt; React Frontend: 5. Handle file change event
+React Frontend -&gt; React Frontend: 6. Validate file type and size (&lt;10MB)
+
+alt Invalid file
+    React Frontend --&gt; User: 7a. Show error: &quot;Only JPEG, PNG, WebP allowed&quot;
+else Valid file
+    React Frontend -&gt; React Frontend: 7b. Create FileReader object
+    React Frontend -&gt; React Frontend: 8. Read file as Data URL (base64)
+    React Frontend -&gt; React Frontend: 9. Store base64 in preview state
+    React Frontend --&gt; User: 10. Display image preview
+end
+
+User -&gt; React Frontend: 11. Click &quot;Detect Pothole&quot; button
+React Frontend -&gt; React Frontend: 12. Disable button, show loading state
+React Frontend -&gt; React Frontend: 13. Create FormData object
+Note over React Frontend: formData.append('file', selectedFile)
+
+React Frontend -&gt; React Frontend: 14. Record start timestamp
+React Frontend -&gt; Flask AI Service: 15. POST /predict (multipart/form-data)
+Note over Flask AI Service: URL: pothole-detection-ai.herokuapp.com/predict
+
+Flask AI Service -&gt; Flask AI Service: 16. Receive image file
+Flask AI Service -&gt; Flask AI Service: 17. Validate image format
+Flask AI Service -&gt; Flask AI Service: 18. Open image with PIL
+Flask AI Service -&gt; Flask AI Service: 19. Resize to 128x128 pixels
+Flask AI Service -&gt; Flask AI Service: 20. Apply transforms (ToTensor, Normalize)
+Note over Flask AI Service: Normalize: mean=[0.5,0.5,0.5], std=[0.5,0.5,0.5]
+
+Flask AI Service -&gt; Flask AI Service: 21. Convert to PyTorch tensor
+Flask AI Service -&gt; Flask AI Service: 22. Add batch dimension [1, 3, 128, 128]
+
+Flask AI Service -&gt; PyTorch CNN Model: 23. Forward pass (model inference)
+Note over PyTorch CNN Model: Conv1 -&gt; Pool -&gt; Conv2 -&gt; Pool -&gt; FC1 -&gt; FC2 -&gt; Sigmoid
+
+PyTorch CNN Model --&gt; Flask AI Service: 24. Return output tensor (0-1 probability)
+Flask AI Service -&gt; Flask AI Service: 25. Extract confidence score
+Note over Flask AI Service: confidence = output.item()
+
+Flask AI Service -&gt; Flask AI Service: 26. Apply threshold (0.5)
+Note over Flask AI Service: is_pothole = output &gt; 0.5
+
+Flask AI Service -&gt; Flask AI Service: 27. Calculate prediction time
+Flask AI Service -&gt; Flask AI Service: 28. Clean up tensors (garbage collection)
+
+Flask AI Service --&gt; React Frontend: 29. Return JSON response
+Note over Flask AI Service: { is_pothole: true, confidence: 0.9576, prediction_time: &quot;1.23s&quot; }
+
+React Frontend -&gt; React Frontend: 30. Record end timestamp
+React Frontend -&gt; React Frontend: 31. Parse response JSON
+React Frontend -&gt; React Frontend: 32. Calculate total time (client + server)
+
+alt Pothole detected (is_pothole = true)
+    React Frontend -&gt; React Frontend: 33a. Update prediction state: &quot;Pothole Detected&quot;
+    React Frontend -&gt; React Frontend: 34a. Calculate confidence percentage (95.76%)
+    React Frontend -&gt; React Frontend: 35a. Set recommendation: &quot;Immediate Repair Needed&quot;
+    React Frontend -&gt; React Frontend: 36a. Set CSS class: &quot;prediction-yes&quot; (green)
+    React Frontend -&gt; React Frontend: 37a. Store raw confidence value (0.9576)
+    React Frontend --&gt; User: 38a. Display detection results
+    React Frontend --&gt; User: 39a. Enable complaint submission form
+else No pothole detected (is_pothole = false)
+    React Frontend -&gt; React Frontend: 33b. Update prediction: &quot;No Pothole Detected&quot;
+    React Frontend -&gt; React Frontend: 34b. Calculate confidence percentage
+    React Frontend -&gt; React Frontend: 35b. Set recommendation: &quot;No Immediate Action Needed&quot;
+    React Frontend -&gt; React Frontend: 36b. Set CSS class: &quot;prediction-no&quot; (red)
+    React Frontend --&gt; User: 37b. Display detection results
+    React Frontend --&gt; User: 38b. Keep complaint form disabled
+end
+
+React Frontend -&gt; React Frontend: 40. Display prediction time
+React Frontend -&gt; React Frontend: 41. Enable detect button
+React Frontend -&gt; React Frontend: 42. Show success alert (3 seconds)
+</div></code></pre>
+<h3 id="key-points">Key Points</h3>
+<ul>
+<li><strong>Direct API Call:</strong> Frontend calls Flask AI service directly (no backend proxy)</li>
+<li><strong>Base64 Preview:</strong> Image stored in state for later complaint submission</li>
+<li><strong>Real-time Feedback:</strong> Loading states and progress indicators</li>
+<li><strong>Confidence Display:</strong> Shown as percentage (0-100%)</li>
+<li><strong>Conditional UI:</strong> Complaint form only enabled if pothole detected</li>
+</ul>
+<h3 id="cnn-model-architecture">CNN Model Architecture</h3>
+<pre class="hljs"><code><div>Input Image (128x128x3)
+    ↓
+Conv2D(3→32, 3x3) + ReLU + MaxPool(2x2)
+    ↓
+Conv2D(32→64, 3x3) + ReLU + MaxPool(2x2)
+    ↓
+Flatten (64 * 32 * 32)
+    ↓
+FC(8192→128) + ReLU + Dropout(0.5)
+    ↓
+FC(128→1) + Sigmoid
+    ↓
+Output: Probability (0-1)
+</div></code></pre>
+<h3 id="performance-metrics">Performance Metrics</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Typical Value</th>
+<th>Maximum</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Prediction Time</td>
+<td>1-3 seconds</td>
+<td>10 seconds (timeout)</td>
+</tr>
+<tr>
+<td>Model Accuracy</td>
+<td>92%+</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Confidence Range</td>
+<td>0.85-0.99 (pothole)</td>
+<td>1.0</td>
+</tr>
+<tr>
+<td>Image Size Limit</td>
+<td>&lt;10 MB</td>
+<td>10 MB</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="6-complaint-submission-with-image">6. Complaint Submission with Image</h2>
+<h3 id="sequence-diagram">Sequence Diagram</h3>
+<pre class="hljs"><code><div>Actor: User
+Participant: React Frontend
+Participant: Express Backend
+Participant: MongoDB
+Participant: Brevo Email API
+
+Note over User: Prerequisite: Pothole detected, results displayed
+
+User -&gt; React Frontend: 1. View detection results (pothole confirmed)
+React Frontend --&gt; User: 2. Display enabled complaint form
+
+User -&gt; React Frontend: 3. Fill location field (text input)
+User -&gt; React Frontend: 4. Fill description field (textarea)
+User -&gt; React Frontend: 5. Click &quot;Submit Complaint&quot; button
+
+React Frontend -&gt; React Frontend: 6. Validate form fields (required check)
+
+alt Fields empty
+    React Frontend --&gt; User: 7a. Show inline validation errors
+else Fields valid
+    React Frontend -&gt; React Frontend: 7b. Disable submit button
+    React Frontend -&gt; React Frontend: 8. Show loading spinner on button
+    React Frontend -&gt; React Frontend: 9. Set isSubmitting state = true
+    
+    React Frontend -&gt; React Frontend: 10. Retrieve JWT token from localStorage
+    React Frontend -&gt; React Frontend: 11. Prepare complaint payload
+    Note over React Frontend: {
+    Note over React Frontend:   location: &quot;Main St &amp; 5th Ave&quot;,
+    Note over React Frontend:   description: &quot;Large pothole&quot;,
+    Note over React Frontend:   imageData: &quot;data:image/jpeg;base64,...&quot;,
+    Note over React Frontend:   confidence: 0.9576
+    Note over React Frontend: }
+    
+    React Frontend -&gt; Express Backend: 12. POST /api/complaints
+    Note over Express Backend: Headers: { Authorization: Bearer &lt;JWT&gt; }
+    
+    Express Backend -&gt; Express Backend: 13. Extract JWT from Authorization header
+    Express Backend -&gt; Express Backend: 14. Verify JWT signature
+    Note over Express Backend: jwt.verify(token, JWT_SECRET)
+    
+    alt JWT invalid or expired
+        Express Backend --&gt; React Frontend: 15a. 401 Unauthorized
+        React Frontend -&gt; React Frontend: 16a. Clear localStorage
+        React Frontend -&gt; React Frontend: 17a. Redirect to /login
+        React Frontend --&gt; User: 18a. Show &quot;Session expired&quot; message
+    else JWT valid
+        Express Backend -&gt; Express Backend: 15b. Extract userId from JWT payload
+        Express Backend -&gt; MongoDB: 16b. Find user by userId
+        MongoDB --&gt; Express Backend: 17b. Return user document
+        
+        Express Backend -&gt; Express Backend: 18b. Validate complaint fields
+        Note over Express Backend: Check: location, description (required)
+        
+        alt Required fields missing
+            Express Backend --&gt; React Frontend: 19a. 400 Bad Request
+            React Frontend --&gt; User: 20a. Show error message
+        else Fields valid
+            Express Backend -&gt; Express Backend: 19b. Create complaint object
+            Note over Express Backend: {
+            Note over Express Backend:   location: req.body.location,
+            Note over Express Backend:   description: req.body.description,
+            Note over Express Backend:   userEmail: user.email,
+            Note over Express Backend:   userName: user.name,
+            Note over Express Backend:   imageData: req.body.imageData,
+            Note over Express Backend:   confidence: req.body.confidence,
+            Note over Express Backend:   status: 'pending',
+            Note over Express Backend:   createdAt: Date.now()
+            Note over Express Backend: }
+            
+            Express Backend -&gt; MongoDB: 20b. Insert complaint document
+            Note over MongoDB: Collection: complaints
+            MongoDB --&gt; Express Backend: 21b. Return inserted document with _id
+            
+            Express Backend -&gt; Express Backend: 22b. Log complaint submission
+            Note over Express Backend: Console: &quot;Complaint submitted by user@email.com&quot;
+            
+            Express Backend -&gt; Brevo Email API: 23b. Send confirmation email
+            Note over Brevo Email API: POST /v3/smtp/email
+            Note over Brevo Email API: Template: &quot;Complaint Received&quot;
+            Note over Brevo Email API: Includes: location, description, timestamp
+            Brevo Email API --&gt; Express Backend: 24b. Email sent (202 Accepted)
+            
+            Express Backend --&gt; React Frontend: 25b. 201 Created: { message, complaintId }
+            Note over Express Backend: Response: {
+            Note over Express Backend:   message: &quot;Complaint submitted successfully!&quot;,
+            Note over Express Backend:   complaintId: &quot;673abc123def456...&quot;
+            Note over Express Backend: }
+            
+            React Frontend -&gt; React Frontend: 26. Parse response
+            React Frontend -&gt; React Frontend: 27. Show success alert
+            React Frontend -&gt; React Frontend: 28. Reset form state
+            React Frontend -&gt; React Frontend: 29. Clear image preview
+            React Frontend -&gt; React Frontend: 30. Navigate to /lifesaver page
+            Note over React Frontend: Success confirmation page
+            
+            React Frontend --&gt; User: 31. Show &quot;Complaint submitted!&quot; message
+            React Frontend --&gt; User: 32. Display thank you page
+        end
+    end
+end
+</div></code></pre>
+<h3 id="key-points">Key Points</h3>
+<ul>
+<li><strong>Image Storage:</strong> Base64-encoded image stored directly in MongoDB</li>
+<li><strong>Authentication Required:</strong> JWT token validates user identity</li>
+<li><strong>Email Confirmation:</strong> Automated email sent via Brevo API</li>
+<li><strong>Confidence Preservation:</strong> Raw AI confidence (0-1) stored with complaint</li>
+<li><strong>User Association:</strong> Complaint linked to user account via email/name</li>
+</ul>
+<h3 id="database-schema-complaint-document">Database Schema (Complaint Document)</h3>
+<pre class="hljs"><code><div>{
+  <span class="hljs-attr">_id</span>: ObjectId(<span class="hljs-string">"673abc123def456..."</span>),
+  <span class="hljs-attr">location</span>: <span class="hljs-string">"Main Street &amp; 5th Ave"</span>,
+  <span class="hljs-attr">description</span>: <span class="hljs-string">"Large pothole near intersection causing vehicle damage"</span>,
+  <span class="hljs-attr">userEmail</span>: <span class="hljs-string">"user@example.com"</span>,
+  <span class="hljs-attr">userName</span>: <span class="hljs-string">"John Doe"</span>,
+  <span class="hljs-attr">imageData</span>: <span class="hljs-string">"data:image/jpeg;base64,/9j/4AAQSkZJRg..."</span>, <span class="hljs-comment">// ~50-200KB</span>
+  <span class="hljs-attr">confidence</span>: <span class="hljs-number">0.9576</span>,
+  <span class="hljs-attr">status</span>: <span class="hljs-string">"pending"</span>, <span class="hljs-comment">// enum: ['pending', 'in-progress', 'resolved']</span>
+  <span class="hljs-attr">createdAt</span>: ISODate(<span class="hljs-string">"2025-11-18T10:30:00.000Z"</span>)
+}
+</div></code></pre>
+<h3 id="payload-size-management">Payload Size Management</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Typical Size</th>
+<th>Maximum</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Location</td>
+<td>~50 bytes</td>
+<td>500 bytes</td>
+</tr>
+<tr>
+<td>Description</td>
+<td>~200 bytes</td>
+<td>2 KB</td>
+</tr>
+<tr>
+<td>Base64 Image</td>
+<td>50-200 KB</td>
+<td>10 MB</td>
+</tr>
+<tr>
+<td>Total Payload</td>
+<td>~100-300 KB</td>
+<td>10 MB</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Backend Body Parser Limit:</strong> 10 MB (configured in server.js)</p>
+<hr>
+<h2 id="7-complete-end-to-end-flow">7. Complete End-to-End Flow</h2>
+<h3 id="full-user-journey-sequence">Full User Journey Sequence</h3>
+<pre class="hljs"><code><div>Actor: User
+Participant: React Frontend
+Participant: Express Backend
+Participant: MongoDB
+Participant: Flask AI Service
+Participant: Brevo Email API
+
+=== PHASE 1: REGISTRATION ===
+
+User -&gt; React Frontend: 1. Open https://app.vercel.app
+React Frontend --&gt; User: 2. Display homepage
+
+User -&gt; React Frontend: 3. Click &quot;Sign Up&quot; button
+React Frontend --&gt; User: 4. Display signup form
+
+User -&gt; React Frontend: 5. Fill form (name, email, password)
+User -&gt; React Frontend: 6. Click &quot;Sign Up&quot;
+
+React Frontend -&gt; Express Backend: 7. POST /signup
+Express Backend -&gt; MongoDB: 8. Create user (verified: false)
+Express Backend -&gt; MongoDB: 9. Save OTP with TTL
+Express Backend -&gt; Brevo Email API: 10. Send OTP email
+Express Backend --&gt; React Frontend: 11. 201 Created
+React Frontend -&gt; React Frontend: 12. Redirect to /verify-otp
+
+User -&gt; User: 13. Check email, copy OTP
+User -&gt; React Frontend: 14. Enter 6-digit OTP
+React Frontend -&gt; Express Backend: 15. POST /verify-otp
+Express Backend -&gt; MongoDB: 16. Update user.verified = true
+Express Backend -&gt; MongoDB: 17. Delete OTP
+Express Backend -&gt; Express Backend: 18. Generate JWT
+Express Backend --&gt; React Frontend: 19. 200 OK: { token, user }
+React Frontend -&gt; React Frontend: 20. Store token in localStorage
+React Frontend -&gt; React Frontend: 21. Redirect to /pothole
+
+=== PHASE 2: POTHOLE DETECTION ===
+
+React Frontend --&gt; User: 22. Display upload interface
+User -&gt; React Frontend: 23. Upload road image
+React Frontend -&gt; React Frontend: 24. Show image preview
+User -&gt; React Frontend: 25. Click &quot;Detect Pothole&quot;
+
+React Frontend -&gt; Flask AI Service: 26. POST /predict
+Flask AI Service -&gt; Flask AI Service: 27. Preprocess image
+Flask AI Service -&gt; Flask AI Service: 28. Run CNN inference
+Flask AI Service --&gt; React Frontend: 29. Return { is_pothole: true, confidence: 0.95 }
+
+React Frontend -&gt; React Frontend: 30. Display results
+React Frontend --&gt; User: 31. Show &quot;Pothole Detected&quot; with 95% confidence
+React Frontend --&gt; User: 32. Enable complaint form
+
+=== PHASE 3: COMPLAINT SUBMISSION ===
+
+User -&gt; React Frontend: 33. Fill location and description
+User -&gt; React Frontend: 34. Click &quot;Submit Complaint&quot;
+
+React Frontend -&gt; Express Backend: 35. POST /api/complaints
+Note over React Frontend: Includes: location, description, imageData, confidence
+Express Backend -&gt; Express Backend: 36. Verify JWT token
+Express Backend -&gt; MongoDB: 37. Insert complaint document
+Express Backend -&gt; Brevo Email API: 38. Send confirmation email
+Express Backend --&gt; React Frontend: 39. 201 Created
+
+React Frontend -&gt; React Frontend: 40. Navigate to /lifesaver
+React Frontend --&gt; User: 41. Show success page
+
+User -&gt; React Frontend: 42. Click &quot;Submit Another Report&quot;
+React Frontend -&gt; React Frontend: 43. Navigate back to /pothole
+React Frontend --&gt; User: 44. Ready for next detection
+
+=== PHASE 4: FUTURE SESSION ===
+
+User -&gt; React Frontend: 45. Return to app (next day)
+React Frontend -&gt; React Frontend: 46. Check localStorage for token
+React Frontend -&gt; React Frontend: 47. Verify token expiration
+
+alt Token expired (&gt;24 hours)
+    React Frontend -&gt; React Frontend: 48a. Clear localStorage
+    React Frontend -&gt; React Frontend: 49a. Redirect to /login
+    React Frontend --&gt; User: 50a. Display login form
+else Token valid
+    React Frontend -&gt; React Frontend: 48b. Auto-login
+    React Frontend -&gt; React Frontend: 49b. Redirect to /pothole
+    React Frontend --&gt; User: 50b. Ready to use
+end
+</div></code></pre>
+<h3 id="timing-breakdown">Timing Breakdown</h3>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Typical Duration</th>
+<th>User Actions</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Registration</td>
+<td>2-3 minutes</td>
+<td>Fill form, check email, enter OTP</td>
+</tr>
+<tr>
+<td>First Login</td>
+<td>5-10 seconds</td>
+<td>Auto-login after verification</td>
+</tr>
+<tr>
+<td>Image Upload</td>
+<td>5-10 seconds</td>
+<td>Select file, preview</td>
+</tr>
+<tr>
+<td>AI Detection</td>
+<td>1-3 seconds</td>
+<td>Click button, wait for result</td>
+</tr>
+<tr>
+<td>Complaint Form</td>
+<td>30-60 seconds</td>
+<td>Fill location/description</td>
+</tr>
+<tr>
+<td>Submission</td>
+<td>2-5 seconds</td>
+<td>Submit to backend</td>
+</tr>
+<tr>
+<td><strong>Total First Use</strong></td>
+<td><strong>~4-5 minutes</strong></td>
+<td>Complete flow from signup to complaint</td>
+</tr>
+<tr>
+<td><strong>Subsequent Use</strong></td>
+<td><strong>~60-90 seconds</strong></td>
+<td>Detection + complaint (already logged in)</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="8-error-handling-scenarios">8. Error Handling Scenarios</h2>
+<h3 id="authentication-errors">Authentication Errors</h3>
+<pre class="hljs"><code><div>User -&gt; React Frontend: 1. Enter invalid credentials
+React Frontend -&gt; Express Backend: 2. POST /login
+Express Backend -&gt; MongoDB: 3. Check user credentials
+MongoDB --&gt; Express Backend: 4. User not found / wrong password
+
+Express Backend --&gt; React Frontend: 5. 401 Unauthorized: &quot;Invalid credentials&quot;
+React Frontend --&gt; User: 6. Display error alert (red banner)
+React Frontend --&gt; User: 7. Keep form visible for retry
+
+User -&gt; React Frontend: 8. Retry with correct credentials
+React Frontend -&gt; Express Backend: 9. POST /login
+Express Backend -&gt; MongoDB: 10. Validate credentials
+MongoDB --&gt; Express Backend: 11. User found, password correct
+
+Express Backend --&gt; React Frontend: 12. 200 OK: { token, user }
+React Frontend -&gt; React Frontend: 13. Store token, redirect
+React Frontend --&gt; User: 14. Login successful
+</div></code></pre>
+<h3 id="ai-service-timeout">AI Service Timeout</h3>
+<pre class="hljs"><code><div>User -&gt; React Frontend: 1. Upload image
+React Frontend -&gt; Flask AI Service: 2. POST /predict
+
+Flask AI Service -&gt; Flask AI Service: 3. Processing image...
+Note over Flask AI Service: Heavy load, slow response
+
+React Frontend -&gt; React Frontend: 4. Wait for response (60 second timeout)
+
+alt Response received in time
+    Flask AI Service --&gt; React Frontend: 5a. Return results
+    React Frontend --&gt; User: 6a. Display detection
+else Timeout after 60 seconds
+    React Frontend -&gt; React Frontend: 5b. Abort request
+    React Frontend --&gt; User: 6b. Display error: &quot;Service timeout&quot;
+    React Frontend --&gt; User: 7b. Show &quot;Try Again&quot; button
+    
+    User -&gt; React Frontend: 8b. Click &quot;Try Again&quot;
+    React Frontend -&gt; Flask AI Service: 9b. POST /predict (retry)
+    Flask AI Service --&gt; React Frontend: 10b. Return results
+    React Frontend --&gt; User: 11b. Display detection
+end
+</div></code></pre>
+<h3 id="database-connection-failure">Database Connection Failure</h3>
+<pre class="hljs"><code><div>User -&gt; React Frontend: 1. Submit complaint
+React Frontend -&gt; Express Backend: 2. POST /api/complaints
+
+Express Backend -&gt; MongoDB: 3. Attempt to insert document
+Note over MongoDB: Connection lost or timeout
+
+MongoDB --&gt; Express Backend: 4. Connection error (ETIMEDOUT)
+
+Express Backend -&gt; Express Backend: 5. Catch error
+Express Backend -&gt; Express Backend: 6. Log error details
+Note over Express Backend: console.error('MongoDB error:', error)
+
+Express Backend --&gt; React Frontend: 7. 500 Internal Server Error
+Note over Express Backend: { error: &quot;Failed to submit complaint&quot; }
+
+React Frontend --&gt; User: 8. Display error message
+React Frontend --&gt; User: 9. Keep form data intact
+React Frontend --&gt; User: 10. Show &quot;Retry&quot; button
+
+User -&gt; React Frontend: 11. Click &quot;Retry&quot;
+React Frontend -&gt; Express Backend: 12. POST /api/complaints (retry)
+Express Backend -&gt; MongoDB: 13. Connection restored, insert successful
+MongoDB --&gt; Express Backend: 14. Document inserted
+Express Backend --&gt; React Frontend: 15. 201 Created
+React Frontend --&gt; User: 16. Show success message
+</div></code></pre>
+<h3 id="email-delivery-failure">Email Delivery Failure</h3>
+<pre class="hljs"><code><div>User -&gt; React Frontend: 1. Register account
+React Frontend -&gt; Express Backend: 2. POST /signup
+
+Express Backend -&gt; MongoDB: 3. Create user
+Express Backend -&gt; MongoDB: 4. Save OTP
+Express Backend -&gt; Brevo Email API: 5. Send OTP email
+
+Brevo Email API --&gt; Express Backend: 6. 500 API Error (rate limit exceeded)
+
+Express Backend -&gt; Express Backend: 7. Catch email error
+Express Backend -&gt; Express Backend: 8. Log error (don't expose to user)
+Note over Express Backend: console.error('Email failed, but user can resend')
+
+Express Backend --&gt; React Frontend: 9. 201 Created (generic success)
+Note over Express Backend: Don't reveal email failure to user (security)
+
+React Frontend --&gt; User: 10. Show success message
+React Frontend -&gt; React Frontend: 11. Redirect to OTP page
+
+User -&gt; User: 12. Wait for email (doesn't arrive)
+User -&gt; React Frontend: 13. Click &quot;Resend OTP&quot; button
+
+React Frontend -&gt; Express Backend: 14. POST /resend-otp
+Express Backend -&gt; MongoDB: 15. Generate new OTP
+Express Backend -&gt; Brevo Email API: 16. Send email (retry)
+Brevo Email API --&gt; Express Backend: 17. 202 Accepted (success)
+Express Backend --&gt; React Frontend: 18. 200 OK
+React Frontend --&gt; User: 19. Show &quot;OTP sent&quot; message
+
+User -&gt; User: 20. Receive email
+User -&gt; React Frontend: 21. Enter OTP, verify successfully
+</div></code></pre>
+<h3 id="network-disconnection">Network Disconnection</h3>
+<pre class="hljs"><code><div>User -&gt; React Frontend: 1. Click &quot;Submit Complaint&quot; (offline)
+
+React Frontend -&gt; Express Backend: 2. POST /api/complaints
+Note over React Frontend: Network disconnected
+
+React Frontend -&gt; React Frontend: 3. Request fails immediately
+Note over React Frontend: axios throws network error
+
+React Frontend -&gt; React Frontend: 4. Catch network error
+React Frontend --&gt; User: 5. Display error: &quot;Check internet connection&quot;
+React Frontend --&gt; User: 6. Keep form data saved
+React Frontend --&gt; User: 7. Auto-retry when back online (optional)
+
+User -&gt; User: 8. Connect to WiFi
+React Frontend -&gt; React Frontend: 9. Detect online event
+React Frontend --&gt; User: 10. Show &quot;Back online&quot; notification
+React Frontend --&gt; User: 11. Enable &quot;Submit&quot; button
+
+User -&gt; React Frontend: 12. Click &quot;Submit&quot; again
+React Frontend -&gt; Express Backend: 13. POST /api/complaints
+Express Backend --&gt; React Frontend: 14. 201 Created
+React Frontend --&gt; User: 15. Success!
+</div></code></pre>
+<hr>
+<h2 id="plantuml-code-for-professional-diagrams">PlantUML Code (For Professional Diagrams)</h2>
+<h3 id="user-registration-sequence">User Registration Sequence</h3>
+<pre class="hljs"><code><div>@startuml
+actor User
+participant &quot;React Frontend&quot; as Frontend
+participant &quot;Express Backend&quot; as Backend
+participant MongoDB
+participant &quot;Brevo API&quot; as Email
+
+User -&gt; Frontend: Fill signup form
+Frontend -&gt; Frontend: Validate input
+Frontend -&gt; Backend: POST /signup
+Backend -&gt; Backend: Validate fields
+Backend -&gt; MongoDB: Check email exists
+MongoDB --&gt; Backend: No conflict
+Backend -&gt; Backend: Hash password (bcrypt)
+Backend -&gt; MongoDB: Create user (verified: false)
+MongoDB --&gt; Backend: User created
+Backend -&gt; Backend: Generate 6-digit OTP
+Backend -&gt; MongoDB: Save OTP (TTL: 10 min)
+MongoDB --&gt; Backend: OTP saved
+Backend -&gt; Email: Send OTP email
+Email --&gt; Backend: Email queued
+Backend --&gt; Frontend: 201 Created
+Frontend --&gt; User: Show success message
+Frontend -&gt; Frontend: Redirect to /verify-otp
+
+User -&gt; User: Check email
+User -&gt; Frontend: Enter OTP
+Frontend -&gt; Backend: POST /verify-otp
+Backend -&gt; MongoDB: Find OTP
+MongoDB --&gt; Backend: OTP found
+Backend -&gt; MongoDB: Update user.verified = true
+MongoDB --&gt; Backend: User updated
+Backend -&gt; MongoDB: Delete OTP
+MongoDB --&gt; Backend: OTP deleted
+Backend -&gt; Backend: Generate JWT
+Backend -&gt; Email: Send welcome email
+Email --&gt; Backend: Email sent
+Backend --&gt; Frontend: 200 OK: { token, user }
+Frontend -&gt; Frontend: Store token in localStorage
+Frontend -&gt; Frontend: Redirect to /pothole
+Frontend --&gt; User: Welcome!
+@enduml
+</div></code></pre>
+<h3 id="pothole-detection-sequence">Pothole Detection Sequence</h3>
+<pre class="hljs"><code><div>@startuml
+actor User
+participant &quot;React Frontend&quot; as Frontend
+participant &quot;Flask AI Service&quot; as AI
+participant &quot;PyTorch Model&quot; as Model
+
+User -&gt; Frontend: Upload image
+Frontend -&gt; Frontend: Validate file type &amp; size
+Frontend -&gt; Frontend: Create base64 preview
+Frontend --&gt; User: Show preview
+User -&gt; Frontend: Click &quot;Detect Pothole&quot;
+Frontend -&gt; Frontend: Create FormData
+Frontend -&gt; AI: POST /predict
+AI -&gt; AI: Read image file
+AI -&gt; AI: Resize to 128x128
+AI -&gt; AI: Normalize pixel values
+AI -&gt; AI: Convert to tensor
+AI -&gt; Model: Forward pass
+Model --&gt; AI: Output probability
+AI -&gt; AI: Apply threshold (0.5)
+AI -&gt; AI: Calculate confidence
+AI -&gt; AI: Measure time
+AI --&gt; Frontend: JSON: { is_pothole, confidence }
+Frontend -&gt; Frontend: Parse results
+Frontend -&gt; Frontend: Calculate percentage
+Frontend --&gt; User: Display &quot;Pothole Detected 95%&quot;
+Frontend --&gt; User: Enable complaint form
+@enduml
+</div></code></pre>
+<h3 id="complaint-submission-sequence">Complaint Submission Sequence</h3>
+<pre class="hljs"><code><div>@startuml
+actor User
+participant &quot;React Frontend&quot; as Frontend
+participant &quot;Express Backend&quot; as Backend
+participant MongoDB
+participant &quot;Brevo API&quot; as Email
+
+User -&gt; Frontend: Fill location &amp; description
+User -&gt; Frontend: Click &quot;Submit Complaint&quot;
+Frontend -&gt; Frontend: Validate fields
+Frontend -&gt; Frontend: Get JWT from localStorage
+Frontend -&gt; Backend: POST /api/complaints
+note right: Headers: Authorization Bearer JWT
+Backend -&gt; Backend: Verify JWT signature
+Backend -&gt; MongoDB: Find user by userId
+MongoDB --&gt; Backend: User found
+Backend -&gt; Backend: Create complaint object
+note right: Includes: location, description,\nimageData (base64), confidence
+Backend -&gt; MongoDB: Insert complaint
+MongoDB --&gt; Backend: Document inserted (_id)
+Backend -&gt; Email: Send confirmation email
+Email --&gt; Backend: Email sent
+Backend --&gt; Frontend: 201 Created
+Frontend -&gt; Frontend: Show success alert
+Frontend -&gt; Frontend: Navigate to /lifesaver
+Frontend --&gt; User: Complaint submitted!
+@enduml
+</div></code></pre>
+<hr>
+<h2 id="system-architecture-overview">System Architecture Overview</h2>
+<pre class="hljs"><code><div>┌──────────────────────────────────────────────────────────────────┐
+│                        CLIENT LAYER                               │
+│                     React SPA (Vercel CDN)                        │
+│   - Authentication UI (Login/Signup/OTP)                          │
+│   - Image Upload &amp; Preview                                        │
+│   - Detection Results Display                                     │
+│   - Complaint Submission Forms                                    │
+└───────────┬──────────────────────────┬───────────────────────────┘
+            │                          │
+            │ HTTPS/JSON               │ HTTPS/FormData
+            │                          │
+┌───────────▼──────────────┐  ┌────────▼──────────────────────────┐
+│   APPLICATION LAYER      │  │    AI INFERENCE LAYER             │
+│   Node.js/Express        │  │    Python/Flask                   │
+│   (Render Cloud)         │  │    (Heroku Dyno)                  │
+│                          │  │                                    │
+│ - JWT Authentication     │  │ - Image Preprocessing             │
+│ - OAuth Integration      │  │ - CNN Model Inference             │
+│ - Complaint Management   │  │ - Confidence Calculation          │
+│ - Email Integration      │  │                                    │
+└───────────┬──────────────┘  └───────────────────────────────────┘
+            │
+            │ MongoDB Wire Protocol
+            │
+┌───────────▼──────────────────────────────────────────────────────┐
+│                       DATA LAYER                                  │
+│                   MongoDB Atlas Cloud                             │
+│   - users: { email, password, verified, authProvider }           │
+│   - otps: { email, otp, expiresAt } [TTL: 10 min]               │
+│   - complaints: { location, description, imageData, confidence }  │
+└───────────────────────────────────────────────────────────────────┘
+
+┌───────────────────────────────────────────────────────────────────┐
+│                    EXTERNAL SERVICES                              │
+│                                                                   │
+│  ┌─────────────┐  ┌─────────────┐  ┌──────────────────────────┐ │
+│  │  Google     │  │  Microsoft  │  │  Brevo Email API         │ │
+│  │  OAuth 2.0  │  │  Identity   │  │  (Transactional Email)   │ │
+│  └─────────────┘  └─────────────┘  └──────────────────────────┘ │
+└───────────────────────────────────────────────────────────────────┘
+</div></code></pre>
+<hr>
+<h2 id="performance-considerations">Performance Considerations</h2>
+<h3 id="response-time-targets">Response Time Targets</h3>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Target</th>
+<th>Maximum</th>
+<th>Measurement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Login</td>
+<td>&lt;500ms</td>
+<td>1s</td>
+<td>Backend JWT generation</td>
+</tr>
+<tr>
+<td>Signup</td>
+<td>&lt;1s</td>
+<td>2s</td>
+<td>Includes email sending</td>
+</tr>
+<tr>
+<td>OAuth Redirect</td>
+<td>&lt;2s</td>
+<td>5s</td>
+<td>External service latency</td>
+</tr>
+<tr>
+<td>Image Detection</td>
+<td>&lt;3s</td>
+<td>10s</td>
+<td>AI model inference</td>
+</tr>
+<tr>
+<td>Complaint Submit</td>
+<td>&lt;500ms</td>
+<td>2s</td>
+<td>MongoDB write + email</td>
+</tr>
+<tr>
+<td>Page Load</td>
+<td>&lt;2s</td>
+<td>3s</td>
+<td>First Contentful Paint</td>
+</tr>
+</tbody>
+</table>
+<h3 id="optimization-strategies">Optimization Strategies</h3>
+<ol>
+<li><strong>CDN Caching:</strong> Vercel edge caching for static assets</li>
+<li><strong>Database Indexing:</strong> Email, googleId, microsoftId indexed</li>
+<li><strong>JWT Stateless:</strong> No database lookup on every request</li>
+<li><strong>Base64 Storage:</strong> No external file storage latency</li>
+<li><strong>Async Email:</strong> Non-blocking email sending</li>
+<li><strong>Connection Pooling:</strong> MongoDB connection reuse</li>
+</ol>
+<hr>
+<h2 id="security-flow-analysis">Security Flow Analysis</h2>
+<h3 id="authentication-token-lifecycle">Authentication Token Lifecycle</h3>
+<pre class="hljs"><code><div>1. User Login (Email/Password or OAuth)
+   ↓
+2. Backend Generates JWT
+   - Payload: { userId: &quot;...&quot; }
+   - Algorithm: HS256
+   - Secret: JWT_SECRET (256-bit)
+   - Expiry: 24 hours
+   ↓
+3. Frontend Stores Token
+   - Location: localStorage.authToken
+   - Persistence: Across browser sessions
+   ↓
+4. Subsequent Requests
+   - Header: Authorization: Bearer &lt;token&gt;
+   - Backend verifies signature
+   - Extract userId from payload
+   ↓
+5. Token Expiration (24 hours)
+   - Backend returns 401 Unauthorized
+   - Frontend clears localStorage
+   - Redirect to /login
+   ↓
+6. User Re-authenticates
+   - New JWT issued
+   - Cycle repeats
+</div></code></pre>
+<h3 id="data-encryption-points">Data Encryption Points</h3>
+<table>
+<thead>
+<tr>
+<th>Data Type</th>
+<th>Encryption Method</th>
+<th>At Rest</th>
+<th>In Transit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Password</td>
+<td>bcrypt (12 rounds)</td>
+<td>✅</td>
+<td>✅ (TLS)</td>
+</tr>
+<tr>
+<td>JWT Token</td>
+<td>HS256 signature</td>
+<td>❌ (client-side)</td>
+<td>✅ (TLS)</td>
+</tr>
+<tr>
+<td>OTP</td>
+<td>bcrypt hash</td>
+<td>✅</td>
+<td>✅ (TLS)</td>
+</tr>
+<tr>
+<td>Image Data</td>
+<td>Base64 encoding</td>
+<td>❌ (plain text)</td>
+<td>✅ (TLS)</td>
+</tr>
+<tr>
+<td>Email</td>
+<td>Plain text</td>
+<td>❌</td>
+<td>✅ (TLS)</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="presentation-tips">Presentation Tips</h2>
+<h3 id="for-interviewsviva">For Interviews/Viva</h3>
+<p><strong>Key Points to Highlight:</strong></p>
+<ol>
+<li><strong>Microservices Architecture:</strong> Clear separation of Frontend, Backend, AI Service</li>
+<li><strong>Security Best Practices:</strong> JWT, bcrypt, rate limiting, HTTPS</li>
+<li><strong>Scalability:</strong> Stateless authentication, CDN distribution, database indexing</li>
+<li><strong>User Experience:</strong> OAuth integration, real-time feedback, error handling</li>
+<li><strong>Production Ready:</strong> Deployed on professional cloud platforms</li>
+</ol>
+<p><strong>Common Questions:</strong></p>
+<p>Q: &quot;Why store images in MongoDB instead of cloud storage?&quot;
+A: &quot;For MVP and free tier deployment, base64 in MongoDB eliminates external dependencies, reduces latency, and simplifies architecture. Future scaling can migrate to S3/Cloudinary.&quot;</p>
+<p>Q: &quot;How do you handle concurrent user sessions?&quot;
+A: &quot;JWT tokens are stateless, enabling horizontal scaling without session store. Each request is independent, validated via cryptographic signature.&quot;</p>
+<p>Q: &quot;What happens if AI service is down?&quot;
+A: &quot;Frontend displays user-friendly error message with retry option. Backend logs incident. Health check endpoint monitors service status. Future: implement fallback ML model or queue system.&quot;</p>
+<p>Q: &quot;How secure is the authentication system?&quot;
+A: &quot;Multi-layered: bcrypt password hashing (12 rounds), JWT with HS256, rate limiting (5 attempts/15 min), HTTPS everywhere, OAuth token validation, OTP with 10-minute expiry.&quot;</p>
+<hr>
+<p><strong>Document End</strong></p>
+<p><em>Generated with precision for senior architecture review and technical presentations.</em></p>
+
+</body>
+</html>

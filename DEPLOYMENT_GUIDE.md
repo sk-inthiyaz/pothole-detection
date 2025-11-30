@@ -11,8 +11,8 @@ This guide will help you deploy your full-stack MERN + AI application to free ho
 ```
 Frontend (React)     →  Vercel (Free)
 Backend (Node.js)    →  Render (Free)
-AI Service (Flask)   →  Render (Free)
-Database             →  MongoDB Atlas (Free - Already Set Up ✅)
+AI Service (Flask)   →  Heroko (Free)(Senior 's subsciption)
+Database             →  MongoDB Atlas 
 ```
 
 ---
@@ -381,7 +381,7 @@ I can create a GitHub Action to ping your services every 14 minutes.
 
 ### Connect Custom Domain to Vercel
 
-1. Buy domain from [Namecheap](https://www.namecheap.com/) (~$1-10/year)
+1. Purchase a domain from any domain registrar (e.g., GoDaddy, Google Domains, Cloudflare) (~$10-15/year)
 2. Vercel Dashboard → Your Project → Settings → Domains
 3. Add your domain: `potholedetection.com`
 4. Add DNS records from Vercel to your domain provider
@@ -393,19 +393,6 @@ I can create a GitHub Action to ping your services every 14 minutes.
 2. Add domain: `api.potholedetection.com`
 3. Add CNAME record to your DNS provider
 4. Wait for DNS propagation
-
----
-
-## 🎓 GitHub Student Pack Benefits
-
-If you have GitHub Student Pack, you get:
-
-- **Heroku:** $13/month credits (better than Render free tier)
-- **DigitalOcean:** $200 credits for 1 year
-- **Azure:** $100 credits
-- **Namecheap:** 1 free .me domain + SSL certificate
-
-**Recommendation:** Use DigitalOcean credits for backend + AI service (better performance, no cold starts).
 
 ---
 

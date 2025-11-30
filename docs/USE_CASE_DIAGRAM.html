@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>USE_CASE_DIAGRAM.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="use-case-diagram---ai-powered-pothole-detection-system">Use Case Diagram - AI-Powered Pothole Detection System</h1>
+<h2 id="uml-use-case-diagram">UML Use Case Diagram</h2>
+<pre class="hljs"><code><div>                                    ┌────────────────────────────────────────────────────────────┐
+                                    │                                                            │
+                                    │     AI-Powered Pothole Detection &amp; Reporting System        │
+                                    │                                                            │
+                                    └────────────────────────────────────────────────────────────┘
+                                                            
+     ┌───────────┐                                                                    ┌──────────┐
+     │           │                                                                    │          │
+     │   Guest   │                                                                    │  Admin   │
+     │   User    │                                                                    │ (Future) │
+     │           │                                                                    │          │
+     └─────┬─────┘                                                                    └────┬─────┘
+           │                                                                               │
+           │                                                                               │
+           │  ┌──────────────────────────────────────────────────────────────────┐         │
+           │  │                                                                  │         │
+           ├──┤  Register Account                                                │         │
+           │  │  (Email/Password + OTP Verification)                             │         │
+           │  │                                                                  │         │
+           │  └──────────────────────────────────────────────────────────────────┘         │
+           │                                                                               │
+           │  ┌──────────────────────────────────────────────────────────────────┐         │
+           │  │                                                                  │         │
+           ├──┤  Login to System                                                 │         │
+           │  │  «extends» OAuth Login (Google)                                  │ ◄───────┤
+           │  │  «extends» OAuth Login (Microsoft)                               │         │
+           │  │                                                                  │         │
+           │  └──────────────────────────────────────────────────────────────────┘         │ 
+           │                                                                               │
+           │  ┌──────────────────────────────────────────────────────────────────┐         │
+           │  │                                                                  │         │
+           ├──┤  Verify Email OTP                                                │         │
+           │  │  «includes» Resend OTP                                           │         │
+           │  │                                                                  │         │
+           │  └──────────────────────────────────────────────────────────────────┘         │
+           │                                                                               │
+           │                                                                               │
+     ┌─────┴─────┐                                                              ┌─────────~┴───────┐
+     │           │                                                              │                  │
+     │Registered │                                                              │  Municipal Admin │
+     │   User    │                                                              │   (Future)       │
+     │           │                                                              │                  │
+     └─────┬─────┘                                                              └──────────────────┘
+           │                                                                              │
+           │  ┌──────────────────────────────────────────────────────────────────┐        │
+           │  │                                                                  │        │
+           ├──┤  Upload Road Image                                               │        │
+           │  │  (JPEG/PNG/WebP, Max 10MB)                                       │        │
+           │  │                                                                  │        │
+           │  └────────────────────┬─────────────────────────────────────────────┘        │
+           │                       │                                                      │
+           │                       │ «includes»                                           │
+           │                       │                                                      │
+           │                       ▼                                                      │
+           │  ┌──────────────────────────────────────────────────────────────────┐        │
+           │  │                                                                  │        │
+           │  │  ┌────────────────────────────────────────────────┐              │        │
+           │  │  │   AI Detection System                           │             │        │
+           │  │  │   • Analyze Image with CNN Model                │             │        │
+           │  │  │   • Calculate Confidence Score (0-100%)         │◄───────┐    │        │
+           │  │  │   • Measure Prediction Time                     │        │    │        │
+           │  │  │   • Generate Repair Recommendation              │        │    │        │
+           │  │  └────────────────────────────────────────────────┘         │    │        │ 
+           │  │                                                             │    │        │
+           │  └─────────────────────────────────────────────────────────────┼────┘        │
+           │                       │                                        │             │
+           │                       │ «includes»                             │             │
+           │                       │                                        │             │
+           │                       ▼                                        │             │
+           │  ┌──────────────────────────────────────────────────────────────────┐        │
+           │  │                                                                  │        │
+           ├──┤  View Detection Results                                          │        │
+           │  │  • Pothole Status (Detected/Not Detected)                        │        │
+           │  │  • Confidence Percentage                                         │        │
+           │  │  • Processing Time                                               │        │
+           │  │  • Recommendation                                                │        │
+           │  │                                                                  │        │
+           │  └──────────────────────────────────────────────────────────────────┘        │
+           │                                                                              │
+           │  ┌──────────────────────────────────────────────────────────────────┐        │
+           │  │                                                                  │        │
+           ├──┤  Submit Complaint                                                │        │
+           │  │  «requires» Detection Complete                                   │        │
+           │  │  «includes» Add Location                                         │        │
+           │  │  «includes» Add Description                                      │        │
+           │  │  «includes» Attach Image Evidence                                │        │
+           │  │                                                                  │        │
+           │  └──────────────────────────────────────────────────────────────────┘        │
+           │                       │                                                      │
+           │                       │ «includes»                                           │
+           │                       │                                                      │
+           │                       ▼                                                      │
+           │  ┌──────────────────────────────────────────────────────────────────┐        │
+           │  │                                                                  │        │
+           │  │  Store Complaint in Database                                     │        │
+           │  │  • Save Location                                                 │        │
+           │  │  • Save Description                                              │        │
+           │  │  • Save Base64 Image                                             │        │
+           │  │  • Save Confidence Score                                         │        │
+           │  │  • Link to User Account                                          │        │
+           │  │  • Timestamp Creation                                            │        │
+           │  │                                                                  │        │
+           │  └──────────────────────────────────────────────────────────────────┘        │
+           │                                                                              │
+           │  ┌──────────────────────────────────────────────────────────────────┐        │
+           │  │                                                                  │        │
+           ├──┤  View Submitted Complaints                                       │        │
+           │  │  (History of User's Reports)                                     │        │
+           │  │                                                                  │        │
+           │  └──────────────────────────────────────────────────────────────────┘        │
+           │                                                                              │
+           │  ┌──────────────────────────────────────────────────────────────────┐        │
+           │  │                                                                  │        │
+           ├──┤  View About &amp; Information Pages                              │        │
+           │  │  • Learn About Project                                           │        │
+           │  │  • View Workflow Diagram                                         │        │
+           │  │  • Understand Life-Saving Impact                                 │        │
+           │  │                                                                  │        │
+           │  └──────────────────────────────────────────────────────────────────┘        │
+           │                                                                              │
+           │  ┌──────────────────────────────────────────────────────────────────┐        │
+           │  │                                                                  │        │
+           ├──┤  Send Contact Message                                            │        │
+           │  │  (Contact Form Submission)                                       │        │
+           │  │                                                                  │        │
+           │  └──────────────────────────────────────────────────────────────────┘        │
+           │                                                                              │
+           │  ┌──────────────────────────────────────────────────────────────────┐        │
+           │  │                                                                  │        │
+           ├──┤  Logout from System                                              │        │
+           │  │  (Clear Session &amp; JWT Token)                                 │        │
+           │  │                                                                  │        │
+           │  └──────────────────────────────────────────────────────────────────┘        │
+           │                                                                              │
+           │                                                                              │
+           │                                                                 ┌────────────┴───────────┐
+           │                                                                 │                        │
+           │                                                            ┌────┤  View All Complaints   │
+           │                                                            │    │  (Dashboard)           │
+           │                                                            │    │                        │
+           │                                                            │    └────────────────────────┘
+           │                                                            │              
+           │                                                            │    ┌──────────────────────────┐
+           │                                                            │    │                          │
+           │                                                            ├────┤  Filter Complaints       │
+           │                                                            │    │  (By Date/Location)      │
+           │                                                            │    │                          │
+           │                                                            │    └──────────────────────────┘
+           │                                                            │              
+           │                                                            │    ┌──────────────────────────┐
+           │                                                            │    │                          │
+           │                                                            ├────┤  Verify Complaint        │
+           │                                                            │    │  (Mark as Valid)         │
+           │                                                            │    │                          │
+           │                                                            │    └──────────────────────────┘
+           │                                                            │              
+           │                                                            │    ┌──────────────────────────┐
+           │                                                            │    │                          │
+           │                                                            ├────┤  Mark Complaint Resolved │
+           │                                                            │    │  (Update Status)         │
+           │                                                            │    │                          │
+           │                                                            │    └──────────────────────────┘
+           │                                                            │              
+           │                                                            │    ┌──────────────────────────┐
+           │                                                            │    │                          │
+           │                                                            └────┤  Generate Reports        │
+           │                                                                 │  (Analytics Dashboard)   │
+           │                                                                 │                          │
+           │                                                                 └──────────────────────────┘
+           │                                                                              
+           │                                                                              
+     ┌─────┴──────────────────────────────────────────────────────────────────────────┐
+     │                                                                                │
+     │                          EXTERNAL SYSTEMS                                      │
+     │                                                                                │
+     │  ┌────────────────┐  ┌────────────────┐  ┌────────────────┐  ┌──────────────┐  │
+     │  │                │  │                │  │                │  │              │  │
+     │  │  Google OAuth  │  │ Microsoft Auth │  │  Brevo Email   │  │   MongoDB    │  │
+     │  │   Service      │  │   Platform     │  │     API        │  │   Database   │  │
+     │  │                │  │                │  │                │  │              │  │
+     │  └────────────────┘  └────────────────┘  └────────────────┘  └──────────────┘  │
+     │                                                                                │
+     └────────────────────────────────────────────────────────────────────────────────┘
+</div></code></pre>
+<hr>
+<h2 id="actor-descriptions">Actor Descriptions</h2>
+<h3 id="1-guest-user-unauthenticated">1. Guest User (Unauthenticated)</h3>
+<p><strong>Description:</strong> Any visitor to the website without an account.</p>
+<p><strong>Capabilities:</strong></p>
+<ul>
+<li>Register new account</li>
+<li>Login with email/password</li>
+<li>Login with Google OAuth</li>
+<li>Login with Microsoft OAuth</li>
+<li>View public pages (Home, About, Workflow)</li>
+</ul>
+<p><strong>Limitations:</strong></p>
+<ul>
+<li>Cannot upload images</li>
+<li>Cannot submit complaints</li>
+<li>Cannot view complaint history</li>
+</ul>
+<hr>
+<h3 id="2-registered-user-authenticated">2. Registered User (Authenticated)</h3>
+<p><strong>Description:</strong> Verified user with an active account and valid JWT token.</p>
+<p><strong>Capabilities:</strong></p>
+<ul>
+<li>All Guest User capabilities, plus:</li>
+<li>Upload road images for analysis</li>
+<li>View AI detection results</li>
+<li>Submit complaints with evidence</li>
+<li>View own complaint history</li>
+<li>Send contact messages</li>
+<li>Logout from system</li>
+</ul>
+<p><strong>Authentication Methods:</strong></p>
+<ul>
+<li>Email/Password (with OTP verification)</li>
+<li>Google OAuth 2.0</li>
+<li>Microsoft OAuth 2.0</li>
+</ul>
+<hr>
+<h3 id="3-ai-detection-system-automated-actor">3. AI Detection System (Automated Actor)</h3>
+<p><strong>Description:</strong> Python/Flask microservice with trained CNN model.</p>
+<p><strong>Responsibilities:</strong></p>
+<ul>
+<li>Receive uploaded images</li>
+<li>Preprocess images (resize, normalize)</li>
+<li>Perform inference with PyTorch CNN</li>
+<li>Calculate confidence scores</li>
+<li>Measure prediction time</li>
+<li>Generate repair recommendations</li>
+<li>Return JSON results to frontend</li>
+</ul>
+<p><strong>Technology:</strong></p>
+<ul>
+<li>PyTorch 2.0 CNN model</li>
+<li>Flask REST API</li>
+<li>Deployed on Heroku</li>
+</ul>
+<hr>
+<h3 id="4-backend-server-system-actor">4. Backend Server (System Actor)</h3>
+<p><strong>Description:</strong> Node.js/Express REST API handling business logic.</p>
+<p><strong>Responsibilities:</strong></p>
+<ul>
+<li>User authentication and authorization</li>
+<li>JWT token generation and validation</li>
+<li>OTP generation and verification</li>
+<li>OAuth integration (Google, Microsoft)</li>
+<li>Complaint data persistence</li>
+<li>Email delivery via Brevo API</li>
+<li>Rate limiting and security enforcement</li>
+</ul>
+<p><strong>Technology:</strong></p>
+<ul>
+<li>Node.js 18 + Express</li>
+<li>MongoDB (Mongoose ODM)</li>
+<li>Passport.js (OAuth)</li>
+<li>Deployed on Render</li>
+</ul>
+<hr>
+<h3 id="5-municipal-admin-future-enhancement">5. Municipal Admin (Future Enhancement)</h3>
+<p><strong>Description:</strong> Government official managing submitted complaints.</p>
+<p><strong>Planned Capabilities:</strong></p>
+<ul>
+<li>View all user complaints</li>
+<li>Filter complaints by date/location/status</li>
+<li>Verify complaint authenticity</li>
+<li>Mark complaints as resolved</li>
+<li>Generate analytics reports</li>
+<li>Export data for planning</li>
+</ul>
+<p><strong>Status:</strong> Not yet implemented (Phase 2)</p>
+<hr>
+<h2 id="use-case-specifications">Use Case Specifications</h2>
+<h3 id="uc-001-register-account">UC-001: Register Account</h3>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Use Case ID</strong></td>
+<td>UC-001</td>
+</tr>
+<tr>
+<td><strong>Use Case Name</strong></td>
+<td>Register Account</td>
+</tr>
+<tr>
+<td><strong>Actor</strong></td>
+<td>Guest User</td>
+</tr>
+<tr>
+<td><strong>Description</strong></td>
+<td>New user creates an account with email and password</td>
+</tr>
+<tr>
+<td><strong>Preconditions</strong></td>
+<td>User has valid email address</td>
+</tr>
+<tr>
+<td><strong>Postconditions</strong></td>
+<td>Account created, OTP sent to email</td>
+</tr>
+<tr>
+<td><strong>Normal Flow</strong></td>
+<td>1. User navigates to signup page<br>2. User enters email and password<br>3. System validates input<br>4. System hashes password with bcrypt<br>5. System generates 6-digit OTP<br>6. System sends OTP via Brevo API<br>7. System displays OTP verification page</td>
+</tr>
+<tr>
+<td><strong>Alternative Flows</strong></td>
+<td><strong>3a. Email already exists:</strong><br>  1. System displays error &quot;Email already registered&quot;<br>  2. User redirects to login page<br><br><strong>6a. Email delivery fails:</strong><br>  1. System logs error<br>  2. System displays generic success message<br>  3. User can request resend</td>
+</tr>
+<tr>
+<td><strong>Exception Flows</strong></td>
+<td><strong>E1. Invalid email format:</strong><br>  Display inline error &quot;Enter valid email&quot;<br><br><strong>E2. Weak password:</strong><br>  Display error &quot;Password must be 8+ characters&quot;</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="uc-002-verify-email-otp">UC-002: Verify Email OTP</h3>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Use Case ID</strong></td>
+<td>UC-002</td>
+</tr>
+<tr>
+<td><strong>Use Case Name</strong></td>
+<td>Verify Email OTP</td>
+</tr>
+<tr>
+<td><strong>Actor</strong></td>
+<td>Guest User</td>
+</tr>
+<tr>
+<td><strong>Description</strong></td>
+<td>User verifies email ownership with OTP</td>
+</tr>
+<tr>
+<td><strong>Preconditions</strong></td>
+<td>User registered, OTP sent to email</td>
+</tr>
+<tr>
+<td><strong>Postconditions</strong></td>
+<td>Account activated, user logged in</td>
+</tr>
+<tr>
+<td><strong>Normal Flow</strong></td>
+<td>1. User receives OTP email<br>2. User enters 6-digit OTP<br>3. System validates OTP hash<br>4. System checks expiration (10 min)<br>5. System activates account<br>6. System generates JWT token<br>7. System redirects to dashboard</td>
+</tr>
+<tr>
+<td><strong>Alternative Flows</strong></td>
+<td><strong>3a. Invalid OTP:</strong><br>  1. Increment attempt counter<br>  2. Display error &quot;Invalid OTP&quot;<br>  3. Allow 3 total attempts<br><br><strong>4a. OTP expired:</strong><br>  1. Delete expired OTP<br>  2. Display error with resend option<br><br><strong>UC-002a. Resend OTP:</strong><br>  1. User clicks &quot;Resend OTP&quot;<br>  2. System generates new OTP<br>  3. System sends new email<br>  4. Display success message</td>
+</tr>
+<tr>
+<td><strong>Exception Flows</strong></td>
+<td><strong>E1. Maximum attempts exceeded:</strong><br>  Lock account for 15 minutes</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="uc-003-login-to-system">UC-003: Login to System</h3>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Use Case ID</strong></td>
+<td>UC-003</td>
+</tr>
+<tr>
+<td><strong>Use Case Name</strong></td>
+<td>Login to System</td>
+</tr>
+<tr>
+<td><strong>Actor</strong></td>
+<td>Registered User</td>
+</tr>
+<tr>
+<td><strong>Description</strong></td>
+<td>User authenticates with credentials</td>
+</tr>
+<tr>
+<td><strong>Preconditions</strong></td>
+<td>User has verified account</td>
+</tr>
+<tr>
+<td><strong>Postconditions</strong></td>
+<td>User authenticated, JWT issued</td>
+</tr>
+<tr>
+<td><strong>Normal Flow</strong></td>
+<td>1. User navigates to login page<br>2. User enters email and password<br>3. System validates credentials<br>4. System compares bcrypt hash<br>5. System generates JWT (24h expiry)<br>6. System stores token in localStorage<br>7. System redirects to pothole detection page</td>
+</tr>
+<tr>
+<td><strong>Alternative Flows</strong></td>
+<td><strong>UC-003a. OAuth Login (Google):</strong><br>  1. User clicks &quot;Sign in with Google&quot;<br>  2. System redirects to Google consent<br>  3. User authorizes app<br>  4. Google returns auth code<br>  5. Backend exchanges for user profile<br>  6. System creates/links account<br>  7. System generates JWT<br>  8. Frontend stores token and redirects<br><br><strong>UC-003b. OAuth Login (Microsoft):</strong><br>  (Same flow as Google, different provider)</td>
+</tr>
+<tr>
+<td><strong>Exception Flows</strong></td>
+<td><strong>E1. Invalid credentials:</strong><br>  Display error &quot;Invalid email or password&quot;<br><br><strong>E2. Unverified account:</strong><br>  Redirect to OTP verification page<br><br><strong>E3. Rate limit exceeded:</strong><br>  Return 429 error, wait 15 minutes</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="uc-004-upload-road-image">UC-004: Upload Road Image</h3>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Use Case ID</strong></td>
+<td>UC-004</td>
+</tr>
+<tr>
+<td><strong>Use Case Name</strong></td>
+<td>Upload Road Image</td>
+</tr>
+<tr>
+<td><strong>Actor</strong></td>
+<td>Registered User</td>
+</tr>
+<tr>
+<td><strong>Description</strong></td>
+<td>User uploads image for pothole detection</td>
+</tr>
+<tr>
+<td><strong>Preconditions</strong></td>
+<td>User authenticated with valid JWT</td>
+</tr>
+<tr>
+<td><strong>Postconditions</strong></td>
+<td>Image uploaded, displayed in preview</td>
+</tr>
+<tr>
+<td><strong>Normal Flow</strong></td>
+<td>1. User clicks upload area or selects file<br>2. User chooses image (JPEG/PNG/WebP)<br>3. System validates file type<br>4. System validates file size (&lt;10MB)<br>5. System creates base64 preview<br>6. System displays image preview<br>7. User clicks &quot;Detect Pothole&quot; button<br>8. System includes UC-005 (AI Detection)</td>
+</tr>
+<tr>
+<td><strong>Alternative Flows</strong></td>
+<td><strong>3a. Invalid file type:</strong><br>  Display error &quot;Only JPEG, PNG, WebP allowed&quot;<br><br><strong>4a. File too large:</strong><br>  Display error &quot;Maximum file size is 10MB&quot;</td>
+</tr>
+<tr>
+<td><strong>Exception Flows</strong></td>
+<td><strong>E1. No file selected:</strong><br>  Keep detect button disabled</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="uc-005-ai-detects-pothole">UC-005: AI Detects Pothole</h3>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Use Case ID</strong></td>
+<td>UC-005</td>
+</tr>
+<tr>
+<td><strong>Use Case Name</strong></td>
+<td>AI Detects Pothole</td>
+</tr>
+<tr>
+<td><strong>Actor</strong></td>
+<td>AI Detection System (Automated)</td>
+</tr>
+<tr>
+<td><strong>Description</strong></td>
+<td>CNN model analyzes image for potholes</td>
+</tr>
+<tr>
+<td><strong>Preconditions</strong></td>
+<td>Image uploaded to Flask service</td>
+</tr>
+<tr>
+<td><strong>Postconditions</strong></td>
+<td>Detection results returned as JSON</td>
+</tr>
+<tr>
+<td><strong>Normal Flow</strong></td>
+<td>1. Flask receives POST /predict request<br>2. System reads image file from FormData<br>3. System resizes image to model input size<br>4. System normalizes pixel values<br>5. System converts to PyTorch tensor<br>6. System performs forward pass through CNN<br>7. System applies softmax activation<br>8. System extracts confidence score<br>9. System measures processing time<br>10. System determines binary classification<br>11. System generates recommendation<br>12. System returns JSON response</td>
+</tr>
+<tr>
+<td><strong>Alternative Flows</strong></td>
+<td>None (automated process)</td>
+</tr>
+<tr>
+<td><strong>Exception Flows</strong></td>
+<td><strong>E1. Invalid image format:</strong><br>  Return 400 error &quot;Invalid image&quot;<br><br><strong>E2. Model inference failure:</strong><br>  Return 500 error &quot;Detection failed&quot;<br><br><strong>E3. Timeout (60 seconds):</strong><br>  Return 504 Gateway Timeout</td>
+</tr>
+</tbody>
+</table>
+<p><strong>JSON Response Schema:</strong></p>
+<pre class="hljs"><code><div>{
+  <span class="hljs-attr">"is_pothole"</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">"confidence"</span>: <span class="hljs-number">0.9576</span>,
+  <span class="hljs-attr">"prediction_time"</span>: <span class="hljs-number">1.23</span>
+}
+</div></code></pre>
+<hr>
+<h3 id="uc-006-view-detection-results">UC-006: View Detection Results</h3>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Use Case ID</strong></td>
+<td>UC-006</td>
+</tr>
+<tr>
+<td><strong>Use Case Name</strong></td>
+<td>View Detection Results</td>
+</tr>
+<tr>
+<td><strong>Actor</strong></td>
+<td>Registered User</td>
+</tr>
+<tr>
+<td><strong>Description</strong></td>
+<td>User views AI analysis results</td>
+</tr>
+<tr>
+<td><strong>Preconditions</strong></td>
+<td>AI detection complete (UC-005)</td>
+</tr>
+<tr>
+<td><strong>Postconditions</strong></td>
+<td>Results displayed, complaint form enabled</td>
+</tr>
+<tr>
+<td><strong>Normal Flow</strong></td>
+<td>1. System receives JSON from AI service<br>2. System parses detection data<br>3. System displays prediction status<br>   (&quot;Pothole Detected&quot; or &quot;No Pothole&quot;)<br>4. System displays confidence percentage<br>5. System displays processing time<br>6. System displays recommendation<br>7. System enables complaint form (if pothole detected)<br>8. User reviews results</td>
+</tr>
+<tr>
+<td><strong>Alternative Flows</strong></td>
+<td><strong>7a. No pothole detected:</strong><br>  Keep complaint form disabled<br>  Display message &quot;No pothole found&quot;</td>
+</tr>
+<tr>
+<td><strong>Exception Flows</strong></td>
+<td><strong>E1. AI service unavailable:</strong><br>  Display error &quot;Service temporarily unavailable&quot;<br><br><strong>E2. Invalid response format:</strong><br>  Display generic error message</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="uc-007-submit-complaint">UC-007: Submit Complaint</h3>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Use Case ID</strong></td>
+<td>UC-007</td>
+</tr>
+<tr>
+<td><strong>Use Case Name</strong></td>
+<td>Submit Complaint</td>
+</tr>
+<tr>
+<td><strong>Actor</strong></td>
+<td>Registered User</td>
+</tr>
+<tr>
+<td><strong>Description</strong></td>
+<td>User reports pothole with evidence</td>
+</tr>
+<tr>
+<td><strong>Preconditions</strong></td>
+<td>- User authenticated<br>- Pothole detected (UC-005)<br>- Detection results viewed (UC-006)</td>
+</tr>
+<tr>
+<td><strong>Postconditions</strong></td>
+<td>Complaint stored in database</td>
+</tr>
+<tr>
+<td><strong>Normal Flow</strong></td>
+<td>1. User enters location (text field)<br>2. User enters description (textarea)<br>3. User clicks &quot;Submit Complaint&quot;<br>4. System validates required fields<br>5. System extracts JWT from localStorage<br>6. System prepares complaint payload:<br>   - location<br>   - description<br>   - imageData (base64)<br>   - confidence (raw 0-1 value)<br>7. System sends POST /api/complaints<br>8. Backend validates JWT<br>9. Backend creates complaint document<br>10. MongoDB stores complaint<br>11. Backend returns success response<br>12. System displays success message<br>13. System redirects to &quot;Life Saver&quot; page</td>
+</tr>
+<tr>
+<td><strong>Alternative Flows</strong></td>
+<td><strong>4a. Missing required fields:</strong><br>  Display inline errors<br>  Prevent submission<br><br><strong>8a. Invalid/expired JWT:</strong><br>  Return 401 Unauthorized<br>  Redirect to login page</td>
+</tr>
+<tr>
+<td><strong>Exception Flows</strong></td>
+<td><strong>E1. Payload too large (&gt;10MB):</strong><br>  Return 413 error &quot;Image too large&quot;<br><br><strong>E2. Database connection failed:</strong><br>  Return 500 error &quot;Submission failed&quot;<br><br><strong>E3. Network timeout:</strong><br>  Display error &quot;Check connection, try again&quot;</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Includes:</strong> UC-008 (Store Complaint)</p>
+<hr>
+<h3 id="uc-008-store-complaint-in-database">UC-008: Store Complaint in Database</h3>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Use Case ID</strong></td>
+<td>UC-008</td>
+</tr>
+<tr>
+<td><strong>Use Case Name</strong></td>
+<td>Store Complaint in Database</td>
+</tr>
+<tr>
+<td><strong>Actor</strong></td>
+<td>Backend Server (System)</td>
+</tr>
+<tr>
+<td><strong>Description</strong></td>
+<td>Persist complaint data to MongoDB</td>
+</tr>
+<tr>
+<td><strong>Preconditions</strong></td>
+<td>Valid complaint payload received</td>
+</tr>
+<tr>
+<td><strong>Postconditions</strong></td>
+<td>Complaint document created</td>
+</tr>
+<tr>
+<td><strong>Normal Flow</strong></td>
+<td>1. Backend extracts user ID from JWT<br>2. Backend creates Complaint object:<br>   - userId (ObjectId reference)<br>   - location (String)<br>   - description (String)<br>   - imageData (base64 String)<br>   - confidence (Number 0-1)<br>   - status: &quot;pending&quot;<br>   - createdAt (Date)<br>3. Mongoose validates schema<br>4. MongoDB inserts document<br>5. MongoDB returns document ID<br>6. Backend sends success response</td>
+</tr>
+<tr>
+<td><strong>Alternative Flows</strong></td>
+<td>None (internal system process)</td>
+</tr>
+<tr>
+<td><strong>Exception Flows</strong></td>
+<td><strong>E1. Validation error:</strong><br>  Return 400 Bad Request<br><br><strong>E2. Database write failure:</strong><br>  Return 500 Internal Error<br><br><strong>E3. Duplicate detection:</strong><br>  Log warning, proceed (no unique constraint)</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="uc-009-view-submitted-complaints">UC-009: View Submitted Complaints</h3>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Use Case ID</strong></td>
+<td>UC-009</td>
+</tr>
+<tr>
+<td><strong>Use Case Name</strong></td>
+<td>View Submitted Complaints</td>
+</tr>
+<tr>
+<td><strong>Actor</strong></td>
+<td>Registered User</td>
+</tr>
+<tr>
+<td><strong>Description</strong></td>
+<td>User views history of their complaints</td>
+</tr>
+<tr>
+<td><strong>Preconditions</strong></td>
+<td>User authenticated</td>
+</tr>
+<tr>
+<td><strong>Postconditions</strong></td>
+<td>Complaint list displayed</td>
+</tr>
+<tr>
+<td><strong>Normal Flow</strong></td>
+<td>1. User navigates to complaints page<br>2. Frontend sends GET /api/complaints<br>3. Backend validates JWT<br>4. Backend extracts user ID<br>5. MongoDB queries complaints by userId<br>6. MongoDB returns complaint array<br>7. Backend sends JSON response<br>8. Frontend displays complaint list<br>9. User views complaint details</td>
+</tr>
+<tr>
+<td><strong>Alternative Flows</strong></td>
+<td><strong>5a. No complaints found:</strong><br>  Return empty array<br>  Display &quot;No complaints yet&quot;</td>
+</tr>
+<tr>
+<td><strong>Exception Flows</strong></td>
+<td><strong>E1. Unauthorized access:</strong><br>  Return 401, redirect to login</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="uc-010-logout-from-system">UC-010: Logout from System</h3>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Use Case ID</strong></td>
+<td>UC-010</td>
+</tr>
+<tr>
+<td><strong>Use Case Name</strong></td>
+<td>Logout from System</td>
+</tr>
+<tr>
+<td><strong>Actor</strong></td>
+<td>Registered User</td>
+</tr>
+<tr>
+<td><strong>Description</strong></td>
+<td>User ends authenticated session</td>
+</tr>
+<tr>
+<td><strong>Preconditions</strong></td>
+<td>User logged in</td>
+</tr>
+<tr>
+<td><strong>Postconditions</strong></td>
+<td>Session cleared, user logged out</td>
+</tr>
+<tr>
+<td><strong>Normal Flow</strong></td>
+<td>1. User clicks &quot;Logout&quot; button<br>2. Frontend clears localStorage:<br>   - Remove authToken<br>   - Remove user object<br>3. Frontend resets app state<br>4. Frontend redirects to home page<br>5. Backend session destroyed (if using cookies)</td>
+</tr>
+<tr>
+<td><strong>Alternative Flows</strong></td>
+<td>None</td>
+</tr>
+<tr>
+<td><strong>Exception Flows</strong></td>
+<td><strong>E1. Already logged out:</strong><br>  No action, redirect to home</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="future-use-cases-admin-panel---phase-2">Future Use Cases (Admin Panel - Phase 2)</h2>
+<h3 id="uc-admin-001-view-all-complaints">UC-ADMIN-001: View All Complaints</h3>
+<p><strong>Actor:</strong> Municipal Admin<br>
+<strong>Description:</strong> Admin views dashboard with all submitted complaints</p>
+<h3 id="uc-admin-002-filter-complaints">UC-ADMIN-002: Filter Complaints</h3>
+<p><strong>Actor:</strong> Municipal Admin<br>
+<strong>Description:</strong> Admin filters complaints by date range, location, or status</p>
+<h3 id="uc-admin-003-verify-complaint">UC-ADMIN-003: Verify Complaint</h3>
+<p><strong>Actor:</strong> Municipal Admin<br>
+<strong>Description:</strong> Admin marks complaint as verified after field inspection</p>
+<h3 id="uc-admin-004-mark-complaint-resolved">UC-ADMIN-004: Mark Complaint Resolved</h3>
+<p><strong>Actor:</strong> Municipal Admin<br>
+<strong>Description:</strong> Admin updates complaint status to &quot;resolved&quot; after repair</p>
+<h3 id="uc-admin-005-generate-analytics-report">UC-ADMIN-005: Generate Analytics Report</h3>
+<p><strong>Actor:</strong> Municipal Admin<br>
+<strong>Description:</strong> Admin exports complaint statistics and trends for planning</p>
+<hr>
+<h2 id="system-integration-use-cases">System Integration Use Cases</h2>
+<h3 id="uc-sys-001-authenticate-with-google-oauth">UC-SYS-001: Authenticate with Google OAuth</h3>
+<p><strong>Actor:</strong> Google OAuth Service (External)<br>
+<strong>Description:</strong> System exchanges authorization code for user profile data</p>
+<h3 id="uc-sys-002-authenticate-with-microsoft-oauth">UC-SYS-002: Authenticate with Microsoft OAuth</h3>
+<p><strong>Actor:</strong> Microsoft Identity Platform (External)<br>
+<strong>Description:</strong> System exchanges authorization code for user profile data</p>
+<h3 id="uc-sys-003-send-otp-email">UC-SYS-003: Send OTP Email</h3>
+<p><strong>Actor:</strong> Brevo Email API (External)<br>
+<strong>Description:</strong> System sends transactional OTP verification email</p>
+<h3 id="uc-sys-004-store-user-data">UC-SYS-004: Store User Data</h3>
+<p><strong>Actor:</strong> MongoDB Database (External)<br>
+<strong>Description:</strong> System persists user accounts, complaints, and OTPs</p>
+<hr>
+<h2 id="use-case-relationships">Use Case Relationships</h2>
+<h3 id="%C2%ABincludes%C2%BB-relationships">«includes» Relationships</h3>
+<ul>
+<li><strong>UC-001 (Register)</strong> includes <strong>UC-SYS-003 (Send OTP Email)</strong></li>
+<li><strong>UC-004 (Upload Image)</strong> includes <strong>UC-005 (AI Detection)</strong></li>
+<li><strong>UC-005 (AI Detection)</strong> includes <strong>UC-006 (View Results)</strong></li>
+<li><strong>UC-007 (Submit Complaint)</strong> includes <strong>UC-008 (Store Complaint)</strong></li>
+</ul>
+<h3 id="%C2%ABextends%C2%BB-relationships">«extends» Relationships</h3>
+<ul>
+<li><strong>UC-003a (OAuth Login Google)</strong> extends <strong>UC-003 (Login)</strong></li>
+<li><strong>UC-003b (OAuth Login Microsoft)</strong> extends <strong>UC-003 (Login)</strong></li>
+<li><strong>UC-002a (Resend OTP)</strong> extends <strong>UC-002 (Verify OTP)</strong></li>
+</ul>
+<h3 id="%C2%ABrequires%C2%BB-relationships">«requires» Relationships</h3>
+<ul>
+<li><strong>UC-007 (Submit Complaint)</strong> requires <strong>UC-005 (AI Detection)</strong> to complete</li>
+<li><strong>UC-009 (View Complaints)</strong> requires <strong>UC-003 (Login)</strong> authentication</li>
+</ul>
+<hr>
+<h2 id="non-functional-use-cases">Non-Functional Use Cases</h2>
+<h3 id="uc-nfr-001-system-performance">UC-NFR-001: System Performance</h3>
+<p><strong>Description:</strong> All API responses complete within 500ms (read operations)</p>
+<h3 id="uc-nfr-002-security-enforcement">UC-NFR-002: Security Enforcement</h3>
+<p><strong>Description:</strong> System enforces rate limiting (5 auth attempts per 15 min)</p>
+<h3 id="uc-nfr-003-data-encryption">UC-NFR-003: Data Encryption</h3>
+<p><strong>Description:</strong> All communications encrypted with TLS 1.3</p>
+<h3 id="uc-nfr-004-concurrent-user-support">UC-NFR-004: Concurrent User Support</h3>
+<p><strong>Description:</strong> System handles 100+ concurrent users without degradation</p>
+<hr>
+<h2 id="plantuml-code-for-presentation">PlantUML Code (For Presentation)</h2>
+<pre class="hljs"><code><div>@startuml
+left to right direction
+skinparam packageStyle rectangle
+
+actor &quot;Guest User&quot; as guest
+actor &quot;Registered User&quot; as user
+actor &quot;AI Detection System&quot; as ai
+actor &quot;Backend Server&quot; as backend
+actor &quot;Municipal Admin\n(Future)&quot; as admin
+
+rectangle &quot;Pothole Detection System&quot; {
+  usecase &quot;Register Account&quot; as UC1
+  usecase &quot;Login to System&quot; as UC2
+  usecase &quot;Verify Email OTP&quot; as UC3
+  usecase &quot;Upload Road Image&quot; as UC4
+  usecase &quot;AI Detects Pothole&quot; as UC5
+  usecase &quot;View Detection Results&quot; as UC6
+  usecase &quot;Submit Complaint&quot; as UC7
+  usecase &quot;Store Complaint&quot; as UC8
+  usecase &quot;View Complaints&quot; as UC9
+  usecase &quot;Logout&quot; as UC10
+  
+  usecase &quot;OAuth Login (Google)&quot; as UC2a
+  usecase &quot;OAuth Login (Microsoft)&quot; as UC2b
+  usecase &quot;Resend OTP&quot; as UC3a
+  
+  usecase &quot;View All Complaints&quot; as UCA1
+  usecase &quot;Mark Resolved&quot; as UCA2
+  usecase &quot;Generate Reports&quot; as UCA3
+}
+
+guest --&gt; UC1
+guest --&gt; UC2
+guest --&gt; UC3
+
+user --&gt; UC4
+user --&gt; UC6
+user --&gt; UC7
+user --&gt; UC9
+user --&gt; UC10
+
+ai --&gt; UC5
+
+UC2 &lt;.. UC2a : &lt;&lt;extends&gt;&gt;
+UC2 &lt;.. UC2b : &lt;&lt;extends&gt;&gt;
+UC3 &lt;.. UC3a : &lt;&lt;extends&gt;&gt;
+
+UC1 ..&gt; UC3 : &lt;&lt;includes&gt;&gt;
+UC4 ..&gt; UC5 : &lt;&lt;includes&gt;&gt;
+UC5 ..&gt; UC6 : &lt;&lt;includes&gt;&gt;
+UC7 ..&gt; UC8 : &lt;&lt;includes&gt;&gt;
+
+admin --&gt; UCA1
+admin --&gt; UCA2
+admin --&gt; UCA3
+
+@enduml
+</div></code></pre>
+<hr>
+<h2 id="presentation-tips-for-interviewers">Presentation Tips for Interviewers</h2>
+<h3 id="%F0%9F%8E%AF-key-points-to-highlight">🎯 Key Points to Highlight:</h3>
+<ol>
+<li>
+<p><strong>Clear Actor Separation:</strong></p>
+<ul>
+<li>Guest vs. Registered User (shows access control understanding)</li>
+<li>AI System as automated actor (shows system design knowledge)</li>
+<li>Admin for future scalability (shows forward thinking)</li>
+</ul>
+</li>
+<li>
+<p><strong>Well-Defined Relationships:</strong></p>
+<ul>
+<li>«includes» for mandatory sub-processes</li>
+<li>«extends» for optional variations (OAuth)</li>
+<li>«requires» for preconditions</li>
+</ul>
+</li>
+<li>
+<p><strong>Comprehensive Coverage:</strong></p>
+<ul>
+<li>10 core use cases documented</li>
+<li>5 future admin use cases planned</li>
+<li>4 system integration use cases identified</li>
+</ul>
+</li>
+<li>
+<p><strong>Enterprise Thinking:</strong></p>
+<ul>
+<li>Security-focused (authentication, authorization)</li>
+<li>Scalable design (admin panel planned)</li>
+<li>Real-world constraints (rate limiting, timeouts)</li>
+</ul>
+</li>
+</ol>
+<h3 id="%F0%9F%93%8A-what-interviewers-love">📊 What Interviewers Love:</h3>
+<p>✅ <strong>Clean, professional UML diagrams</strong><br>
+✅ <strong>Detailed use case specifications with flows</strong><br>
+✅ <strong>Clear preconditions and postconditions</strong><br>
+✅ <strong>Exception handling documented</strong><br>
+✅ <strong>Future enhancements planned</strong><br>
+✅ <strong>System integration awareness</strong></p>
+<hr>
+<p><strong>Generated:</strong> November 18, 2025<br>
+<strong>Project:</strong> AI-Powered Pothole Detection System<br>
+<strong>Document Version:</strong> 1.0</p>
+
+</body>
+</html>
